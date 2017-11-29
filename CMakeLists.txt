@@ -9,7 +9,7 @@ enable_testing()
 set(SOURCE_FILES main.cpp SampleClass.cpp SampleClass.hpp)
 add_executable(PSZT_test ${SOURCE_FILES})
 
-
+SET(BOOST_ROOT "/usr/local/boost_1_65_1")
 find_package(Boost 1.65.1 EXACT COMPONENTS system timer unit_test_framework REQUIRED)
 
 if (Boost_FOUND)
