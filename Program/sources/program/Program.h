@@ -16,63 +16,48 @@ namespace program {
 
 		Program() = default;
 
-		virtual void run() = 0;
+		virtual void run(){}
 
 		virtual ~Program() = default;
 	private:
 	};
 
-	class SimpleProgram : public Program {
-	public:
-		SimpleProgram(){
-			id_ = ID++;
-			std::cerr << id_ << std::endl;
-		}
-		virtual void run(){}
-		virtual ~SimpleProgram(){
-			std::cerr << "Destructor" << id_ << std::endl;
-		}
-		int  id_;
-		static int ID;
-	};
-
 	
-
-	class SimpleProgramDecorator : public SimpleProgram {
+	class ProgramDecorator : public Program {
 	public:
-		SimpleProgramDecorator(std::shared_ptr<SimpleProgram> program): simpleProgram_(program){}
+		ProgramDecorator(std::unique_ptr<Program> program):
+				program_(std::move(program)){}
 
 		virtual void run(){
-			simpleProgram_->run();
+			program_->run();
 		}
 
-		virtual ~SimpleProgramDecorator(){
-			std::cerr << "Decorator destructor" << std::endl;
-		}
+		virtual ~ProgramDecorator() = default;
 	private:
-		std::shared_ptr<SimpleProgram> simpleProgram_;
+		std::unique_ptr<Program> program_;
 	};
 
-	class GetVersionProgram : public SimpleProgramDecorator {
+	class GetVersionProgram : public ProgramDecorator {
 	public:
-		GetVersionProgram(std::shared_ptr<SimpleProgram> program): SimpleProgramDecorator(program){}
+		GetVersionProgram(std::unique_ptr<Program> program): ProgramDecorator(std::move(program)){}
 
 		virtual void run(){
 			std::cout << "Program version : " << PROGRAM_VERSION_MAJOR << "." << PROGRAM_VERSION_MINOR << std::endl;
-			SimpleProgramDecorator::run();
+			ProgramDecorator::run();
 		}
 		virtual ~GetVersionProgram() = default;
 	};
 
-	class HelpProgram : public SimpleProgramDecorator {
+	class HelpProgram : public ProgramDecorator {
 	public:
-		HelpProgram(std::shared_ptr<SimpleProgram> program, boost::program_options::options_description description) :
-				SimpleProgramDecorator(program),
+		HelpProgram(std::unique_ptr<Program> program,
+		            boost::program_options::options_description description) :
+				ProgramDecorator(std::move(program)),
 				description_(std::move(description)) {}
 
 		virtual void run(){
 			std::cout << description_ << std::endl;
-			SimpleProgramDecorator::run();
+			ProgramDecorator::run();
 		}
 		virtual ~HelpProgram() = default;
 
@@ -81,8 +66,6 @@ namespace program {
 	};
 
 }
-
-//TODO : too many objects created
 
 #endif //PSZT_NEURAL_NETWORK_PROGRAM_H
 

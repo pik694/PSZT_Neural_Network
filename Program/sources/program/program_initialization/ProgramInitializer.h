@@ -20,7 +20,7 @@ namespace program {
 
 			ProgramInitializer(int argc, const char **argv);
 
-			std::shared_ptr<Program> getProgram();
+			std::unique_ptr<Program> getProgram();
 
 			virtual ~ProgramInitializer() = default;
 

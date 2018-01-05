@@ -5,7 +5,7 @@
 #include <iostream>
 #include "ProgramInitializer.h"
 
-
+using namespace program;
 using namespace program::program_initializer;
 using namespace boost::program_options;
 
@@ -27,24 +27,24 @@ std::string ProgramInitializer::command(std::string longCommand, std::string sho
 	return (longCommand + "," + shortCommand);
 }
 
-std::shared_ptr<program::Program> ProgramInitializer::getProgram() {
+std::unique_ptr<program::Program> ProgramInitializer::getProgram() {
 
-	std::shared_ptr<Program> program;
+	std::unique_ptr<Program> program;
 
 	try {
 		parse();
 	}
-		//TODO : check whether we should catch a const & to an exception
 	catch (const boost::program_options::required_option &e) {
+
 		if (variablesMap_.count(HELP) || variablesMap_.count(VERSION)) {
-			//TODO : shared ptrs
-			std::shared_ptr<SimpleProgram> program = std::shared_ptr<SimpleProgram>(new SimpleProgram());
+
+			program = std::make_unique<Program>();
 
 			if (variablesMap_.count(HELP)){
-				program = std::shared_ptr<SimpleProgram>(new HelpProgram(program, description_));
+				program = std::make_unique<HelpProgram>(std::move(program), description_);
 			}
 			if (variablesMap_.count(VERSION)){
-				program = std::shared_ptr<SimpleProgram>(new GetVersionProgram(program));
+				program = std::make_unique<GetVersionProgram>(std::move(program));
 			}
 
 			return program;

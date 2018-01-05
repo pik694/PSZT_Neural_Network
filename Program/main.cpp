@@ -4,7 +4,6 @@
 
 using namespace neural_network;
 
-int program::SimpleProgram::ID = 0;
 
 int main( int argc,const char** argv )
 {
