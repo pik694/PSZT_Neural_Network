@@ -3,20 +3,20 @@
 #include <program/program_initialization/ProgramInitializer.h>
 
 using namespace neural_network;
+using namespace program;
 
 
-int main( int argc,const char** argv )
-{
+int main(int argc, const char **argv) {
 //	std::string file_name( "kc_house_data.csv" );
 //	const char separator = ',';
 //	NeuralNetwork neural_network;
 //	neural_network.trainOnFile( file_name, &separator );
 //
 
+	program_initializer::ProgramInitializer programInitializer (argc, argv);
 
-	program::program_initializer::ProgramInitializer a (argc, argv);
-
-	a.getProgram()->run();
+	auto program = programInitializer.getProgram();
+	program->run();
 
 	return 0;
 }
