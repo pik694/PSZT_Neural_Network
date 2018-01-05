@@ -14,8 +14,6 @@ namespace program {
 	class Program {
 	public:
 
-		Program() = default;
-
 		virtual void run(){}
 
 		virtual ~Program() = default;
@@ -25,10 +23,10 @@ namespace program {
 	
 	class ProgramDecorator : public Program {
 	public:
-		ProgramDecorator(std::unique_ptr<Program> program):
+		 explicit ProgramDecorator(std::unique_ptr<Program> program):
 				program_(std::move(program)){}
 
-		virtual void run(){
+		void run() override {
 			program_->run();
 		}
 
@@ -39,9 +37,9 @@ namespace program {
 
 	class GetVersionProgram : public ProgramDecorator {
 	public:
-		GetVersionProgram(std::unique_ptr<Program> program): ProgramDecorator(std::move(program)){}
+		explicit GetVersionProgram(std::unique_ptr<Program> program): ProgramDecorator(std::move(program)){}
 
-		virtual void run(){
+		void run() override {
 			std::cout << "Program version : " << PROGRAM_VERSION_MAJOR << "." << PROGRAM_VERSION_MINOR << std::endl;
 			ProgramDecorator::run();
 		}
@@ -55,7 +53,7 @@ namespace program {
 				ProgramDecorator(std::move(program)),
 				description_(std::move(description)) {}
 
-		virtual void run(){
+		void run() override {
 			std::cout << description_ << std::endl;
 			ProgramDecorator::run();
 		}

@@ -34,7 +34,7 @@ std::unique_ptr<program::Program> ProgramInitializer::getProgram() {
 	try {
 		parse();
 	}
-	catch (const boost::program_options::required_option &e) {
+	catch (boost::program_options::required_option &e) {
 
 		if (variablesMap_.count(HELP) || variablesMap_.count(VERSION)) {
 
