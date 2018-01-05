@@ -6,12 +6,15 @@ set(CMAKE_CXX_STANDARD 14)
 include(CTest)
 enable_testing()
 
-set(PROJECT_VERSION_MAJOR 0)
-set(PROJECT_VERSION_MINOR 1)
+set(Project_VERSION_MAJOR 0)
+set(Project_VERSION_MINOR 1)
 
-SET(BOOST_ROOT "/usr/local/boost_1_65_1")
+configure_file(
+        "${PROJECT_SOURCE_DIR}/Program/program_version"
+        "${PROJECT_BINARY_DIR}/Program/program_version.h"
+)
 
-find_package(Boost 1.65.1 EXACT COMPONENTS system timer unit_test_framework REQUIRED)
+find_package(Boost COMPONENTS system timer unit_test_framework program_options REQUIRED)
 
 if (Boost_FOUND)
     include_directories(${Boost_INDLUDE_DIRS})
@@ -21,11 +24,12 @@ if (Boost_FOUND)
 endif()
 
 
-include_directories(Program/sources)
+include_directories(${PROJECT_SOURCE_DIR}/Program/sources)
+include_directories(${PROJECT_BINARY_DIR}/Program)
 
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Program)
+add_subdirectory(Program)
 
-#add_subdirectory(Tests)
+add_subdirectory(Tests)
 
 
 
