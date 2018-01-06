@@ -4,8 +4,6 @@
 
 #include "RandomNumberGenerator.h"
 
-using namespace neural_network;
-
 RandomNumberGenerator* RandomNumberGenerator::instance_ = nullptr;
 
 RandomNumberGenerator::RandomNumberGenerator() {
