@@ -1,6 +1,8 @@
 #include "TrainingDataFactory.h"
 #include "progress/ProgressStatusManager.h"
 
+using namespace progress;
+
 TrainingDataFactory::TrainingDataFactory() = default;
 
 void TrainingDataFactory::run( std::vector< std::string >* file_rows, std::vector< std::shared_ptr< House > >* training_data )
@@ -105,6 +107,8 @@ void TrainingDataFactory::createHouseFromRow( unsigned thread_id, std::vector< s
 				case SQFT_LOT15:
 					std::istringstream( *it ) >> std::scientific >> sqftLot15;
 					break;
+                default:
+                    break;
 				}
 			}
 			catch ( ... )

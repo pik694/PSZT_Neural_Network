@@ -1,5 +1,6 @@
 #include "ProgressStatusManager.h"
 
+using namespace progress;
 ProgressStatusManager* ProgressStatusManager::instance_ = nullptr;
 
 ProgressStatusManager::~ProgressStatusManager() {

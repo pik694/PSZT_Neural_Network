@@ -11,6 +11,7 @@
 using namespace program;
 using namespace program::program_initializer;
 using namespace boost::program_options;
+using namespace progress;
 
 ProgramInitializer::ProgramInitializer(int argc, const char **argv) :
 		argc_(argc),

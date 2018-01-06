@@ -1,5 +1,7 @@
 #include "ProgressStatusInfo.h"
 
+using namespace progress;
+
 void ProgressStatusInfo::done() {
 
     refreshProgress();
