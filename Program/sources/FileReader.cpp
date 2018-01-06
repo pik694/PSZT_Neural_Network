@@ -1,5 +1,5 @@
 #include "FileReader.h"
-
+#include "progress/ProgressStatusManager.h"
 
 FileReader::FileReader() = default;
 
@@ -14,8 +14,20 @@ std::vector< std::string > FileReader::getFileRows( const std::string& file_name
 
 	//first row - headers, no need to store them
 	std::getline( file_, row );
+	unsigned progress = 0;
 	while ( std::getline( file_, row ) )
+	{
+		++progress;
 		file_rows.push_back( row );
+		if( progress == PROGRESS_INFO )
+		{
+			ProgressStatusManager::getInstance()->addProgress( progress );
+			ProgressStatusManager::getInstance()->refresh();
+			progress = 0;
+		}
+	}
+
+	ProgressStatusManager::getInstance()->addProgress( progress );
 
 	file_.close();
 	return file_rows;

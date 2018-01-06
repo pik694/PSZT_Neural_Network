@@ -1,4 +1,5 @@
 #include "TrainingDataFactory.h"
+#include "progress/ProgressStatusManager.h"
 
 TrainingDataFactory::TrainingDataFactory() = default;
 
@@ -17,8 +18,15 @@ void TrainingDataFactory::run( std::vector< std::string >* file_rows, std::vecto
 void TrainingDataFactory::createHouseFromRow( unsigned thread_id, std::vector< std::string >* file_rows, std::vector< std::shared_ptr< House > >* training_data )
 {
 	boost::char_separator< char > b_separator( "," );
-	for ( unsigned index = thread_id; index < ( *file_rows ).size(); index += THREADS_COUNT )
+	unsigned progress = 0;
+	for ( unsigned index = thread_id; index < ( *file_rows ).size(); index += THREADS_COUNT, ++progress )
 	{
+		if( progress == PROGRESS_INFO ) {
+
+			ProgressStatusManager::getInstance()->addProgress( progress );
+			progress = 0;
+			ProgressStatusManager::getInstance()->refresh();
+		}
 		bool error_occured = false;
 		boost::gregorian::date date; 
 		float floors, price, bathrooms, f_long, lat ;
@@ -112,6 +120,9 @@ void TrainingDataFactory::createHouseFromRow( unsigned thread_id, std::vector< s
 		( *training_data )[ index ] = std::make_shared< House >( date, price, bedrooms, bathrooms, sqftLiving, sqftLot, floors, waterfront,
 			view, condition, grade, sqftAbove, sqftBasement, yrBuilt, yrRenovated, zipcode, lat, f_long, sqftLiving15, sqftLot15 );
 	}
+
+	ProgressStatusManager::getInstance()->addProgress( progress );
+
 }
 
 TrainingDataFactory::~TrainingDataFactory() = default;
