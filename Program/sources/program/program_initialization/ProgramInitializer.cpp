@@ -31,15 +31,13 @@ std::string ProgramInitializer::command(std::string longCommand, std::string sho
 
 std::unique_ptr<program::Program> ProgramInitializer::getProgram() {
 
-	std::unique_ptr<Program> program;
+	std::unique_ptr<Program> program = std::make_unique<Program>();
 	try {
 		parse();
 	}
 	catch (boost::program_options::required_option &e) {
 
 		if (variablesMap_.count(HELP) || variablesMap_.count(VERSION)) {
-
-			program = std::make_unique<Program>();
 
 			if (variablesMap_.count(HELP)){
 				program = std::make_unique<HelpProgram>(std::move(program), description_);
@@ -53,11 +51,16 @@ std::unique_ptr<program::Program> ProgramInitializer::getProgram() {
 		} else throw e;
 	}
 
-	FileReader fileReader;
-    std::vector< std::string > file_data = fileReader.getFileRows( inputFileName );
-    std::vector< std::shared_ptr< House > > training_data( file_data.size() );
-    TrainingDataFactory training_data_factory;
-    training_data_factory.run( &file_data , &training_data );
+	try{
+		FileReader fileReader;
+		std::vector< std::string > file_data = fileReader.getFileRows( inputFileName );
+		std::vector< std::shared_ptr< House > > training_data( file_data.size() );
+		TrainingDataFactory training_data_factory;
+		training_data_factory.run( &file_data , &training_data );
+	}
+	catch (std::invalid_argument& e){
+		return std::make_unique<ErrorInfoProgram>(e.what(), std::move(program));
+	}
 
 	return program;
 }

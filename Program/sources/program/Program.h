@@ -63,6 +63,22 @@ namespace program {
 		boost::program_options::options_description description_;
 	};
 
+	class ErrorInfoProgram : public ProgramDecorator{
+	public:
+		ErrorInfoProgram(const std::string& errorMessage, std::unique_ptr<Program> program) :
+				errorMessage_(errorMessage),
+				ProgramDecorator(std::move(program)) {}
+
+		void run() override {
+			std::cerr << errorMessage_ << std::endl;
+			ProgramDecorator::run();
+		}
+		virtual ~ErrorInfoProgram() = default;
+
+	private:
+		const std::string errorMessage_;
+	};
+
 }
 
 #endif //PSZT_NEURAL_NETWORK_PROGRAM_H

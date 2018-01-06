@@ -8,6 +8,10 @@ std::vector< std::string > FileReader::getFileRows( const std::string& file_name
 	std::vector< std::string > file_rows;
 	std::string row;
 	file_.open( file_name );
+	if (!file_.is_open()){
+		throw std::invalid_argument("File could not be opened");
+	}
+
 	//first row - headers, no need to store them
 	std::getline( file_, row );
 	while ( std::getline( file_, row ) )
