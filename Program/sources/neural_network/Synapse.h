@@ -6,6 +6,11 @@
 #define PSZT_NEURAL_NETWORK_SYNAPSE_H
 
 #include <memory>
+
+namespace neural_network{
+	class Synapse;
+}
+
 #include "Neuron.h"
 
 namespace neural_network {

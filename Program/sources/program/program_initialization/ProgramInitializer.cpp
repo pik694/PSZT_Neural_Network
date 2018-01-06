@@ -6,6 +6,7 @@
 #include "FileReader.h"
 #include "TrainingDataFactory.h"
 #include "ProgramInitializer.h"
+#include "progress/ProgressStatusManager.h"
 
 using namespace program;
 using namespace program::program_initializer;
@@ -63,12 +64,23 @@ std::unique_ptr<program::Program> ProgramInitializer::getProgram() {
 
 	try{
 		FileReader fileReader;
+		ProgressStatusManager::getInstance()->init( "File reading: " + inputFileName );
 		std::vector< std::string > file_data = fileReader.getFileRows( inputFileName );
+		ProgressStatusManager::getInstance()->deinit();
+
+		ProgressStatusManager::getInstance()->init( "Creating training data", file_data.size() );
 		std::vector< std::shared_ptr< House > > training_data( file_data.size() );
 		TrainingDataFactory training_data_factory;
 		training_data_factory.run( &file_data , &training_data );
+		ProgressStatusManager::getInstance()->deinit();
 	}
 	catch (std::invalid_argument& e){
+		return std::make_unique<ErrorInfoProgram>(e.what(), std::move(program));
+	}
+	catch (std::runtime_error& e){
+		return std::make_unique<ErrorInfoProgram>(e.what(), std::move(program));
+	}
+	catch (std::bad_alloc& e){
 		return std::make_unique<ErrorInfoProgram>(e.what(), std::move(program));
 	}
 
