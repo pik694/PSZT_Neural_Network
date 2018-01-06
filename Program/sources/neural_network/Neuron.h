@@ -8,6 +8,11 @@
 
 #include <vector>
 #include <functional>
+
+namespace neural_network{
+    class Neuron;
+}
+
 #include "Synapse.h"
 
 namespace neural_network {
