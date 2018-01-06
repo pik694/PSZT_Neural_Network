@@ -13,6 +13,6 @@ namespace neural_network {
 
 		void trainOnFile();
 
-		~NeuralNetwork();
+		virtual ~NeuralNetwork();
 	};
 }

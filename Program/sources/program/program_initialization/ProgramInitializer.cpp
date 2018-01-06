@@ -48,7 +48,9 @@ std::unique_ptr<program::Program> ProgramInitializer::getProgram() {
 
 			return program;
 
-		} else throw e;
+		}
+		else
+			return std::make_unique<ErrorInfoProgram>(e.what(), std::move(program));
 	}
 
 	try{
