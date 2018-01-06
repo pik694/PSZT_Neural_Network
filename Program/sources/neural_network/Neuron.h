@@ -22,21 +22,23 @@ namespace neural_network {
 
         explicit Neuron(std::function<double(double)> function, std::function<double(double)> derivative);
 
+        double calculateOutputValue();
+        void updateInputValue();
+        void updateOutputValue();
         double getOutputValue() const;
-        void setOutputValue(double outputValue);
-        void addInputSynapse(Synapse inputSynapse);
-        void addOutputSynapse(Synapse outputSynapse);
+        void addInputSynapse(const std::shared_ptr<Synapse> &inputSynapse);
+        void addOutputSynapse(const std::shared_ptr<Synapse>  &outputSynapse);
 
     private:
 
         std::function<double(double)> function_;
         std::function<double(double)> derivative_;
-        double outputValue;
-        std::vector<Synapse> input_synapses_;
-        std::vector<Synapse> output_synapses_;
+        double input_value_;
+        double output_value_;
+        std::vector<std::shared_ptr<Synapse> > input_synapses_;
+        std::vector<std::shared_ptr<Synapse> > output_synapses_;
 
         double sumInputs();
-        double calculateOutputValue();
 
     };
 
