@@ -6,20 +6,21 @@
 #include <iomanip>
 #include "ProgressStatus.h"
 
-class ProgressStatusInfo : public ProgressStatus{
-public:
-    ProgressStatusInfo( );
+namespace progress {
+    class ProgressStatusInfo : public ProgressStatus {
+    public:
+        ProgressStatusInfo();
 
-    void refreshProgress() override;
+        void refreshProgress() override;
 
-    void addProgress( unsigned long progress ) override;
+        void addProgress(unsigned long progress) override;
 
-    void done() override;
+        void done() override;
 
-private:
-    unsigned lengthOfLastPrintedMessage_;
-    unsigned long iterations_;
-};
+    private:
+        unsigned lengthOfLastPrintedMessage_;
+        unsigned long iterations_;
+    };
 
-
+}
 #endif //PSZT_NEURAL_NETWORK_PROGRESSSTATUSINFO_H

@@ -8,27 +8,34 @@
 
 const unsigned PROGRESS_INFO = 500;
 
-class ProgressStatusManager {
-public:
-    static ProgressStatusManager* getInstance();
-    ~ProgressStatusManager();
+namespace progress {
+    class ProgressStatusManager {
+    public:
+        static ProgressStatusManager *getInstance();
 
-    void init( const std::string message, unsigned long iterations );
-    void init( const std::string message );
-    void deinit();
+        ~ProgressStatusManager();
 
-    void addProgress( unsigned long progress );
-    void refresh();
+        void init(const std::string message, unsigned long iterations);
 
-private:
-    ProgressStatusManager();
-    ProgressStatusManager( const ProgressStatusManager& ) = delete;
-    ProgressStatusManager& operator=( const ProgressStatusManager& ) = delete;
+        void init(const std::string message);
 
-    static ProgressStatusManager* instance_;
+        void deinit();
 
-    ProgressStatus* progressStatus_;
-};
+        void addProgress(unsigned long progress);
 
+        void refresh();
+
+    private:
+        ProgressStatusManager();
+
+        ProgressStatusManager(const ProgressStatusManager &) = delete;
+
+        ProgressStatusManager &operator=(const ProgressStatusManager &) = delete;
+
+        static ProgressStatusManager *instance_;
+
+        ProgressStatus *progressStatus_;
+    };
+}
 
 #endif //PSZT_NEURAL_NETWORK_PROGRESSSTATUSMANAGER_H

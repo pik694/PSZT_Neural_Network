@@ -1,6 +1,8 @@
 #include "FileReader.h"
 #include "progress/ProgressStatusManager.h"
 
+using namespace progress;
+
 FileReader::FileReader() = default;
 
 std::vector< std::string > FileReader::getFileRows( const std::string& file_name )

@@ -1,5 +1,7 @@
 #include "ProgressStatusBar.h"
 
+using namespace progress;
+
 ProgressStatusBar::ProgressStatusBar( unsigned long iterations ) {
 
     progressBar_ = std::make_shared< boost::progress_display >( iterations );
