@@ -9,9 +9,7 @@ namespace neural_network {
 	class NeuralNetwork {
 	private:
 	public:
-		NeuralNetwork();
-
-		void trainOnFile();
+		NeuralNetwork(std::vector<int> neuronsInLayer, std::function<double(double)>  neuronActivationFunction, std::function<double(double)> );
 
 		virtual ~NeuralNetwork();
 	};
