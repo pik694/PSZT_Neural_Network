@@ -30,7 +30,8 @@ namespace program {
 
 			std::string command(std::string longCommand, std::string shortCommand) const;
 
-			boost::program_options::options_description description_;
+			boost::program_options::options_description infoOptions_;
+			boost::program_options::options_description runOptions_;
 			boost::program_options::variables_map variablesMap_;
 
 			std::string inputFileName;

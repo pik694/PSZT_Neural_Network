@@ -11,6 +11,7 @@ int main(int argc, const char **argv) {
 	program_initializer::ProgramInitializer programInitializer (argc, argv);
 
 	auto program = programInitializer.getProgram();
+
 	program->run();
 
 	return 0;
