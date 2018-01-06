@@ -3,7 +3,7 @@
 
 FileReader::FileReader() = default;
 
-std::vector< std::string > FileReader::getFileRows(const std::string& file_name )
+std::vector< std::string > FileReader::getFileRows( const std::string& file_name )
 {
 	std::vector< std::string > file_rows;
 	std::string row;

@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 3.9.3)
 project(PSZT_Neural_Network CXX)
 
 set(CMAKE_CXX_STANDARD 14)
+if (UNIX AND NOT APPLE)
+    set(CMAKE_CXX_FLAGS "-lpthread ")
+endif ()
 
 include(CTest)
 enable_testing()

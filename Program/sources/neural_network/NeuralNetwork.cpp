@@ -4,16 +4,9 @@ using namespace neural_network;
 
 NeuralNetwork::NeuralNetwork() = default;
 
-void NeuralNetwork::trainOnFile( const std::string& file_name, const char* separator )
+void NeuralNetwork::trainOnFile()
 {
-	std::vector< std::string > file_data = fileReader_.getFileRows( file_name );
-	std::vector< std::shared_ptr< House > > training_data( file_data.size() );
-	trainingDataFactory_.run( &file_data , separator, &training_data );
-	
 	//TODO
-	//...
-	//...
-	//...
 }
 
 NeuralNetwork::~NeuralNetwork() = default;

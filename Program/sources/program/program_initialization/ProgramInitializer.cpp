@@ -3,6 +3,8 @@
 //
 
 #include <iostream>
+#include "FileReader.h"
+#include "TrainingDataFactory.h"
 #include "ProgramInitializer.h"
 
 using namespace program;
@@ -30,7 +32,6 @@ std::string ProgramInitializer::command(std::string longCommand, std::string sho
 std::unique_ptr<program::Program> ProgramInitializer::getProgram() {
 
 	std::unique_ptr<Program> program;
-
 	try {
 		parse();
 	}
@@ -51,6 +52,12 @@ std::unique_ptr<program::Program> ProgramInitializer::getProgram() {
 
 		} else throw e;
 	}
+
+	FileReader fileReader;
+    std::vector< std::string > file_data = fileReader.getFileRows( inputFileName );
+    std::vector< std::shared_ptr< House > > training_data( file_data.size() );
+    TrainingDataFactory training_data_factory;
+    training_data_factory.run( &file_data , &training_data );
 
 	return program;
 }

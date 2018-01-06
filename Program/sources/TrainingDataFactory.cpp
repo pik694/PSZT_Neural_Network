@@ -2,11 +2,11 @@
 
 TrainingDataFactory::TrainingDataFactory() = default;
 
-void TrainingDataFactory::run( std::vector< std::string >* file_rows, const char* separator, std::vector< std::shared_ptr< House > >* training_data )
+void TrainingDataFactory::run( std::vector< std::string >* file_rows, std::vector< std::shared_ptr< House > >* training_data )
 {
 	
 	for ( unsigned thread_id = 0; thread_id < THREADS_COUNT; ++thread_id )
-		threads_.emplace_back(createHouseFromRow, thread_id, file_rows, separator, training_data);
+		threads_.emplace_back(createHouseFromRow, thread_id, file_rows, training_data);
 
 	for ( unsigned thread_id = 0; thread_id < THREADS_COUNT; ++thread_id )
 		threads_[ thread_id ].join();
@@ -14,10 +14,9 @@ void TrainingDataFactory::run( std::vector< std::string >* file_rows, const char
 	( *file_rows ).clear();
 }
 
-void TrainingDataFactory::createHouseFromRow( unsigned thread_id, std::vector< std::string >* file_rows, const char* separator,
-												std::vector< std::shared_ptr< House > >* training_data )
+void TrainingDataFactory::createHouseFromRow( unsigned thread_id, std::vector< std::string >* file_rows, std::vector< std::shared_ptr< House > >* training_data )
 {
-	boost::char_separator< char > b_separator( separator );
+	boost::char_separator< char > b_separator( "," );
 	for ( unsigned index = thread_id; index < ( *file_rows ).size(); index += THREADS_COUNT )
 	{
 		bool error_occured = false;
@@ -98,8 +97,6 @@ void TrainingDataFactory::createHouseFromRow( unsigned thread_id, std::vector< s
 				case SQFT_LOT15:
 					std::istringstream( *it ) >> std::scientific >> sqftLot15;
 					break;
-					default:
-						throw std::runtime_error("Invalid value");
 				}
 			}
 			catch ( ... )
@@ -110,6 +107,7 @@ void TrainingDataFactory::createHouseFromRow( unsigned thread_id, std::vector< s
 		}		
 		if( error_occured )
 			continue;
+
 
 		( *training_data )[ index ] = std::make_shared< House >( date, price, bedrooms, bathrooms, sqftLiving, sqftLot, floors, waterfront,
 			view, condition, grade, sqftAbove, sqftBasement, yrBuilt, yrRenovated, zipcode, lat, f_long, sqftLiving15, sqftLot15 );

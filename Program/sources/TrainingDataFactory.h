@@ -13,10 +13,10 @@ class TrainingDataFactory
 {
 private:
 	std::vector< std::thread > threads_;
-	static void createHouseFromRow( unsigned thread_id, std::vector< std::string >* file_rows, const char* separator, std::vector< std::shared_ptr< House > >* training_data );
+	static void createHouseFromRow( unsigned thread_id, std::vector< std::string >* file_rows, std::vector< std::shared_ptr< House > >* training_data );
 public:
 	TrainingDataFactory();
-	void run( std::vector< std::string >* file_rows, const char* separator, std::vector< std::shared_ptr< House > >* training_data );
+	void run( std::vector< std::string >* file_rows, std::vector< std::shared_ptr< House > >* training_data );
 	~TrainingDataFactory();
 };
 

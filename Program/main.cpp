@@ -7,11 +7,6 @@ using namespace program;
 
 
 int main(int argc, const char **argv) {
-//	std::string file_name( "kc_house_data.csv" );
-//	const char separator = ',';
-//	NeuralNetwork neural_network;
-//	neural_network.trainOnFile( file_name, &separator );
-//
 
 	program_initializer::ProgramInitializer programInitializer (argc, argv);
 

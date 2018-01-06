@@ -8,13 +8,10 @@
 namespace neural_network {
 	class NeuralNetwork {
 	private:
-		std::vector<std::string> fileRows_;
-		FileReader fileReader_;
-		TrainingDataFactory trainingDataFactory_;
 	public:
 		NeuralNetwork();
 
-		void trainOnFile(const std::string& file_name, const char *separator);
+		void trainOnFile();
 
 		~NeuralNetwork();
 	};
