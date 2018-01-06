@@ -36,7 +36,7 @@ int RandomNumberGenerator::generateNumber<int>(int min, int max) {
 
 template <>
 double RandomNumberGenerator::generateNumber<double>(double min, double max) {
-	//TODO
+	//TODO : real number random generator
 	const int magnitude = 1000;
 
 	int maxI = max * magnitude;
