@@ -5,7 +5,7 @@
 #include "Synapse.h"
 #include "RandomNumberGenerator.h"
 
-using namespace neural_network;
+using namespace neural_network::neurons;
 
 const double Synapse::MAX_WEIGHT = 1.0;
 
