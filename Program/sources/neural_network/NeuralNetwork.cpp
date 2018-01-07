@@ -11,8 +11,8 @@ NeuralNetwork::NeuralNetwork(std::vector<int> neuronsInLayer, std::function<doub
 		neurons_(neuronsInLayer.size() + 2) {
 
 
-	// 20 input neurons for each position in house + 1 bias neuron
-	for (int i = 0; i < 20; ++i) {
+	// 19 input neurons for each position in house + 1 bias neuron
+	for (int i = 0; i < 19; ++i) {
 		neurons_.at(0).emplace_back(new neurons::InputNeuron());
 	}
 	neurons_.at(0).emplace_back(new neurons::BiasNeuron());
@@ -46,5 +46,57 @@ NeuralNetwork::NeuralNetwork(std::vector<int> neuronsInLayer, std::function<doub
 		}
 	}
 
+}
+
+double NeuralNetwork::feedForward(const house::NormalizedValuesHouse& house) {
+
+	setInputs(house);
+
+	for (auto i = neurons_.begin() + 1; i != neurons_.end(); ++i){
+		std::for_each(i->begin(), i->end(),
+		              [](std::shared_ptr<neurons::Neuron> neuron){
+			neuron->calculateOutputValue();
+		});
+	}
+
+	return getNetResult();
+
+}
+
+void NeuralNetwork::setInputs(const NormalizedValuesHouse& house) {
+
+	layer_t& inputLayer = neurons_.at(0);
+
+	//TODO: waits until proper method is created
+	// inputLayer.at(0)->setOutputValue(house.getDate());
+	inputLayer.at(1)->setOutputValue(house.getBedrooms());
+	inputLayer.at(2)->setOutputValue(house.getBathrooms());
+	inputLayer.at(3)->setOutputValue(house.getSqftLiving());
+	inputLayer.at(4)->setOutputValue(house.getSqftLot());
+	inputLayer.at(5)->setOutputValue(house.getFloors());
+	inputLayer.at(6)->setOutputValue(house.getWaterfront());
+	inputLayer.at(7)->setOutputValue(house.getView());
+	inputLayer.at(8)->setOutputValue(house.getCondition());
+	inputLayer.at(9)->setOutputValue(house.getGrade());
+	inputLayer.at(10)->setOutputValue(house.getSqftAbove());
+	inputLayer.at(11)->setOutputValue(house.getSqftBasement());
+	inputLayer.at(12)->setOutputValue(house.getYrBuilt());
+	inputLayer.at(13)->setOutputValue(house.getYrRenovated());
+	inputLayer.at(14)->setOutputValue(house.getZipcode());
+	inputLayer.at(15)->setOutputValue(house.getLat());
+	inputLayer.at(16)->setOutputValue(house.getLong());
+	inputLayer.at(17)->setOutputValue(house.getSqftLiving15());
+	inputLayer.at(18)->setOutputValue(house.getSqftLot15());
+
 };
+
+double NeuralNetwork::getNetResult() {
+
+	auto outputNeuronLayer = --neurons_.end();
+
+	return outputNeuronLayer->at(0)->getOutputValue();
+
+}
+
+
 

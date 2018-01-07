@@ -5,6 +5,7 @@
 #include "FileReader.h"
 
 #include "neural_network/neurons/Neuron.h"
+#include "house/NormalizedValuesHouse.h"
 
 
 namespace neural_network {
@@ -14,17 +15,21 @@ namespace neural_network {
 		              std::function<double(double)>  function,
 		              std::function<double(double)> derivative );
 
-		double calculatePrice(const House&) const;
+		double calculatePrice(const  NormalizedValuesHouse& house) {return feedForward(house);}
 
-		void propagateBack();
+		void propagateBack(const  NormalizedValuesHouse&);
 
-		double feedForward(const House&) const;
+		double feedForward(const  NormalizedValuesHouse&);
 
 		virtual ~NeuralNetwork() = default;
 
 	private:
 
 		using layer_t = std::vector<std::shared_ptr<neurons::Neuron>>;
+
+
+		void setInputs(const  NormalizedValuesHouse&);
+		double getNetResult();
 
 		std::vector<layer_t> neurons_;
 

@@ -10,3 +10,10 @@ InputNeuron::InputNeuron():Neuron([](double a){return a;}, [](double a){return 1
 {
 
 }
+
+void InputNeuron::setOutputValue(double value) {
+
+	//TODO
+	throw std::runtime_error("TODO");
+
+}

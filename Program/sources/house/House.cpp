@@ -1,9 +1,12 @@
 #include "House.h"
 
-House::House( boost::gregorian::date date, float price, int bedrooms, float bathrooms, int sqftLiving, int sqftLot, float floors,
-				int waterfront, int view, int condition, int grade, int sqftAbove,int sqftBasement, int yrBuilt, int yrRenovated,
-				int zipcode, float lat, float f_long, int sqftLiving15, int sqftLot15 )
-{
+using namespace house;
+
+House::House(boost::gregorian::date date, float price, int bedrooms, float bathrooms, int sqftLiving, int sqftLot,
+             float floors,
+             int waterfront, int view, int condition, int grade, int sqftAbove, int sqftBasement, int yrBuilt,
+             int yrRenovated,
+             int zipcode, float lat, float f_long, int sqftLiving15, int sqftLot15) {
 	date_ = date;
 	price_ = price;
 	bedrooms_ = bedrooms;

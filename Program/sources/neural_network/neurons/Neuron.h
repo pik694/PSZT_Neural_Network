@@ -37,6 +37,9 @@ namespace neural_network {
 
 			void addOutputSynapse(const std::shared_ptr<Synapse> &outputSynapse);
 
+			virtual void
+			setOutputValue(double value) {throw std::domain_error("In this type of neuron you cannot set output value");}
+
 			virtual ~Neuron() = default;
 
 		private:

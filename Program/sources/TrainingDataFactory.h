@@ -5,9 +5,11 @@
 #include <thread>
 #include <regex>
 #include <boost/tokenizer.hpp>
-#include "House.h"
+#include "house/House.h"
 
 const unsigned THREADS_COUNT = std::thread::hardware_concurrency();
+
+using namespace house;
 
 class TrainingDataFactory
 {

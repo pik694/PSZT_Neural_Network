@@ -12,6 +12,8 @@ namespace neural_network {
 		class InputNeuron : public Neuron{
 		public:
 			InputNeuron();
+
+			void setOutputValue(double value) override;
 		};
 	}
 }
