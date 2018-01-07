@@ -21,11 +21,11 @@ NeuralNetwork::NeuralNetwork(std::vector<int> neuronsInLayer, std::function<doub
 
 	auto hiddenLayers = neuronsInLayer.size();
 
-	for (int i = 1; i <= hiddenLayers; ++i) {
+	for (int i = 0; i < hiddenLayers; ++i) {
 		for (int j = 0; j < neuronsInLayer.at(i); ++j) {
-			neurons_.at(i).emplace_back(new neurons::Neuron(function, derivative));
+			neurons_.at(i+1).emplace_back(new neurons::Neuron(function, derivative));
 		}
-		neurons_.at(i).emplace_back(new neurons::BiasNeuron());
+		neurons_.at(i+1).emplace_back(new neurons::BiasNeuron());
 	}
 
 	// output layer consists of only one output neuron
