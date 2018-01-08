@@ -16,15 +16,9 @@ double Neuron::getOutputValue() const {
 	return outputValue_;
 }
 
-double Neuron::sumInputs() {
-	double sum = 0;
-	for (const std::shared_ptr<Synapse> &s : inputSynapses_) {
-		sum += s->getValue();
-	}
-	return sum;
-}
 
-double Neuron::calculateOutputValue() {
+
+double Neuron::recalculateOutputValue() {
 	updateInputValue();
 	updateOutputValue();
 	return outputValue_;
@@ -43,8 +37,17 @@ void Neuron::updateOutputValue() {
 }
 
 void Neuron::updateInputValue() {
+
 	inputValue_ = sumInputs();
 
+}
+
+double Neuron::sumInputs() {
+	double sum = 0;
+	for (const std::shared_ptr<Synapse> &s : inputSynapses_) {
+		sum += s->getValue();
+	}
+	return sum;
 }
 
 

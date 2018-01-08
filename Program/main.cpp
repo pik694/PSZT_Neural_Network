@@ -1,6 +1,6 @@
 #include "neural_network/NeuralNetwork.h"
+#include "program/program_initialization/ProgramInitializer.h"
 
-#include <program/program_initialization/ProgramInitializer.h>
 
 using namespace neural_network;
 using namespace program;

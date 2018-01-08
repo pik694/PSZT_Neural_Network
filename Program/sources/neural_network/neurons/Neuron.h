@@ -9,7 +9,7 @@
 #include <vector>
 #include <functional>
 
-namespace neural_network{
+namespace neural_network {
 	namespace neurons {
 		class Neuron;
 	}
@@ -18,18 +18,14 @@ namespace neural_network{
 #include "Synapse.h"
 
 namespace neural_network {
-	namespace  neurons {
+	namespace neurons {
 		class Neuron {
 
 		public:
 
 			explicit Neuron(std::function<double(double)> function, std::function<double(double)> derivative);
 
-			double calculateOutputValue();
-
-			void updateInputValue();
-
-			void updateOutputValue();
+			double recalculateOutputValue();
 
 			double getOutputValue() const;
 
@@ -38,20 +34,29 @@ namespace neural_network {
 			void addOutputSynapse(const std::shared_ptr<Synapse> &outputSynapse);
 
 			virtual void
-			setOutputValue(double value) {throw std::domain_error("In this type of neuron you cannot set output value");}
+			setOutputValue(double value) {
+				throw std::domain_error("In this type of neuron you cannot set output value");
+			}
 
 			virtual ~Neuron() = default;
 
 		private:
 
+			double sumInputs();
+
+			void updateInputValue();
+
+			void updateOutputValue();
+
 			std::function<double(double)> function_;
 			std::function<double(double)> derivative_;
-			double inputValue_;
-			double outputValue_;
+
 			std::vector<std::shared_ptr<Synapse> > inputSynapses_;
 			std::vector<std::shared_ptr<Synapse> > outputSynapses_;
 
-			double sumInputs();
+			double inputValue_;
+			double outputValue_;
+
 
 		};
 	}
