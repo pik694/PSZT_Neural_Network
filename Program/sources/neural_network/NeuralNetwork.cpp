@@ -1,3 +1,4 @@
+#include <random>
 #include "neurons/BiasNeuron.h"
 #include "neurons/InputNeuron.h"
 #include "neurons/OutputNeuron.h"
@@ -5,47 +6,47 @@
 
 using namespace neural_network;
 
-NeuralNetwork::NeuralNetwork(std::vector<int> neuronsInLayer, std::function<double(double)> function,
-                             std::function<double(double)> derivative) :
-		neurons_(neuronsInLayer.size() + 2) {
-
-
-	// 19 input neurons for each position in house + 1 bias neuron
-	for (int i = 0; i < 19; ++i) {
-		neurons_.at(0).emplace_back(new neurons::InputNeuron());
-	}
-	neurons_.at(0).emplace_back(new neurons::BiasNeuron());
-
-	// hidden layers with number of neurons specified in the input argument + 1 bias neuron per layer
-
-	auto hiddenLayers = neuronsInLayer.size();
-
-	for (int i = 0; i < hiddenLayers; ++i) {
-		for (int j = 0; j < neuronsInLayer.at(i); ++j) {
-			neurons_.at(i+1).emplace_back(new neurons::Neuron(function, derivative));
-		}
-		neurons_.at(i+1).emplace_back(new neurons::BiasNeuron());
-	}
-
-	// output layer consists of only one output neuron
-
-	neurons_.at(neurons_.size() - 1).emplace_back(new neurons::OutputNeuron());
-
-	// create synapses between neurons
-
-	for (auto i = neurons_.begin(), j = i + 1 ; j != neurons_.end(); ++i, ++j) {
-		for (auto k = i->begin(); k != i->end(); ++k){
-			for(auto l = j->begin(); l != j->end(); ++l){
-
-				std::shared_ptr<neurons::Synapse> synapse = std::make_shared<neurons::Synapse>(*k,*l);
-
-				(*k)->addOutputSynapse(synapse);
-				(*l)->addInputSynapse(synapse);
-			}
-		}
-	}
-
-}
+//NeuralNetwork::NeuralNetwork(std::vector<int> neuronsInLayer, std::function<double(double)> function,
+//                             std::function<double(double)> derivative) :
+//		neurons_(neuronsInLayer.size() + 2) {
+//
+//
+//	// 19 input neurons for each position in house + 1 bias neuron
+//	for (int i = 0; i < 19; ++i) {
+//		neurons_.at(0).emplace_back(new neurons::InputNeuron());
+//	}
+//	neurons_.at(0).emplace_back(new neurons::BiasNeuron());
+//
+//	// hidden layers with number of neurons specified in the input argument + 1 bias neuron per layer
+//
+//	auto hiddenLayers = neuronsInLayer.size();
+//
+//	for (int i = 0; i < hiddenLayers; ++i) {
+//		for (int j = 0; j < neuronsInLayer.at(i); ++j) {
+//			neurons_.at(i+1).emplace_back(new neurons::Neuron(function, derivative));
+//		}
+//		neurons_.at(i+1).emplace_back(new neurons::BiasNeuron());
+//	}
+//
+//	// output layer consists of only one output neuron
+//
+//	neurons_.at(neurons_.size() - 1).emplace_back(new neurons::OutputNeuron());
+//
+//	// create synapses between neurons
+//
+//	for (auto i = neurons_.begin(), j = i + 1 ; j != neurons_.end(); ++i, ++j) {
+//		for (auto k = i->begin(); k != i->end(); ++k){
+//			for(auto l = j->begin(); l != j->end(); ++l){
+//
+//				std::shared_ptr<neurons::Synapse> synapse = std::make_shared<neurons::Synapse>(*k,*l);
+//
+//				(*k)->addOutputSynapse(synapse);
+//				(*l)->addInputSynapse(synapse);
+//			}
+//		}
+//	}
+//
+//}
 
 double NeuralNetwork::feedForward(const house::NormalizedValuesHouse& house) {
 
@@ -89,6 +90,41 @@ void NeuralNetwork::setInputs(const NormalizedValuesHouse& house) {
 
 };
 
+void NeuralNetwork::stochasticGradientDescent(const std::vector<NormalizedValuesHouse>& trainingData, unsigned int epochs,
+                                         unsigned int miniBatchSize,
+                                         double eta, std::function<void()> afterEachEpoch = [](){}) {
+// TODO
+//	std::random_device rd;
+//	std::mt19937 g(rd());
+//
+//	std::vector<const NormalizedValuesHouse*> data;
+//
+//	for (auto& house : trainingData){
+//		data.emplace_back(&house);
+//	}
+//
+//	for (int i = 0; i < epochs; ++i){
+//		std::shuffle(data.begin(), data.end(), g);
+//
+//		int index = 0;
+//		for(auto& datum : data){
+//
+//
+//
+//
+//			if(index % miniBatchSize == 0){
+//				updateWeights();
+//			}
+//		}
+//
+//
+//		// Update progress
+//		afterEachEpoch();
+//	}
+
+
+}
+
 double NeuralNetwork::getNetResult() {
 
 	auto outputNeuronLayer = --neurons_.end();
@@ -97,13 +133,8 @@ double NeuralNetwork::getNetResult() {
 
 }
 
-void NeuralNetwork::propagateBack(const NormalizedValuesHouse& house) {
-
-	//calculate error
-	double error = getNetResult();
-	error *= error;
-
-
+void NeuralNetwork::updateWeights() {
+	throw std::runtime_error("TODO");
 }
 
 
