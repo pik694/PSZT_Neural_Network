@@ -12,7 +12,7 @@ const double Synapse::MAX_WEIGHT = 1.0;
 Synapse::Synapse(const std::shared_ptr<Neuron> &begin, const std::shared_ptr<Neuron> &end) :
 		begin_(begin),
 		end_(end) {
-	weight_ = RandomNumberGenerator::getInstance()->generateNumber(0.0, MAX_WEIGHT);
+	weight_ = RandomNumberGenerator<0,1>::generateDouble();
 }
 
 Synapse::Synapse(const std::shared_ptr<Neuron> &begin, const std::shared_ptr<Neuron> &end, double weight) :

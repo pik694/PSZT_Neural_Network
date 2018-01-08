@@ -5,19 +5,28 @@
 #ifndef PSZT_NEURAL_NETWORK_RANDOMNUMBERGENERATOR_H
 #define PSZT_NEURAL_NETWORK_RANDOMNUMBERGENERATOR_H
 
-#include <stdexcept>
+#include <random>
 
+template <int min, int max>
 class RandomNumberGenerator {
 public:
-	static RandomNumberGenerator *getInstance();
 
-	template<typename T>
-	T generateNumber(T min, T max);
+	static int generateInteger(){
+		static 	std::random_device randomDevice;
+		static  std::mt19937 generator;
+		static  std::uniform_int_distribution<> distribution (min, max);
 
-private:
-	RandomNumberGenerator();
+		return distribution(generator);
+	}
 
-	static RandomNumberGenerator *instance_;
+	static double generateDouble(){
+		static 	std::random_device randomDevice;
+		static  std::mt19937 generator;
+		static  std::uniform_real_distribution<> distribution ((double)min,(double)max);
+
+		return distribution(generator);
+	}
+
 };
 
 #endif //PSZT_NEURAL_NETWORK_RANDOMNUMBERGENERATOR_H
