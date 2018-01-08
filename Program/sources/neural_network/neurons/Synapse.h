@@ -7,7 +7,7 @@
 
 #include <memory>
 
-namespace neural_network{
+namespace neural_network {
 	namespace neurons {
 		class Synapse;
 	}
@@ -22,6 +22,7 @@ namespace neural_network {
 		public:
 
 			Synapse(const std::shared_ptr<Neuron> &begin, const std::shared_ptr<Neuron> &end);
+			Synapse(const std::shared_ptr<Neuron> &begin, const std::shared_ptr<Neuron> &end, double weight);
 
 			double getWeight() const;
 
@@ -34,6 +35,7 @@ namespace neural_network {
 		private:
 			std::weak_ptr<Neuron> begin_;
 			std::weak_ptr<Neuron> end_;
+
 			double weight_;
 
 			static const double MAX_WEIGHT;
