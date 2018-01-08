@@ -3,7 +3,6 @@
 #include "neurons/OutputNeuron.h"
 #include "NeuralNetwork.h"
 
-
 using namespace neural_network;
 
 NeuralNetwork::NeuralNetwork(std::vector<int> neuronsInLayer, std::function<double(double)> function,
@@ -55,7 +54,7 @@ double NeuralNetwork::feedForward(const house::NormalizedValuesHouse& house) {
 	for (auto i = neurons_.begin() + 1; i != neurons_.end(); ++i){
 		std::for_each(i->begin(), i->end(),
 		              [](std::shared_ptr<neurons::Neuron> neuron){
-			neuron->calculateOutputValue();
+			              neuron->recalculateOutputValue();
 		});
 	}
 
@@ -95,6 +94,15 @@ double NeuralNetwork::getNetResult() {
 	auto outputNeuronLayer = --neurons_.end();
 
 	return outputNeuronLayer->at(0)->getOutputValue();
+
+}
+
+void NeuralNetwork::propagateBack(const NormalizedValuesHouse& house) {
+
+	//calculate error
+	double error = getNetResult();
+	error *= error;
+
 
 }
 
