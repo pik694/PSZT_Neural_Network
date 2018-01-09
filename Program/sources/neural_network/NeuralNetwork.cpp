@@ -2,7 +2,6 @@
 #include "NeuralNetwork.h"
 
 #include "neurons/InputNeuron.h"
-#include "neurons/OutputNeuron.h"
 #include "neurons/BiasNeuron.h"
 #include "neurons/HiddenLayerNeuron.h"
 
@@ -128,7 +127,7 @@ void NeuralNetwork::createConnections(NeuralNetwork::weights_t weights) {
 
 }
 
-std::vector<int> NeuralNetwork::getTopology() {
+std::vector<int> NeuralNetwork::getTopology() const {
 	std::vector<int> topology(neurons_.size() - 2);
 
 	auto outputLayer = --neurons_.end();
@@ -138,7 +137,7 @@ std::vector<int> NeuralNetwork::getTopology() {
 	return topology;
 }
 
-NeuralNetwork::weights_t NeuralNetwork::getWeights() {
+NeuralNetwork::weights_t NeuralNetwork::getWeights() const {
 
 	weights_t weights(neurons_.size() - 1);
 
@@ -163,21 +162,51 @@ NeuralNetwork::weights_t NeuralNetwork::getWeights() {
 	return weights;
 }
 
-//	// create synapses between neurons
-//
-//	for (auto i = neurons_.begin(), j = i + 1 ; j != neurons_.end(); ++i, ++j) {
-//		for (auto k = i->begin(); k != i->end(); ++k){
-//			for(auto l = j->begin(); l != j->end(); ++l){
-//
-//				std::shared_ptr<neurons::Synapse> synapse = std::make_shared<neurons::Synapse>(*k,*l);
-//
-//				(*k)->addOutputSynapse(synapse);
-//				(*l)->addInputSynapse(synapse);
-//			}
-//		}
-//	}
+double NeuralNetwork::calculateHousesPrice(const house::NormalizedValuesHouse &house) {
 
+	feedForward(house);
+	return outputNeuron_->getValue();
 
+}
+
+void NeuralNetwork::feedForward(const house::NormalizedValuesHouse &house) {
+
+	setInputs(house);
+
+	for (auto i = neurons_.begin() + 1; i != neurons_.end(); ++i) {
+		std::for_each(i->begin(), i->end(),
+		              [](std::shared_ptr<neurons::Neuron> neuron) {
+			              neuron->recalculateValue();
+		              });
+	}
+
+}
+
+void NeuralNetwork::setInputs(const house::NormalizedValuesHouse &house) {
+
+	layer_t &inputLayer = neurons_.at(0);
+
+	inputLayer.at(0)->setOutputValue(house.getDate());
+	inputLayer.at(1)->setOutputValue(house.getBedrooms());
+	inputLayer.at(2)->setOutputValue(house.getBathrooms());
+	inputLayer.at(3)->setOutputValue(house.getSqftLiving());
+	inputLayer.at(4)->setOutputValue(house.getSqftLot());
+	inputLayer.at(5)->setOutputValue(house.getFloors());
+	inputLayer.at(6)->setOutputValue(house.getWaterfront());
+	inputLayer.at(7)->setOutputValue(house.getView());
+	inputLayer.at(8)->setOutputValue(house.getCondition());
+	inputLayer.at(9)->setOutputValue(house.getGrade());
+	inputLayer.at(10)->setOutputValue(house.getSqftAbove());
+	inputLayer.at(11)->setOutputValue(house.getSqftBasement());
+	inputLayer.at(12)->setOutputValue(house.getYrBuilt());
+	inputLayer.at(13)->setOutputValue(house.getYrRenovated());
+	inputLayer.at(14)->setOutputValue(house.getZipcode());
+	inputLayer.at(15)->setOutputValue(house.getLat());
+	inputLayer.at(16)->setOutputValue(house.getLong());
+	inputLayer.at(17)->setOutputValue(house.getSqftLiving15());
+	inputLayer.at(18)->setOutputValue(house.getSqftLot15());
+
+}
 
 
 //double NeuralNetwork::feedForward(const house::NormalizedValuesHouse& house) {
