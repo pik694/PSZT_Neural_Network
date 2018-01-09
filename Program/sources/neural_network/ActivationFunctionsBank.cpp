@@ -80,7 +80,7 @@ namespace boost {
 
 		using string_function_map_t = std::map<const std::string, ActivationFunctions_E>;
 
-		string_function_map_t map = {
+		static const string_function_map_t map = {
 				{std::to_string(static_cast<int>(ActivationFunctions_E::step)),              ActivationFunctions_E::step},
 				{std::to_string(
 						static_cast<int>(ActivationFunctions_E::fastSigmoid)),               ActivationFunctions_E::fastSigmoid},
