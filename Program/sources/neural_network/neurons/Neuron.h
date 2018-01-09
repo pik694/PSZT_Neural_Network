@@ -35,6 +35,8 @@ namespace neural_network {
 
 			const std::vector<std::shared_ptr<Synapse> >& getOutputSynapses(){return outputSynapses_;}
 
+			virtual void updateOutputSynapses(double eta, int batchSize);
+
 			virtual ~Neuron() = default;
 
 		protected:
@@ -43,6 +45,8 @@ namespace neural_network {
 			std::vector<std::shared_ptr<Synapse> > outputSynapses_;
 
 			double value_;
+			double inputSum_;
+
 
 		};
 	}

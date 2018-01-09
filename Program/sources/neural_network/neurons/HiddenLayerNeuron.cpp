@@ -15,12 +15,12 @@ HiddenLayerNeuron::HiddenLayerNeuron(neural_network::functions::ActivationFuncti
 
 double HiddenLayerNeuron::recalculateValue() {
 
-	double sum = 0.0;
+	inputSum_ = 0.0;
 	for(auto& synapse : inputSynapses_){
-		sum += synapse->getValue();
+		inputSum_ += synapse->updateValue();
 	}
 
-	return 	value_ = functions_.first(sum);
+	return 	value_ = functions_.first(inputSum_);
 }
 
 void HiddenLayerNeuron::addInputSynapse(

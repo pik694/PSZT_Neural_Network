@@ -29,6 +29,10 @@ namespace neural_network {
 			void setWeight(double weight);
 
 			double getValue() const;
+			double updateValue();
+
+			void updateWeight(double eta, int batchSize);
+			void resetTemporaryData();
 
 			virtual ~Synapse() = default;
 
@@ -37,6 +41,10 @@ namespace neural_network {
 			std::weak_ptr<Neuron> end_;
 
 			double weight_;
+			double value_;
+
+			double nablaWeight_;
+			double deltaNablaWeight_;
 
 			static const double MAX_WEIGHT;
 		};

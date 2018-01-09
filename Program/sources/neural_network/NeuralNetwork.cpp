@@ -1,4 +1,5 @@
 
+#include <random>
 #include "NeuralNetwork.h"
 
 #include "neurons/InputNeuron.h"
@@ -208,6 +209,59 @@ void NeuralNetwork::setInputs(const house::NormalizedValuesHouse &house) {
 	inputLayer.at(18)->setOutputValue(house.getSqftLot15());
 
 }
+
+void
+NeuralNetwork::stochasticGradientDescent(const NeuralNetwork::houses_t &inputHouses, int epochs, int batchSize,
+                                         double eta,
+                                         std::function<void()> updateProgress = [] {}) {
+
+	std::vector<houses_t::const_iterator> houses;
+	std::random_device randomDevice;
+	std::mt19937 g(randomDevice());
+
+	for (auto iterator = inputHouses.begin(); iterator != inputHouses.end(); ++iterator)
+		houses.emplace_back(iterator);
+
+	for (int epoch = 0; epoch < epochs; ++epoch) {
+
+		std::shuffle(houses.begin(), houses.end(), g);
+
+		for (auto iterator = houses.begin(); iterator != houses.end();)
+			runBatchAndUpdateWeights(iterator, iterator += batchSize, eta, batchSize);
+
+		updateProgress();
+	}
+}
+
+void NeuralNetwork::runBatchAndUpdateWeights(NeuralNetwork::houses_const_iterator_t begin,
+                                             NeuralNetwork::houses_const_iterator_t end, double eta, int batchSize) {
+
+
+	while(begin != end)
+		propagateBack(**(begin++));
+
+	updateWeights(eta, batchSize);
+}
+
+void NeuralNetwork::updateWeights(double eta, int batchSize) {
+
+	for(auto& layer : neurons_)
+		for(auto& neuron : layer)
+			neuron->updateOutputSynapses(eta, batchSize);
+
+}
+
+void NeuralNetwork::propagateBack(const house::NormalizedValuesHouse& house) {
+
+	feedForward(house);
+
+
+
+}
+
+
+
+
 
 
 
