@@ -1,37 +1,38 @@
 //Created by Daniel Bigos
 
 #include <vector>
-#include "TrainingDataFactory.h"
-#include "FileReader.h"
 
-#include "neural_network/neurons/Neuron.h"
 #include "house/NormalizedValuesHouse.h"
-
+#include "ActivationFunctionsBank.h"
+#include "neurons/Neuron.h"
 
 namespace neural_network {
 	class NeuralNetwork {
 	public:
-		NeuralNetwork(std::vector<int> neuronsInLayer,
-		              std::function<double(double)>  function,
-		              std::function<double(double)> derivative );
 
-		double calculatePrice(const  NormalizedValuesHouse& house) {return feedForward(house);}
+		using weights_t = std::vector<std::vector<std::vector<double>>>;
 
-		void propagateBack(const  NormalizedValuesHouse&);
+		NeuralNetwork(std::vector<int> topology, functions::ActivationFunctions_E activationFunction);
+		NeuralNetwork(weights_t weights, functions::ActivationFunctions_E activationFunction);
 
-		double feedForward(const  NormalizedValuesHouse&);
+		std::vector<int> getTopology();
+		weights_t getWeights();
 
 		virtual ~NeuralNetwork() = default;
 
 	private:
 
 		using layer_t = std::vector<std::shared_ptr<neurons::Neuron>>;
-
-
-		void setInputs(const  NormalizedValuesHouse&);
-		double getNetResult();
-
 		std::vector<layer_t> neurons_;
+
+		void createInputNeurons();
+		void createOutputNeuron();
+		void createHiddenLayers(std::vector<int>, functions::ActivationFunctions_E);
+		void createHiddenLayers(weights_t, functions::ActivationFunctions_E);
+
+		void createConnections();
+		void createConnections(weights_t);
+
 
 	};
 }

@@ -20,48 +20,33 @@ namespace neural_network {
 namespace neural_network {
 	namespace neurons {
 		class Neuron {
-
 		public:
+			Neuron() = default;
 
-			explicit Neuron(std::function<double(double)> function, std::function<double(double)> derivative);
+			double getValue() const { return value_; }
 
-			double recalculateOutputValue();
+			virtual double recalculateValue() { return getValue(); }
 
-			double getOutputValue() const;
+			virtual void addInputSynapse(const std::shared_ptr<Synapse> &inputSynapse);
 
-			void addInputSynapse(const std::shared_ptr<Synapse> &inputSynapse);
+			virtual void addOutputSynapse(const std::shared_ptr<Synapse> &outputSynapse);
 
-			void addOutputSynapse(const std::shared_ptr<Synapse> &outputSynapse);
+			virtual void setOutputValue(double value);
 
-			virtual void
-			setOutputValue(double value) {
-				throw std::domain_error("In this type of neuron you cannot set output value");
-			}
+			const std::vector<std::shared_ptr<Synapse> >& getOutputSynapses(){return outputSynapses_;}
 
 			virtual ~Neuron() = default;
 
-		private:
-
-			double sumInputs();
-
-			void updateInputValue();
-
-			void updateOutputValue();
-
-			std::function<double(double)> function_;
-			std::function<double(double)> derivative_;
+		protected:
 
 			std::vector<std::shared_ptr<Synapse> > inputSynapses_;
 			std::vector<std::shared_ptr<Synapse> > outputSynapses_;
 
-			double inputValue_;
-			double outputValue_;
-
+			double value_;
 
 		};
 	}
-
-};
+}
 
 
 #endif //PSZT_NEURAL_NETWORK_NEURON_H

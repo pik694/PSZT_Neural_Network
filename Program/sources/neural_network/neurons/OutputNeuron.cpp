@@ -6,5 +6,6 @@
 
 using namespace neural_network::neurons;
 
-OutputNeuron::OutputNeuron():
-	Neuron([](double a){return a;}, [](double){return 1;}) {}
+void OutputNeuron::addInputSynapse(const std::shared_ptr<Synapse> &inputSynapse) {
+	inputSynapses_.emplace_back(inputSynapse);
+}

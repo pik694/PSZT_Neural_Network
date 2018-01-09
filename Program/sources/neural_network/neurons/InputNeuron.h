@@ -11,9 +11,13 @@ namespace neural_network {
 	namespace neurons {
 		class InputNeuron : public Neuron{
 		public:
-			InputNeuron();
+			InputNeuron() = default;
+
+			void addOutputSynapse(const std::shared_ptr<Synapse> &outputSynapse) override;
 
 			void setOutputValue(double value) override;
+
+			~InputNeuron() override = default;
 		};
 	}
 }

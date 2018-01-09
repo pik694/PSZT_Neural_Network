@@ -5,14 +5,15 @@
 #ifndef PSZT_NEURAL_NETWORK_BIASNEURON_H
 #define PSZT_NEURAL_NETWORK_BIASNEURON_H
 
-#include "Neuron.h"
+#include "InputNeuron.h"
 
 namespace neural_network {
 	namespace neurons {
-		class BiasNeuron : public Neuron {
-
+		class BiasNeuron : public InputNeuron {
 		public:
-			BiasNeuron();
+			BiasNeuron() {value_ = 1.0;}
+
+			~BiasNeuron() override = default;
 
 		};
 	}
