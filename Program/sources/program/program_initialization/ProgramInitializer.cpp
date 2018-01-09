@@ -28,7 +28,8 @@ ProgramInitializer::ProgramInitializer(int argc, const char **argv) :
 			( command( HELP, "h" ).c_str(), "Show this help message" )
 			( command( VERSION, "v" ).c_str(), "Show program version" );
 	runOptions_.add_options()
-			( command( MODE, "m" ).c_str(), value< ExecutionMode_E >( &executionMode_ )->required(), "Specifies program mode")
+//			( command( MODE, "m" ).c_str(), value< ExecutionMode_E >( &executionMode_ )->required(), "Specifies program mode")
+			( command( MODE, "m" ).c_str(), value< ExecutionMode_E >(), "Specifies program mode")
 			( command( DATA, "d" ).c_str(), value< std::string >( &inputFileName_ )->required(), "Specifies input data file");
 }
 
@@ -77,8 +78,6 @@ std::unique_ptr<program::Program> ProgramInitializer::getProgram()
                 return std::make_unique< TrainAndTestProgram >();
             case ExecutionMode_E::TEST:
                 return std::make_unique< TestProgram >();
-            default:
-                throw std::runtime_error( "Unknown execution mode." );
         }
 
         //example
@@ -127,4 +126,25 @@ void ProgramInitializer::parse() {
 	notify( variablesMap_ );
 }
 
+
+namespace boost {
+	template<>
+	program::ExecutionMode_E lexical_cast(const std::string &name) {
+
+		using string_function_map_t = std::map<const std::string, program::ExecutionMode_E>;
+
+		static const string_function_map_t map = {
+				{std::to_string(
+						static_cast< int >( program::ExecutionMode_E::TRAIN )),                  program::ExecutionMode_E::TRAIN},
+				{std::to_string(
+						static_cast< int >( program::ExecutionMode_E::TRAIN_AND_TEST )),         program::ExecutionMode_E::TRAIN_AND_TEST},
+				{std::to_string(
+						static_cast< int >( program::ExecutionMode_E::TEST )),                   program::ExecutionMode_E::TEST},
+		};
+
+		return map.at(name);
+
+	}
+
+}
 
