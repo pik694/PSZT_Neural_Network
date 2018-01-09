@@ -1,41 +1,168 @@
-#include <random>
-#include "neurons/BiasNeuron.h"
+
 #include "NeuralNetwork.h"
+
+#include "neurons/InputNeuron.h"
+#include "neurons/OutputNeuron.h"
+#include "neurons/BiasNeuron.h"
+#include "neurons/HiddenLayerNeuron.h"
 
 using namespace neural_network;
 
+NeuralNetwork::NeuralNetwork(std::vector<int> topology, functions::ActivationFunctions_E activationFunction) :
+		neurons_(topology.size() + 2) {
 
-NeuralNetwork::NeuralNetwork(std::vector<int> neuronsInLayer, functions::ActivationFunctions_E activationFunction) {
+
+	createInputNeurons();
+
+	createHiddenLayers(topology, activationFunction);
+
+	createOutputNeuron();
+
+	createConnections();
 
 }
 
+NeuralNetwork::NeuralNetwork(NeuralNetwork::weights_t weights, functions::ActivationFunctions_E activationFunction) :
+		neurons_(weights.size() + 1) {
 
-//NeuralNetwork::NeuralNetwork(std::vector<int> neuronsInLayer, std::function<double(double)> function,
-//                             std::function<double(double)> derivative) :
-//		neurons_(neuronsInLayer.size() + 2) {
-//
-//
-//	// 19 input neurons for each position in house + 1 bias neuron
-//	for (int i = 0; i < 19; ++i) {
-//		neurons_.at(0).emplace_back(new neurons::InputNeuron());
-//	}
-//	neurons_.at(0).emplace_back(new neurons::BiasNeuron());
-//
-//	// hidden layers with number of neurons specified in the input argument + 1 bias neuron per layer
-//
-//	auto hiddenLayers = neuronsInLayer.size();
-//
-//	for (int i = 0; i < hiddenLayers; ++i) {
-//		for (int j = 0; j < neuronsInLayer.at(i); ++j) {
-//			neurons_.at(i+1).emplace_back(new neurons::Neuron(function, derivative));
-//		}
-//		neurons_.at(i+1).emplace_back(new neurons::BiasNeuron());
-//	}
-//
-//	// output layer consists of only one output neuron
-//
-//	neurons_.at(neurons_.size() - 1).emplace_back(new neurons::OutputNeuron());
-//
+	createInputNeurons();
+
+	createHiddenLayers(weights, activationFunction);
+
+	createOutputNeuron();
+
+	createConnections(weights);
+}
+
+void NeuralNetwork::createInputNeurons() {
+
+	neurons_.emplace_back();
+
+	// 19 input neurons for each position in a house + 1 bias neuron
+	for (int i = 0; i < 19; ++i) {
+		neurons_.at(0).emplace_back(new neurons::InputNeuron());
+	}
+	neurons_.at(0).emplace_back(new neurons::BiasNeuron());
+
+}
+
+void NeuralNetwork::createOutputNeuron() {
+
+	// output layer consists of only one output neuron
+	neurons_.at(neurons_.size() - 1).emplace_back(new neurons::OutputNeuron());
+
+}
+
+void NeuralNetwork::createHiddenLayers(std::vector<int> topology, functions::ActivationFunctions_E activationFunction) {
+
+	// hidden layers with number of neurons specified in the input argument + 1 bias neuron per layer
+
+	auto hiddenLayers = topology.size();
+
+	for (int i = 0; i < hiddenLayers; ++i) {
+		for (int j = 0; j < topology.at(i); ++j) {
+			neurons_.at(i + 1).emplace_back(new neurons::HiddenLayerNeuron(activationFunction));
+		}
+		neurons_.at(i + 1).emplace_back(new neurons::BiasNeuron());
+	}
+
+}
+
+void NeuralNetwork::createHiddenLayers(NeuralNetwork::weights_t weights,
+                                       functions::ActivationFunctions_E activationFunction) {
+
+
+	auto netIterator = ++neurons_.begin();
+	auto weightsIterator = ++weights.begin();
+
+	for (; weightsIterator != weights.end();
+	       ++netIterator, ++weightsIterator) {
+
+		auto neuronsInLayer = weightsIterator->size() - 1;
+
+		for (int i = 0; i < neuronsInLayer; ++i)
+			netIterator->emplace_back(new neurons::HiddenLayerNeuron(activationFunction));
+
+		netIterator->emplace_back(new neurons::BiasNeuron());
+	}
+
+
+}
+
+void NeuralNetwork::createConnections() {
+
+	for (auto i = neurons_.begin(), j = i + 1; j != neurons_.end(); ++i, ++j) {
+		for (auto k = i->begin(); k != i->end(); ++k) {
+			for (auto l = j->begin(); l != j->end(); ++l) {
+
+				auto synapse = std::make_shared<neurons::Synapse>(*k, *l);
+
+				(*k)->addOutputSynapse(synapse);
+				(*l)->addInputSynapse(synapse);
+			}
+		}
+	}
+}
+
+void NeuralNetwork::createConnections(NeuralNetwork::weights_t weights) {
+
+	auto layerIt = weights.begin();
+
+	for (auto i = neurons_.begin(), j = i + 1; j != neurons_.end(); ++i, ++j, layerIt++) {
+
+		auto k = i->begin();
+		auto weightK = layerIt->begin();
+
+		for (; k != i->end(); ++k, ++weightK) {
+			auto l = j->begin();
+			auto weightsL = weightK->begin();
+			for (; l != j->end(); ++l, ++weightsL) {
+
+				auto synapse = std::make_shared<neurons::Synapse>(*k, *l, *weightsL);
+
+				(*k)->addOutputSynapse(synapse);
+				(*l)->addInputSynapse(synapse);
+			}
+		}
+	}
+
+}
+
+std::vector<int> NeuralNetwork::getTopology() {
+	std::vector<int> topology(neurons_.size() - 2);
+
+	auto outputLayer = --neurons_.end();
+	for (auto iterator = ++neurons_.begin(); iterator != outputLayer; ++iterator)
+		topology.emplace_back(iterator->size());
+
+	return topology;
+}
+
+NeuralNetwork::weights_t NeuralNetwork::getWeights() {
+
+	weights_t weights(neurons_.size() - 1);
+
+	auto firstDim = weights.begin();
+	auto outputLayer = --neurons_.end();
+	for (auto layer = neurons_.begin(); layer != outputLayer; ++layer, ++firstDim) {
+		firstDim->emplace_back(layer->size());
+
+		auto secondDim = firstDim->begin();
+		for (auto neuron = layer->begin(); neuron != layer->end(); ++neuron, ++secondDim) {
+
+			auto synapses = (*neuron)->getOutputSynapses();
+
+			std::for_each(synapses.begin(), synapses.end(),
+			              [&secondDim](auto synapse) {
+				              secondDim->emplace_back(synapse->getWeight());
+			              });
+
+		}
+	}
+
+	return weights;
+}
+
 //	// create synapses between neurons
 //
 //	for (auto i = neurons_.begin(), j = i + 1 ; j != neurons_.end(); ++i, ++j) {
@@ -49,9 +176,10 @@ NeuralNetwork::NeuralNetwork(std::vector<int> neuronsInLayer, functions::Activat
 //			}
 //		}
 //	}
-//
-//}
-//
+
+
+
+
 //double NeuralNetwork::feedForward(const house::NormalizedValuesHouse& house) {
 //
 //	setInputs(house);

@@ -20,7 +20,7 @@ namespace neural_network {
 
 			void addOutputSynapse(const std::shared_ptr<Synapse> &outputSynapse) override;
 
-			virtual ~HiddenLayerNeuron() = default;
+			~HiddenLayerNeuron() override = default;
 
 		private:
 			const std::pair<std::function<double(double)>, std::function<double(double)>> functions_;

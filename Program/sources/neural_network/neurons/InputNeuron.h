@@ -17,7 +17,7 @@ namespace neural_network {
 
 			void setOutputValue(double value) override;
 
-			virtual ~InputNeuron() = default;
+			~InputNeuron() override = default;
 		};
 	}
 }

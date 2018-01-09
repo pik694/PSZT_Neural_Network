@@ -6,6 +6,13 @@
 
 
 using namespace neural_network::neurons;
+
+HiddenLayerNeuron::HiddenLayerNeuron(neural_network::functions::ActivationFunctions_E functions):
+	functions_(functions::ActivationFunctionsBank::getFunctionAndDerivative(functions))
+{
+
+}
+
 double HiddenLayerNeuron::recalculateValue() {
 
 	double sum = 0.0;

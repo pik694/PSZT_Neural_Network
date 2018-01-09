@@ -13,7 +13,7 @@ namespace neural_network {
 		public:
 			BiasNeuron() {value_ = 1.0;}
 
-			virtual ~BiasNeuron() = default;
+			~BiasNeuron() override = default;
 
 		};
 	}

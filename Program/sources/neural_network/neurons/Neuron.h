@@ -33,6 +33,8 @@ namespace neural_network {
 
 			virtual void setOutputValue(double value);
 
+			const std::vector<std::shared_ptr<Synapse> >& getOutputSynapses(){return outputSynapses_;}
+
 			virtual ~Neuron() = default;
 
 		protected:
