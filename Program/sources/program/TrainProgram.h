@@ -12,6 +12,9 @@ namespace program
     public:
         void run() override;
         virtual ~TrainProgram() = default;
+    private:
+        /*std::vector< std::shared_ptr< NormalizedHouse> > training_data;
+        std::vector< >*/
     };
 }
 

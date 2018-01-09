@@ -11,6 +11,7 @@
 #include "program/TestProgram.h"
 #include "program/TrainProgram.h"
 #include "program/TrainAndTestProgram.h"
+#include "neural_network/ActivationFunctionsBank.h"
 
 namespace program {
 	namespace program_initializer {
@@ -37,6 +38,13 @@ namespace program {
 			boost::program_options::variables_map variablesMap_;
 			boost::program_options::positional_options_description positionalOptions_;
 
+            std::vector< int > epoch_v;
+            std::vector< int > pack_v;
+            std::vector< int > topology_v;
+            std::vector< neural_network::functions::ActivationFunctions_E > function_v;
+            std::vector< double > eta_v;
+            std::vector< int > tolerance_v;
+            std::string neuralNetFile_;
 			std::string inputFileName_;
 			ExecutionMode_E executionMode_;
 
@@ -47,6 +55,13 @@ namespace program {
 			c_str VERSION = "version";
 			c_str MODE = "mode";
 			c_str DATA = "input data";
+            c_str PACK = "pack";
+            c_str FUNCTION = "function";
+            c_str ETA = "eta";
+            c_str EPOCH = "epoch";
+            c_str TOPOLOGY = "topology";
+            c_str TOLERANCE = "tolerance";
+            c_str NEURAL_NET = "neural net";
 		};
 	}
 }

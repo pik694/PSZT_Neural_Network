@@ -70,29 +70,10 @@ ActivationFunctionsBank::getFunctionAndDerivative(ActivationFunctions_E funcEnum
 			                                                          specificAlgebraicFunctionDerivative)},
 	};
 
+	if( map.find( funcEnum ) == map.end() )
+		throw std::runtime_error( "Invalid function" );
 	return map.at(funcEnum);
 
 }
 
-namespace boost {
-	template<>
-	ActivationFunctions_E lexical_cast(const std::string &name) {
 
-		using string_function_map_t = std::map<const std::string, ActivationFunctions_E>;
-
-		static const string_function_map_t map = {
-				{std::to_string(static_cast<int>(ActivationFunctions_E::step)),              ActivationFunctions_E::step},
-				{std::to_string(
-						static_cast<int>(ActivationFunctions_E::fastSigmoid)),               ActivationFunctions_E::fastSigmoid},
-				{std::to_string(
-						static_cast<int>(ActivationFunctions_E::logistic)),                  ActivationFunctions_E::logistic},
-				{std::to_string(
-						static_cast<int>(ActivationFunctions_E::hyperbolicTangent)),         ActivationFunctions_E::hyperbolicTangent},
-				{std::to_string(
-						static_cast<int>(ActivationFunctions_E::specificAlgebraic)),         ActivationFunctions_E::specificAlgebraic}
-		};
-
-		return map.at(name);
-	}
-
-}

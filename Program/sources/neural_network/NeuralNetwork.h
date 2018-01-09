@@ -1,14 +1,20 @@
 //Created by Daniel Bigos
 
 #include <vector>
-
 #include "house/NormalizedValuesHouse.h"
 #include "ActivationFunctionsBank.h"
 #include "neurons/Neuron.h"
 #include "neurons/OutputNeuron.h"
 
-namespace neural_network {
-	class NeuralNetwork {
+namespace neural_network
+{
+	enum class Topology_E
+	{
+		JakaKolwiek = 69
+	};
+
+	class NeuralNetwork
+	{
 	public:
 
 		using weights_t = std::vector<std::vector<std::vector<double>>>;
@@ -45,9 +51,6 @@ namespace neural_network {
 
 		void feedForward(const house::NormalizedValuesHouse& house);
 		void setInputs(const house::NormalizedValuesHouse& house);
-
-
-
 
 	};
 }
