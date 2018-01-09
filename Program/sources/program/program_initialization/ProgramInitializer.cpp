@@ -8,6 +8,7 @@
 #include "TrainingDataFactory.h"
 #include "ProgramInitializer.h"
 #include "progress/ProgressStatusManager.h"
+#include "neural_network/NeuralNetworkTopology.h"
 
 
 using namespace program;

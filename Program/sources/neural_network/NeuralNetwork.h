@@ -8,10 +8,6 @@
 
 namespace neural_network
 {
-	enum class Topology_E
-	{
-		JakaKolwiek = 69
-	};
 
 	class NeuralNetwork
 	{
