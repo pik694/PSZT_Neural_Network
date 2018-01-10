@@ -4,7 +4,7 @@ if (ENABLE_TESTS_AT_EACH_BUILD)
 
 
     set(SOURCE_FILES )
-    set(TEST_SOURCES test_main.cpp SampleTests.cpp)
+    set(TEST_SOURCES test_main.cpp SampleTests.cpp NeuralNetworkTests.cpp)
 
     add_executable(Tests ${TEST_SOURCES} ${SOURCE_FILES})
     target_link_libraries(Tests ${Boost_LIBRARIES})
