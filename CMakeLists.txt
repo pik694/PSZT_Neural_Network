@@ -6,6 +6,8 @@ if (UNIX AND NOT APPLE)
     set(CMAKE_CXX_FLAGS "-lpthread ")
 endif ()
 
+set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-O3 -Wall -Wextra" )
+
 include(CTest)
 enable_testing()
 

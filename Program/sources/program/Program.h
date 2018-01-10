@@ -71,8 +71,9 @@ namespace program
     {
 	public:
 		ErrorInfoProgram( const std::string& errorMessage, std::unique_ptr< Program > program ) :
-				errorMessage_( errorMessage ),
-				ProgramDecorator( std::move( program ) ) {}
+				ProgramDecorator( std::move( program ) ),
+				errorMessage_( errorMessage )
+		{}
 
 		void run() override;
 

@@ -13,6 +13,5 @@ void InputNeuron::addOutputSynapse(const std::shared_ptr<Synapse> &outputSynapse
 }
 
 void InputNeuron::setOutputValue(double value) {
-	throw std::runtime_error("TODO");
-	//value_ = value;
+	value_ = value;
 }

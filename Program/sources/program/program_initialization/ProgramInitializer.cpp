@@ -18,11 +18,12 @@ using namespace boost::program_options;
 using namespace progress;
 
 ProgramInitializer::ProgramInitializer(int argc, const char **argv) :
-		argc_(argc),
-		argv_(argv),
 		infoOptions_("Info options"),
 		runOptions_ ("Program arguments"),
-		variablesMap_() {
+		variablesMap_(),
+		argc_(argc),
+		argv_(argv)
+{
 
 		positionalOptions_.add( EPOCH.c_str(), -1 );
 		positionalOptions_.add( TOPOLOGY.c_str(), -1 );

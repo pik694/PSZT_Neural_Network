@@ -61,7 +61,7 @@ void NeuralNetwork::createHiddenLayers(std::vector<int> topology, functions::Act
 
 	auto hiddenLayers = topology.size();
 
-	for (int i = 0; i < hiddenLayers; ++i) {
+	for (unsigned int i = 0; i < hiddenLayers; ++i) {
 		for (int j = 0; j < topology.at(i); ++j) {
 			neurons_.at(i + 1).emplace_back(new neurons::HiddenLayerNeuron(activationFunction));
 		}
@@ -82,7 +82,7 @@ void NeuralNetwork::createHiddenLayers(NeuralNetwork::weights_t weights,
 
 		auto neuronsInLayer = weightsIterator->size() - 1;
 
-		for (int i = 0; i < neuronsInLayer; ++i)
+		for (unsigned int i = 0; i < neuronsInLayer; ++i)
 			netIterator->emplace_back(new neurons::HiddenLayerNeuron(activationFunction));
 
 		netIterator->emplace_back(new neurons::BiasNeuron());
