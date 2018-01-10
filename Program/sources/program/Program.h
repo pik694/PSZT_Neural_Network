@@ -5,6 +5,7 @@
 #ifndef PSZT_NEURAL_NETWORK_PROGRAM_H
 #define PSZT_NEURAL_NETWORK_PROGRAM_H
 
+#include <thread>
 #include <boost/program_options.hpp>
 #include "program_version.h"
 
@@ -24,6 +25,11 @@ namespace program
 		virtual void run(){}
 
 		virtual ~Program() = default;
+
+		//static void trainNeuralNet();
+
+	protected:
+		std::vector< std::thread > threadsVec_;
 	private:
 
     };

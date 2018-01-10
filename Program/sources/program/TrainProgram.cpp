@@ -16,6 +16,10 @@ void TrainProgram::run()
                 {
                     for( auto it_eta = etaVec_.begin(); it_eta != etaVec_.end(); ++it_eta )
                     {
+                        for( unsigned threads_count = 0; threads_count < threadsForEta_; ++threads_count )
+                        {
+
+                        }
                         //na 1 eta parametr wątków
                         //kazdy watek zwroci inny wynik, za kazdym razem puszczac tak aby bylo zajete maks watków, bez sprawdzenia
                         //kady watek liczy siec

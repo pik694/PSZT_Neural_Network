@@ -45,7 +45,7 @@ ProgramInitializer::ProgramInitializer(int argc, const char **argv) :
             ( command( PACK, "p" ).c_str(), value< std::vector< int > >( &batchSize_v )->multitoken(), "Specifies data packs, must be a factor of data size" )
             ( command( FUNCTION, "f" ).c_str(), value< std::vector< neural_network::functions::ActivationFunctions_E > >( &function_v )->multitoken(), "Specifies neural activation function" )
             ( command( TOLERANCE, "b" ).c_str(), value< int  >( &percentage_ )->default_value( -1 ), "Specifies error tolerance" )
-            ( command( THREADS, "w" ).c_str(), value< int  >( &threadsForeEta_ )->default_value( 0 ), "Specifies threads count for one eta" );
+            ( command( THREADS, "w" ).c_str(), value< int >( &threadsForeEta_ )->default_value( 0 ), "Specifies threads count for one eta" );
 			}
 
 std::string ProgramInitializer::command( std::string longCommand, std::string shortCommand ) const
