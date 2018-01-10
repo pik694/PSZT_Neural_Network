@@ -18,12 +18,21 @@ void Neuron::setOutputValue(double value) {
 	throw std::runtime_error("This method should not be used in this type");
 }
 
-void Neuron::updateOutputSynapses(double eta, int batchSize) {
-
-	for(auto& synapse : outputSynapses_) {
-		synapse->updateWeight(eta, batchSize);
-		synapse->resetTemporaryData();
-	}
+void Neuron::recalculateValue() {
+	throw std::runtime_error("This method should not be used in this type");
 }
+
+void Neuron::computeError() {
+	throw std::runtime_error("This method should not be used in this type");
+}
+
+void Neuron::updateOutputWeights(double eta, int batchSize) {
+
+	for(auto synapse : outputSynapses_)
+		synapse->updateWeight(eta, batchSize);
+}
+
+
+Neuron::~Neuron() {}
 
 

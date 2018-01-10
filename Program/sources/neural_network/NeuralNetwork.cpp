@@ -1,7 +1,8 @@
-
+#include <boost/range/adaptor/reversed.hpp>
 #include <random>
-#include "NeuralNetwork.h"
 
+
+#include "NeuralNetwork.h"
 #include "neurons/InputNeuron.h"
 #include "neurons/BiasNeuron.h"
 #include "neurons/HiddenLayerNeuron.h"
@@ -16,7 +17,7 @@ NeuralNetwork::NeuralNetwork(std::vector<int> topology, functions::ActivationFun
 
 	createHiddenLayers(topology, activationFunction);
 
-	createOutputNeuron();
+	createOutputNeuron(activationFunction);
 
 	createConnections();
 
@@ -29,7 +30,7 @@ NeuralNetwork::NeuralNetwork(NeuralNetwork::weights_t weights, functions::Activa
 
 	createHiddenLayers(weights, activationFunction);
 
-	createOutputNeuron();
+	createOutputNeuron(activationFunction);
 
 	createConnections(weights);
 }
@@ -46,10 +47,10 @@ void NeuralNetwork::createInputNeurons() {
 
 }
 
-void NeuralNetwork::createOutputNeuron() {
+void NeuralNetwork::createOutputNeuron(functions::ActivationFunctions_E functions) {
 
 	// output layer consists of only one output neuron
-	outputNeuron_ = std::make_shared<neurons::OutputNeuron>();
+	outputNeuron_ = std::make_shared<neurons::OutputNeuron>(functions);
 	neurons_.at(neurons_.size() - 1).emplace_back(outputNeuron_);
 
 }
@@ -177,7 +178,7 @@ void NeuralNetwork::feedForward(const house::NormalizedValuesHouse &house) {
 
 	for (auto i = neurons_.begin() + 1; i != neurons_.end(); ++i) {
 		std::for_each(i->begin(), i->end(),
-		              [](std::shared_ptr<neurons::Neuron> neuron) {
+		              [](std::shared_ptr<neurons::Neuron>& neuron) {
 			              neuron->recalculateValue();
 		              });
 	}
@@ -222,6 +223,8 @@ NeuralNetwork::stochasticGradientDescent(const NeuralNetwork::houses_t &inputHou
 	for (auto iterator = inputHouses.begin(); iterator != inputHouses.end(); ++iterator)
 		houses.emplace_back(iterator);
 
+
+
 	for (int epoch = 0; epoch < epochs; ++epoch) {
 
 		std::shuffle(houses.begin(), houses.end(), g);
@@ -236,26 +239,37 @@ NeuralNetwork::stochasticGradientDescent(const NeuralNetwork::houses_t &inputHou
 void NeuralNetwork::runBatchAndUpdateWeights(NeuralNetwork::houses_const_iterator_t begin,
                                              NeuralNetwork::houses_const_iterator_t end, double eta, int batchSize) {
 
+	for(;begin != end; ++begin){
 
-	while(begin != end)
-		propagateBack(**(begin++));
+		feedForward(**begin);
+		calculateOutputError(**begin);
+		propagateBack();
+
+	}
 
 	updateWeights(eta, batchSize);
+
+}
+
+void NeuralNetwork::calculateOutputError(const house::NormalizedValuesHouse &house) {
+	outputNeuron_->calculateOutputError(house, costDerivative);
 }
 
 void NeuralNetwork::updateWeights(double eta, int batchSize) {
 
-	for(auto& layer : neurons_)
-		for(auto& neuron : layer)
-			neuron->updateOutputSynapses(eta, batchSize);
+	for(layer_t layer : neurons_){
+		for(auto neuron : layer){
+			neuron->updateOutputWeights(eta, batchSize);
+		}
+	}
 
 }
 
-void NeuralNetwork::propagateBack(const house::NormalizedValuesHouse& house) {
+void NeuralNetwork::propagateBack() {
 
-	feedForward(house);
-
-
+	for(auto layer_it = neurons_.rbegin(); layer_it != neurons_.rend(); ++layer_it)
+		for(auto neuron_it = layer_it->begin(); neuron_it != layer_it->end(); ++neuron_it)
+			(*neuron_it)->computeError();
 
 }
 

@@ -24,15 +24,12 @@ namespace neural_network {
 			Synapse(const std::shared_ptr<Neuron> &begin, const std::shared_ptr<Neuron> &end);
 			Synapse(const std::shared_ptr<Neuron> &begin, const std::shared_ptr<Neuron> &end, double weight);
 
-			double getWeight() const;
+			double getWeight();
+			double getValue();
 
-			void setWeight(double weight);
-
-			double getValue() const;
-			double updateValue();
-
+			double recalculateValue();
+			double getBackPropagationValue();
 			void updateWeight(double eta, int batchSize);
-			void resetTemporaryData();
 
 			virtual ~Synapse() = default;
 
@@ -42,9 +39,7 @@ namespace neural_network {
 
 			double weight_;
 			double value_;
-
-			double nablaWeight_;
-			double deltaNablaWeight_;
+			double delta_;
 
 			static const double MAX_WEIGHT;
 		};

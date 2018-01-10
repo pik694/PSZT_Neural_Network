@@ -34,7 +34,7 @@ namespace neural_network {
 		std::shared_ptr<neurons::OutputNeuron> outputNeuron_;
 
 		void createInputNeurons();
-		void createOutputNeuron();
+		void createOutputNeuron(functions::ActivationFunctions_E);
 		void createHiddenLayers(std::vector<int>, functions::ActivationFunctions_E);
 		void createHiddenLayers(weights_t, functions::ActivationFunctions_E);
 
@@ -44,8 +44,8 @@ namespace neural_network {
 
 		void runBatchAndUpdateWeights(houses_const_iterator_t begin, houses_const_iterator_t end, double eta, int batchSize);
 		void updateWeights(double eta, int batchSize);
-		void propagateBack(const house::NormalizedValuesHouse& house);
-
+		void propagateBack();
+		void calculateOutputError(const house::NormalizedValuesHouse& house);
 
 		void feedForward(const house::NormalizedValuesHouse& house);
 		void setInputs(const house::NormalizedValuesHouse& house);
