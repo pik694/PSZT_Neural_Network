@@ -29,7 +29,6 @@ ProgramInitializer::ProgramInitializer(int argc, const char **argv) :
         positionalOptions_.add( ETA.c_str(), -1 );
         positionalOptions_.add( PACK.c_str(), -1 );
 		positionalOptions_.add( FUNCTION.c_str(), -1 );
-		positionalOptions_.add( TOLERANCE.c_str(), -1 );
 
 	infoOptions_.add_options()
 			( command( HELP, "h" ).c_str(), "Show this help message" )
@@ -37,13 +36,15 @@ ProgramInitializer::ProgramInitializer(int argc, const char **argv) :
 	runOptions_.add_options()
 			( command( MODE, "m" ).c_str(), value< ExecutionMode_E >( &executionMode_ )->required(), "Specifies program mode" )
             ( command( DATA, "d" ).c_str(), value< std::string >( &inputFileName_ )->required(), "Specifies input data file" )
+            ( command( RESULT, "r" ).c_str(), value< std::string >( &resultPath_ )->default_value( ".\\result" ), "Specifies result path" )
+            ( command( LOGGER, "l" ).c_str(), value< std::string >( &loggerFile_ )->default_value( ".\\result\\logger.csv" ), "Specifies logger file" )
             ( command( EPOCH, "e" ).c_str(), value< std::vector< int > >( &epoch_v )->multitoken(), "Specifies epoch count" )
             ( command( TOPOLOGY, "t" ).c_str(), value< std::vector< neural_network::Topology_E > >( &topology_v )->multitoken(), "Specifies topology" )
             ( command( ETA, "c" ).c_str(), value< std::vector< double > >( &eta_v )->multitoken(), "Specifies eta" )
             ( command( NEURAL_NET, "n" ).c_str(), value< std::string >( &neuralNetFile_ ), "Specifies serialized neural network file" )
             ( command( PACK, "p" ).c_str(), value< std::vector< int > >( &pack_v )->multitoken(), "Specifies data packs, must be a factor of data size" )
             ( command( FUNCTION, "f" ).c_str(), value< std::vector< neural_network::functions::ActivationFunctions_E > >( &function_v )->multitoken(), "Specifies neural activation function" )
-            ( command( TOLERANCE, "b" ).c_str(), value< std::vector< int > >( &tolerance_v )->multitoken(), "Specifies error tolerance" );
+            ( command( TOLERANCE, "b" ).c_str(), value< int  >( &tolerance_ )->default_value( -1 ), "Specifies error tolerance" );
 			}
 
 std::string ProgramInitializer::command( std::string longCommand, std::string shortCommand ) const
@@ -96,30 +97,46 @@ std::unique_ptr< program::Program > ProgramInitializer::getProgram()
 		training_data_factory.run( &file_data , &training_data );
 		ProgressStatusManager::getInstance()->deinit();
 
+		std::ofstream loggerStream;
+		std::ifstream neural_net_file;
+
         switch ( executionMode_ )
         {
 			case ExecutionMode_E::TRAIN:
-                if( !epoch_v.size() || !pack_v.size() || !function_v.size() || !eta_v.size() || !topology_v.size() )
+                if( !epoch_v.size() || !pack_v.size() || !function_v.size() || !eta_v.size() || !topology_v.size() || !loggerFile_.size() || !resultPath_.size() )
                     throw std::runtime_error( "More parameters required." );
 
-				return std::make_unique< TrainProgram >( &training_data, &epoch_v, &pack_v, &function_v, &eta_v, &topology_v );
+				loggerStream.open( loggerFile_ );
+				if( !loggerStream.is_open() )
+					throw std::runtime_error( "Could not open logger file." );
+
+				return std::make_unique< TrainProgram >( training_data, epoch_v, pack_v, function_v, eta_v, topology_v );
 
 			case ExecutionMode_E::TRAIN_AND_TEST:
-                if( !epoch_v.size() || !pack_v.size() || !function_v.size() || !eta_v.size() || !topology_v.size() || !tolerance_v.size() )
+                if( !epoch_v.size() || !pack_v.size() || !function_v.size() || !eta_v.size() || !topology_v.size() || !loggerFile_.size() || !resultPath_.size() )
                     throw std::runtime_error( "More parameters required." );
 
-                return std::make_unique< TrainAndTestProgram >( &training_data, &epoch_v, &pack_v, &function_v, &eta_v, &topology_v, &tolerance_v );
+				if( tolerance_ < 0 )
+					throw std::runtime_error( "Invalid tolerance specified." );
+
+				loggerStream.open( loggerFile_ );
+				if( !loggerStream.is_open() )
+					throw std::runtime_error( "Could not open logger file." );
+
+				return std::make_unique< TrainAndTestProgram >( training_data, epoch_v, pack_v, function_v, eta_v, topology_v, tolerance_ );
 
 			case ExecutionMode_E::TEST:
-                if( !pack_v.size() || !neuralNetFile_.size() || !tolerance_v.size() )
+                if( !pack_v.size() || !neuralNetFile_.size()  )
                     throw std::runtime_error( "More parameters required." );
 
-				std::ifstream neural_net_file;
+				if( tolerance_ < 0 )
+					throw std::runtime_error( "Invalid tolerance specified." );
+
 				neural_net_file.open( neuralNetFile_ );
 				if( neural_net_file.is_open() )
 					throw std::invalid_argument( "File could not be opened" );
 
-                return std::make_unique< TestProgram >( &training_data, &neural_net_file, &pack_v, &tolerance_v );
+                return std::make_unique< TestProgram >( training_data, neural_net_file, pack_v, tolerance_ );
         }
 	}
 	catch ( std::exception& e )

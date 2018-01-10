@@ -13,13 +13,16 @@ namespace program
     class TrainProgram : public Program
     {
     public:
-        TrainProgram( std::vector< std::shared_ptr< house::NormalizedValuesHouse > > *training_data,
-                             std::vector< int > *epoch_vec, std::vector< int > *pack_vec,
-                             std::vector< neural_network::functions::ActivationFunctions_E >* function_vec,
-                             std::vector< double >* eta_vec, std::vector< neural_network::Topology_E >* topology_vec );
+        TrainProgram( std::vector< std::shared_ptr< house::NormalizedValuesHouse > > &training_data,
+                      std::vector< int > &epoch_vec,
+                      std::vector< int > &pack_vec,
+                      std::vector< neural_network::functions::ActivationFunctions_E > &function_vec,
+                      std::vector< double > &eta_vec,
+                      std::vector< neural_network::Topology_E > &topology_vec );
 
         void run() override;
-        virtual ~TrainProgram() = default;
+
+        virtual ~TrainProgram();
     private:
         std::vector< std::shared_ptr< house::NormalizedValuesHouse > > trainingData_;
         std::vector< int > epochVec_;

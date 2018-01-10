@@ -12,17 +12,18 @@ namespace program
     class TestProgram : public Program
     {
     public:
-        TestProgram( std::vector< std::shared_ptr< house::NormalizedValuesHouse > > *training_data,
-                     std::ifstream* neural_file, std::vector< int > *pack_vec,
-                     std::vector< int >* tolerance_vec );
+        TestProgram( std::vector< std::shared_ptr< house::NormalizedValuesHouse > > &training_data,
+                     std::ifstream &neural_file,
+                     std::vector< int > &pack_vec,
+                     int tolerance );
+
         void run() override;
 
         ~TestProgram() override;
     private:
         std::vector< std::shared_ptr< house::NormalizedValuesHouse > > trainingData_;
         std::ifstream neuralFile_;
-        std::vector< int > packVec_;
-        std::vector< int > toleranceVec_;
+        int tolerance_;
     };
 }
 #endif //PSZT_NEURAL_NETWORK_TESTPROGRAM_H
