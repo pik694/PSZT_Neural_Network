@@ -3,8 +3,10 @@ project(PSZT_Neural_Network CXX)
 
 set(CMAKE_CXX_STANDARD 14)
 if (UNIX AND NOT APPLE)
-    set(CMAKE_CXX_FLAGS "-lpthread ")
+    set(CMAKE_CXX_FLAGS "-lpthread")
 endif ()
+
+set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-O3 -Wall -Wextra")
 
 include(CTest)
 enable_testing()
