@@ -24,21 +24,19 @@ namespace neural_network {
 			Neuron() = default;
 
 			virtual void addInputSynapse(const std::shared_ptr<Synapse> &inputSynapse);
-
 			virtual void addOutputSynapse(const std::shared_ptr<Synapse> &outputSynapse);
 
-			const std::vector<std::shared_ptr<Synapse>>& getOutputSynapses(){return outputSynapses_;}
-
 			virtual void setOutputValue(double value);
+
+			virtual void recalculateValue();
+			virtual void computeError();
+
+			const std::vector<std::shared_ptr<Synapse>>& getOutputSynapses(){return outputSynapses_;}
 
 			double getValue(){return value_;}
 			double getDelta(){return delta_;}
 
 			void updateOutputWeights(double factor);
-
-			virtual void recalculateValue();
-
-			virtual void computeError();
 
 			virtual ~Neuron() = 0;
 

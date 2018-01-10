@@ -287,7 +287,7 @@ void NeuralNetwork::updateWeights(double factor) {
 
 void NeuralNetwork::propagateBack() {
 
-	for(auto layer_it = neurons_.rbegin(); layer_it != neurons_.rend(); ++layer_it)
+	for(auto layer_it = ++neurons_.rbegin(); layer_it != neurons_.rend(); ++layer_it)
 		for(auto neuron_it = layer_it->begin(); neuron_it != layer_it->end(); ++neuron_it)
 			(*neuron_it)->computeError();
 

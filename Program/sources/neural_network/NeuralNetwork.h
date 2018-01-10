@@ -12,7 +12,7 @@ namespace neural_network {
 	public:
 
 		using weights_t = std::vector<std::vector<std::vector<double>>>;
-		using houses_t = std::vector<house::NormalizedValuesHouse>;
+		using houses_t = std::vector<house::NormalizedValuesHouse>; // TODO : shared ptr
 
 		NeuralNetwork(std::vector<int> topology, functions::ActivationFunctions_E activationFunction);
 		NeuralNetwork(weights_t weights, functions::ActivationFunctions_E activationFunction);
@@ -30,7 +30,8 @@ namespace neural_network {
 	private:
 
 		using layer_t = std::vector<std::shared_ptr<neurons::Neuron>>;
-		using houses_const_iterator_t = std::vector<houses_t::const_iterator>::iterator;
+		using houses_const_iterator_t = std::vector<houses_t::const_iterator>::iterator; //TODO : check whether it is ok
+
 		std::vector<layer_t> neurons_;
 		std::shared_ptr<neurons::OutputNeuron> outputNeuron_;
 

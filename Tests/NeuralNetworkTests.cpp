@@ -131,5 +131,23 @@ BOOST_AUTO_TEST_SUITE(NEURAL_NETWORK_TESTS)
 
 	}
 
+	BOOST_AUTO_TEST_CASE(SimpleBackPropagation) {
+
+		std::vector<int> topology = {1, 2, 3};
+
+		date day(2002, Feb, 1);
+
+		house::NormalizedValuesHouse house(day, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+		std::vector<house::NormalizedValuesHouse> houses;
+		houses.push_back(house);
+		houses.push_back(house);
+
+		NeuralNetwork net(topology, sampleActivationFunction);
+
+		auto MSE = net.stochasticGradientDescent(houses, 1, 1, 0.1, 0);
+
+	}
+
 
 BOOST_AUTO_TEST_SUITE_END()
