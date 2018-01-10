@@ -207,10 +207,10 @@ void NeuralNetwork::setInputs(const house::NormalizedValuesHouse &house) {
 
 }
 
-void
-NeuralNetwork::stochasticGradientDescent(const NeuralNetwork::houses_t &inputHouses, int epochs, int batchSize,
-                                         double eta,
-                                         std::function<void()> updateProgress = [] {}) {
+double
+NeuralNetwork::stochasticGradientDescent(const houses_t &inputHouses, int epochs, int batchSize, double eta,
+                                         int testsPct,
+                                         std::function<void()> updateProgress) {
 
 	std::vector<houses_t::const_iterator> houses;
 	std::random_device randomDevice;
@@ -232,6 +232,9 @@ NeuralNetwork::stochasticGradientDescent(const NeuralNetwork::houses_t &inputHou
 
 		updateProgress();
 	}
+
+	//TODO
+	return 0.0;
 }
 
 void NeuralNetwork::runBatchAndUpdateWeights(NeuralNetwork::houses_const_iterator_t begin,

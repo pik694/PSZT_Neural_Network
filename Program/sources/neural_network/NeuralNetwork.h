@@ -20,7 +20,9 @@ namespace neural_network {
 		std::vector<int> getTopology() const;
 		weights_t getWeights() const;
 
-		void stochasticGradientDescent(const houses_t& inputHouses, int epochs, int batchSize, double eta, std::function<void()> updateProgress);
+		double stochasticGradientDescent(const houses_t &inputHouses, int epochs, int batchSize, double eta,
+		                                 int testsPct,
+		                                 std::function<void()> updateProgress);
 
 		double calculateHousesPrice(const house::NormalizedValuesHouse& house);
 
