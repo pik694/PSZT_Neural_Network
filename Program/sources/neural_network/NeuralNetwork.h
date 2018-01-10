@@ -43,7 +43,6 @@ namespace neural_network {
 		void createConnections();
 		void createConnections(weights_t);
 
-
 		void runBatchAndUpdateWeights(NeuralNetwork::houses_const_iterator_t begin,
 				                              NeuralNetwork::houses_const_iterator_t end, double factor);
 		void updateWeights(double factor);
@@ -54,5 +53,7 @@ namespace neural_network {
 		void setInputs(const house::NormalizedValuesHouse& house);
 
 		const std::function<double (double, double)> costDerivative = [](double received, double expected){return received - expected;};
+
+		double getMSE(const houses_t::const_iterator &begin, const houses_t::const_iterator &end);
 	};
 }

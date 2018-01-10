@@ -217,7 +217,11 @@ NeuralNetwork::stochasticGradientDescent(const houses_t &inputHouses, int epochs
 	std::mt19937 g(randomDevice());
 	double factor = eta/batchSize;
 
-	for (auto iterator = inputHouses.begin(); iterator != inputHouses.end(); ++iterator)
+	int testsNumber = inputHouses.size() * testsPct / 100;
+
+	auto firstTest = (inputHouses.end() - testsNumber);
+
+	for (auto iterator = inputHouses.begin(); iterator != firstTest ; ++iterator)
 		houses.emplace_back(iterator);
 
 
@@ -226,15 +230,29 @@ NeuralNetwork::stochasticGradientDescent(const houses_t &inputHouses, int epochs
 
 		std::shuffle(houses.begin(), houses.end(), g);
 
-		for (auto iterator = houses.begin(); iterator != houses.end();)
+		for (auto iterator = houses.begin(); iterator != houses.end(); iterator += batchSize)
 			runBatchAndUpdateWeights(iterator,
-			                         iterator += batchSize, factor);
+			                         iterator + batchSize, factor);
 
 		updateProgress();
 	}
 
-	//TODO
-	return 0.0;
+
+	double meanSquaredError = getMSE(firstTest, inputHouses.end());
+
+	return (meanSquaredError / testsNumber);
+}
+
+double NeuralNetwork::getMSE(const houses_t::const_iterator &begin,
+                             const houses_t::const_iterator &end) {
+	double meanSquaredError = 0.0;
+
+	for(auto test = begin; test != end; ++test){
+		double currentError = calculateHousesPrice(*test);
+		currentError *= currentError;
+		meanSquaredError += currentError;
+	}
+	return meanSquaredError;
 }
 
 void NeuralNetwork::runBatchAndUpdateWeights(NeuralNetwork::houses_const_iterator_t begin,

@@ -15,6 +15,8 @@ namespace neural_network {
 
 			void addInputSynapse(const std::shared_ptr<Synapse>&) override {}
 
+			void recalculateValue() override {}
+
 			~BiasNeuron() override = default;
 
 		};
