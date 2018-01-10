@@ -43,7 +43,7 @@ namespace program {
 			const char **argv_;
 
             std::vector< int > epoch_v;
-            std::vector< int > pack_v;
+            std::vector< int > batchSize_v;
             std::vector< neural_network::Topology_E > topology_v;
             std::vector< neural_network::functions::ActivationFunctions_E > function_v;
             std::vector< double > eta_v;

@@ -14,7 +14,6 @@ namespace program
     public:
         TestProgram( std::vector< std::shared_ptr< house::NormalizedValuesHouse > > &training_data,
                      std::ifstream &neural_file,
-                     std::vector< int > &pack_vec,
                      int tolerance );
 
         void run() override;

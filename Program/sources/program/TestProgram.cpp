@@ -18,7 +18,6 @@ TestProgram::~TestProgram()
 
 TestProgram::TestProgram( std::vector< std::shared_ptr< house::NormalizedValuesHouse > > &training_data,
                           std::ifstream &neural_file,
-                          std::vector< int > &pack_vec,
                           int tolerance )
 
         : trainingData_( std::move( training_data ) ),

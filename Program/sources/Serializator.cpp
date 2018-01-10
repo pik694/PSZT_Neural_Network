@@ -5,14 +5,14 @@
 #include <fstream>
 #include "Serializator.h"
 
-void Serializator::serialize(neural_network::NeuralNetwork &neuralNetwork, std::string &fileName) {
+/*void Serializator::serialize(neural_network::NeuralNetwork &neuralNetwork, std::string &fileName) {
     std::ofstream file;
     file.open(fileName);
     writeActivationFunction(file);
     writeTopology(file, neuralNetwork);
     writeWeights(file, neuralNetwork);
     file.close();
-}
+}*/
 
 neural_network::NeuralNetwork Serializator::deserialize(std::ifstream &file) {
 
@@ -120,11 +120,29 @@ neural_network::NeuralNetwork::weights_t Serializator::readWeights(std::ifstream
     return weights;
 }
 
-void Serializator::saveResults(neural_network::NeuralNetwork &neuralNetwork, std::string &fileName) {
+void Serializator::setOuptutDirecotry(const std::string &) {
+    // TODO
+}
+
+void Serializator::setLoggerFile(std::ofstream) {
+    // TODO
+}
+
+void Serializator::closeLoggerFile() {
+    // TODO
+}
+
+void
+Serializator::serialize(neural_network::NeuralNetwork &neuralNetwork, neural_network::functions::ActivationFunctions_E,
+                        int epochs, int batchSize, double eta) {
+
+}
+
+/*void Serializator::saveResults(neural_network::NeuralNetwork &neuralNetwork, std::string &fileName) {
     std::ofstream file;
     file.open(fileName);
     //todo
-}
+}*/
 
 
 

@@ -43,7 +43,7 @@ ProgramInitializer::ProgramInitializer(int argc, const char **argv) :
             ( command( TOPOLOGY, "t" ).c_str(), value< std::vector< neural_network::Topology_E > >( &topology_v )->multitoken(), "Specifies topology" )
             ( command( ETA, "c" ).c_str(), value< std::vector< double > >( &eta_v )->multitoken(), "Specifies eta" )
             ( command( NEURAL_NET, "n" ).c_str(), value< std::string >( &neuralNetFile_ ), "Specifies serialized neural network file" )
-            ( command( PACK, "p" ).c_str(), value< std::vector< int > >( &pack_v )->multitoken(), "Specifies data packs, must be a factor of data size" )
+            ( command( PACK, "p" ).c_str(), value< std::vector< int > >( &batchSize_v )->multitoken(), "Specifies data packs, must be a factor of data size" )
             ( command( FUNCTION, "f" ).c_str(), value< std::vector< neural_network::functions::ActivationFunctions_E > >( &function_v )->multitoken(), "Specifies neural activation function" )
             ( command( TOLERANCE, "b" ).c_str(), value< int  >( &tolerance_ )->default_value( -1 ), "Specifies error tolerance" );
 			}
@@ -104,17 +104,17 @@ std::unique_ptr< program::Program > ProgramInitializer::getProgram()
         switch ( executionMode_ )
         {
 			case ExecutionMode_E::TRAIN:
-                if( !epoch_v.size() || !pack_v.size() || !function_v.size() || !eta_v.size() || !topology_v.size() || !loggerFile_.size() || !resultPath_.size() )
+                if( !epoch_v.size() || !batchSize_v.size() || !function_v.size() || !eta_v.size() || !topology_v.size() || !loggerFile_.size() || !resultPath_.size() )
                     throw std::runtime_error( "More parameters required." );
 
 				loggerStream.open( loggerFile_ );
 				if( !loggerStream.is_open() )
 					throw std::runtime_error( "Could not open logger file." );
 
-				return std::make_unique< TrainProgram >( training_data, epoch_v, pack_v, function_v, eta_v, topology_v );
+				return std::make_unique< TrainProgram >( training_data, epoch_v, batchSize_v, function_v, eta_v, topology_v );
 
 			case ExecutionMode_E::TRAIN_AND_TEST:
-                if( !epoch_v.size() || !pack_v.size() || !function_v.size() || !eta_v.size() || !topology_v.size() || !loggerFile_.size() || !resultPath_.size() )
+                if( !epoch_v.size() || !batchSize_v.size() || !function_v.size() || !eta_v.size() || !topology_v.size() || !loggerFile_.size() || !resultPath_.size() )
                     throw std::runtime_error( "More parameters required." );
 
 				if( tolerance_ < 0 )
@@ -124,10 +124,10 @@ std::unique_ptr< program::Program > ProgramInitializer::getProgram()
 				if( !loggerStream.is_open() )
 					throw std::runtime_error( "Could not open logger file." );
 
-				return std::make_unique< TrainAndTestProgram >( training_data, epoch_v, pack_v, function_v, eta_v, topology_v, tolerance_ );
+				return std::make_unique< TrainAndTestProgram >( training_data, epoch_v, batchSize_v, function_v, eta_v, topology_v, tolerance_ );
 
 			case ExecutionMode_E::TEST:
-                if( !pack_v.size() || !neuralNetFile_.size()  )
+                if( !batchSize_v.size() || !neuralNetFile_.size()  )
                     throw std::runtime_error( "More parameters required." );
 
 				if( tolerance_ < 0 )
@@ -137,7 +137,7 @@ std::unique_ptr< program::Program > ProgramInitializer::getProgram()
 				if( neural_net_file.is_open() )
 					throw std::invalid_argument( "File could not be opened" );
 
-                return std::make_unique< TestProgram >( training_data, neural_net_file, pack_v, tolerance_ );
+                return std::make_unique< TestProgram >( training_data, neural_net_file, tolerance_ );
         }
 	}
 	catch ( std::exception& e )
