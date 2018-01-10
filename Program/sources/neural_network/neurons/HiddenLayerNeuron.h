@@ -14,15 +14,20 @@ namespace neural_network {
 		public:
 			HiddenLayerNeuron(functions::ActivationFunctions_E);
 
-			double recalculateValue() override;
+
+
+			~HiddenLayerNeuron() override = default;
 
 			void addInputSynapse(const std::shared_ptr<Synapse> &inputSynapse) override;
 
 			void addOutputSynapse(const std::shared_ptr<Synapse> &outputSynapse) override;
 
-			~HiddenLayerNeuron() override = default;
+			void recalculateValue() override;
 
-		private:
+			void computeError() override;
+
+
+		protected:
 			const std::pair<std::function<double(double)>, std::function<double(double)>> functions_;
 		};
 	}
