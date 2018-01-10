@@ -19,7 +19,8 @@ namespace program
                       std::vector< neural_network::functions::ActivationFunctions_E > &function_vec,
                       std::vector< double > &eta_vec,
                       std::vector< neural_network::Topology_E > &topology_vec,
-                      int percentage );
+                      int percentage,
+                      int threads_for_eta );
 
         void run() override;
 
@@ -32,6 +33,7 @@ namespace program
         std::vector< double > etaVec_;
         std::vector< neural_network::Topology_E > topologyVec_;
         int percentage_;
+        int threadsForEta_;
     };
 }
 

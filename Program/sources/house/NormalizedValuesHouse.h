@@ -4,6 +4,7 @@
 #define PSZT_NEURAL_NETWORK_NORMALIZEDVALUESHOUSE_H
 
 #include "House.h"
+#include <thread>
 
 const long MIN_DATE = 19000101;
 const long MAX_DATE = 21001231;
@@ -45,6 +46,8 @@ const int MIN_SQFT_LIVING15 = 0;
 const int MAX_SQFT_LIVING15 = 20000;
 const int MIN_SQFT_LOT15 = 0;
 const long MAX_SQFT_LOT15 = 10000000;
+
+const unsigned THREADS_COUNT = std::thread::hardware_concurrency();
 
 namespace house {
 	class NormalizedValuesHouse {

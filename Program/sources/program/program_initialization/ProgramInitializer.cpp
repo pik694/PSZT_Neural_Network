@@ -44,7 +44,8 @@ ProgramInitializer::ProgramInitializer(int argc, const char **argv) :
             ( command( NEURAL_NET, "n" ).c_str(), value< std::string >( &neuralNetFile_ ), "Specifies serialized neural network file" )
             ( command( PACK, "p" ).c_str(), value< std::vector< int > >( &batchSize_v )->multitoken(), "Specifies data packs, must be a factor of data size" )
             ( command( FUNCTION, "f" ).c_str(), value< std::vector< neural_network::functions::ActivationFunctions_E > >( &function_v )->multitoken(), "Specifies neural activation function" )
-            ( command( TOLERANCE, "b" ).c_str(), value< int  >( &percentage_ )->default_value( -1 ), "Specifies error tolerance" );
+            ( command( TOLERANCE, "b" ).c_str(), value< int  >( &percentage_ )->default_value( -1 ), "Specifies error tolerance" )
+            ( command( THREADS, "w" ).c_str(), value< int  >( &threadsForeEta_ )->default_value( 0 ), "Specifies threads count for one eta" );
 			}
 
 std::string ProgramInitializer::command( std::string longCommand, std::string shortCommand ) const
@@ -115,6 +116,8 @@ std::unique_ptr< program::Program > ProgramInitializer::getProgram()
                 if( percentage_ < 0 )
                     throw std::runtime_error( "Invalid percentage specified." );
 
+                if( threadsForEta_ < 1 )
+                    throw std::runtime_error( "Invalid threads count for eta specified." );
                 data_size = (long)( ( ( 100 - percentage_) / 100.0 ) * training_data.size() );
                 for( int i = 0; i < batchSize_v.size(); ++i )
                 {
@@ -129,7 +132,7 @@ std::unique_ptr< program::Program > ProgramInitializer::getProgram()
                 Serializator::getInstance().setLoggerFile( loggerStream );
                 Serializator::getInstance().setOuptutDirecotry( resultPath_ );
 
-				return std::make_unique< TrainProgram >( training_data, epoch_v, batchSize_v, function_v, eta_v, topology_v, percentage_ );
+				return std::make_unique< TrainProgram >( training_data, epoch_v, batchSize_v, function_v, eta_v, topology_v, percentage_, threadsForEta_ );
 
 			case ExecutionMode_E::TRAIN_AND_TEST:
                 if( epoch_v.empty() || batchSize_v.empty() || function_v.empty() || eta_v.empty() || topology_v.empty() || !loggerFile_.size() || !resultPath_.size() )

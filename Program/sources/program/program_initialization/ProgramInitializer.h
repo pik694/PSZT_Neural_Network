@@ -53,6 +53,7 @@ namespace program {
 			ExecutionMode_E executionMode_;
 			std::string resultPath_;
 			std::string loggerFile_;
+            int threadsForEta_;
 
 
 			c_str HELP = "help";
@@ -68,6 +69,7 @@ namespace program {
             c_str NEURAL_NET = "neural net";
 			c_str LOGGER = "logger";
 			c_str RESULT = "result path";
+            c_str THREADS = "threads";
 		};
 	}
 }

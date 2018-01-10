@@ -15,9 +15,7 @@ void TrainProgram::run()
                 for( auto it_function = functionVec_.begin(); it_function != functionVec_.end(); ++it_function )
                 {
                     for( auto it_eta = etaVec_.begin(); it_eta != etaVec_.end(); ++it_eta )
-
                     {
-                        //TODO train
                         //na 1 eta parametr wątków
                         //kazdy watek zwroci inny wynik, za kazdym razem puszczac tak aby bylo zajete maks watków, bez sprawdzenia
                         //kady watek liczy siec
@@ -38,7 +36,8 @@ TrainProgram::TrainProgram( std::vector< std::shared_ptr< house::NormalizedValue
                             std::vector< neural_network::functions::ActivationFunctions_E > &function_vec,
                             std::vector< double > &eta_vec,
                             std::vector< neural_network::Topology_E > &topology_vec,
-                            int percentage )
+                            int percentage,
+                            int threads_for_eta )
 
         :   trainingData_( std::move( training_data) ),
             epochVec_( std::move( epoch_vec ) ),
@@ -46,7 +45,8 @@ TrainProgram::TrainProgram( std::vector< std::shared_ptr< house::NormalizedValue
             functionVec_( std::move( function_vec ) ),
             etaVec_( std::move( eta_vec ) ),
             topologyVec_( std::move( topology_vec ) ),
-            percentage_( percentage )
+            percentage_( percentage ),
+            threadsForEta_( threads_for_eta )
 {
 }
 
