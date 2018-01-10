@@ -29,7 +29,7 @@ namespace neural_network {
 
 			double recalculateValue();
 			double getBackPropagationValue();
-			void updateWeight(double eta, int batchSize);
+			void updateWeight(double factor);
 
 			virtual ~Synapse() = default;
 
