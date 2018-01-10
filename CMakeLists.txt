@@ -10,7 +10,7 @@ include(CTest)
 enable_testing()
 
 set(Project_VERSION_MAJOR 0)
-set(Project_VERSION_MINOR 1)
+set(Project_VERSION_MINOR 9)
 
 configure_file(
         "${PROJECT_SOURCE_DIR}/Program/program_version"

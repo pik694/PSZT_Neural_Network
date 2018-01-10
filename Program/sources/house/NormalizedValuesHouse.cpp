@@ -1,10 +1,12 @@
 #include "NormalizedValuesHouse.h"
 
-house::NormalizedValuesHouse::NormalizedValuesHouse(const boost::gregorian::date &date, float price, int bedrooms,
+using namespace house;
+NormalizedValuesHouse::NormalizedValuesHouse(const boost::gregorian::date &date, float price, int bedrooms,
                                                     float bathrooms, int sqftLiving, int sqftLot, float floors,
                                                     int waterfront, int view, int condition, int grade, int sqftAbove,
                                                     int sqftBasement, int yrBuilt, int yrRenovated, int zipcode,
-                                                    float lat, float f_long, int sqftLiving15, int sqftLot15 ) {
+                                                    float lat, float f_long, int sqftLiving15, int sqftLot15 )
+{
 
 	date_ = ( ( date.year() * 10000 + date.month() * 100 + date.day() ) - MIN_DATE ) / (double)( MAX_DATE - MIN_DATE );
 	price_ = ( price - MIN_PRICE ) / (double) ( MAX_PRICE - MIN_PRICE );
