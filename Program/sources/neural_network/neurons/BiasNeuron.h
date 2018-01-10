@@ -11,7 +11,7 @@ namespace neural_network {
 	namespace neurons {
 		class BiasNeuron : public InputNeuron {
 		public:
-			BiasNeuron() {value_ = 1.0;}
+			BiasNeuron() { value_ = 1.0; }
 
 			~BiasNeuron() override = default;
 

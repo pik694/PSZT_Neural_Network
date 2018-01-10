@@ -39,6 +39,9 @@ namespace program {
 			boost::program_options::variables_map variablesMap_;
 			boost::program_options::positional_options_description positionalOptions_;
 
+			int argc_;
+			const char **argv_;
+
             std::vector< int > epoch_v;
             std::vector< int > pack_v;
             std::vector< neural_network::Topology_E > topology_v;
@@ -51,8 +54,6 @@ namespace program {
 			std::string resultPath_;
 			std::string loggerFile_;
 
-			int argc_;
-			const char **argv_;
 
 			c_str HELP = "help";
 			c_str VERSION = "version";

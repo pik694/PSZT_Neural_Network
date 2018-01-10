@@ -34,7 +34,7 @@ namespace neural_network {
 
 			static double stepFunction(double x);
 
-			static double stepFunctionDerivative(double x);
+			static double stepFunctionDerivative(double);
 
 			static double fastSigmoidFunction(double x);
 

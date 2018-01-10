@@ -17,7 +17,7 @@ double ActivationFunctionsBank::stepFunction(double x) {
 	}
 }
 
-double ActivationFunctionsBank::stepFunctionDerivative(double x) {
+double ActivationFunctionsBank::stepFunctionDerivative(double) {
 	return 0;
 }
 
