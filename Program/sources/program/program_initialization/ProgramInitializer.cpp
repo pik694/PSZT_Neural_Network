@@ -3,7 +3,8 @@
 //
 
 #include <iostream>
-#include <neural_network/NeuralNetwork.h>
+#include <fstream>
+#include "neural_network/NeuralNetwork.h"
 #include "FileReader.h"
 #include "TrainingDataFactory.h"
 #include "ProgramInitializer.h"
@@ -37,7 +38,7 @@ ProgramInitializer::ProgramInitializer(int argc, const char **argv) :
 			( command( MODE, "m" ).c_str(), value< ExecutionMode_E >( &executionMode_ )->required(), "Specifies program mode" )
             ( command( DATA, "d" ).c_str(), value< std::string >( &inputFileName_ )->required(), "Specifies input data file" )
             ( command( EPOCH, "e" ).c_str(), value< std::vector< int > >( &epoch_v )->multitoken(), "Specifies epoch count" )
-            ( command( TOPOLOGY, "t" ).c_str(), value< std::vector< int > >( &topology_v )->multitoken(), "Specifies topology" )
+            ( command( TOPOLOGY, "t" ).c_str(), value< std::vector< neural_network::Topology_E > >( &topology_v )->multitoken(), "Specifies topology" )
             ( command( ETA, "c" ).c_str(), value< std::vector< double > >( &eta_v )->multitoken(), "Specifies eta" )
             ( command( NEURAL_NET, "n" ).c_str(), value< std::string >( &neuralNetFile_ ), "Specifies serialized neural network file" )
             ( command( PACK, "p" ).c_str(), value< std::vector< int > >( &pack_v )->multitoken(), "Specifies data packs, must be a factor of data size" )
@@ -101,19 +102,24 @@ std::unique_ptr< program::Program > ProgramInitializer::getProgram()
                 if( !epoch_v.size() || !pack_v.size() || !function_v.size() || !eta_v.size() || !topology_v.size() )
                     throw std::runtime_error( "More parameters required." );
 
+				return std::make_unique< TrainProgram >( &training_data, &epoch_v, &pack_v, &function_v, &eta_v, &topology_v );
 
-
-                return std::make_unique< TrainProgram >();
-            case ExecutionMode_E::TRAIN_AND_TEST:
+			case ExecutionMode_E::TRAIN_AND_TEST:
                 if( !epoch_v.size() || !pack_v.size() || !function_v.size() || !eta_v.size() || !topology_v.size() || !tolerance_v.size() )
                     throw std::runtime_error( "More parameters required." );
 
-                return std::make_unique< TrainAndTestProgram >();
-            case ExecutionMode_E::TEST:
+                return std::make_unique< TrainAndTestProgram >( &training_data, &epoch_v, &pack_v, &function_v, &eta_v, &topology_v, &tolerance_v );
+
+			case ExecutionMode_E::TEST:
                 if( !pack_v.size() || !neuralNetFile_.size() || !tolerance_v.size() )
                     throw std::runtime_error( "More parameters required." );
 
-                return std::make_unique< TestProgram >();
+				std::ifstream neural_net_file;
+				neural_net_file.open( neuralNetFile_ );
+				if( neural_net_file.is_open() )
+					throw std::invalid_argument( "File could not be opened" );
+
+                return std::make_unique< TestProgram >( &training_data, &neural_net_file, &pack_v, &tolerance_v );
         }
 	}
 	catch ( std::exception& e )
@@ -121,8 +127,6 @@ std::unique_ptr< program::Program > ProgramInitializer::getProgram()
 		return std::make_unique< ErrorInfoProgram >( e.what(), std::move( program ) );
 	}
 
-
-	return program;
 }
 
 void ProgramInitializer::parse()

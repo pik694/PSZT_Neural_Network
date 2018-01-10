@@ -12,6 +12,7 @@
 #include "program/TrainProgram.h"
 #include "program/TrainAndTestProgram.h"
 #include "neural_network/ActivationFunctionsBank.h"
+#include "neural_network/NeuralNetworkTopology.h"
 
 namespace program {
 	namespace program_initializer {
@@ -40,7 +41,7 @@ namespace program {
 
             std::vector< int > epoch_v;
             std::vector< int > pack_v;
-            std::vector< int > topology_v;
+            std::vector< neural_network::Topology_E > topology_v;
             std::vector< neural_network::functions::ActivationFunctions_E > function_v;
             std::vector< double > eta_v;
             std::vector< int > tolerance_v;
