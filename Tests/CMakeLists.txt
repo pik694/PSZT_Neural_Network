@@ -2,7 +2,6 @@
 
 if (ENABLE_TESTS_AT_EACH_BUILD)
 
-    include_directories(..)
 
     set(SOURCE_FILES )
     set(TEST_SOURCES test_main.cpp SampleTests.cpp)

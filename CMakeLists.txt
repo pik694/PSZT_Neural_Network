@@ -1,25 +1,36 @@
 cmake_minimum_required(VERSION 3.9.3)
-project(PSZT_Neural_Network)
+project(PSZT_Neural_Network CXX)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 14)
+if (UNIX AND NOT APPLE)
+    set(CMAKE_CXX_FLAGS "-lpthread ")
+endif ()
 
 include(CTest)
 enable_testing()
 
-set(SOURCE_FILES sources/main.cpp)
-add_executable(PSZT_Neural_Network ${SOURCE_FILES})
+set(Project_VERSION_MAJOR 0)
+set(Project_VERSION_MINOR 9)
 
-SET(BOOST_ROOT "/usr/local/boost_1_65_1")
-find_package(Boost 1.65.1 EXACT COMPONENTS system timer unit_test_framework REQUIRED)
+configure_file(
+        "${PROJECT_SOURCE_DIR}/Program/program_version"
+        "${PROJECT_BINARY_DIR}/Program/program_version.h"
+)
+
+find_package(Boost COMPONENTS system timer unit_test_framework program_options REQUIRED)
 
 if (Boost_FOUND)
     include_directories(${Boost_INDLUDE_DIRS})
     link_directories(${Boost_LIBRARY_DIRS})
-    target_link_libraries(PSZT_Neural_Network ${Boost_LIBRARIES})
 
     set(ENABLE_TESTS_AT_EACH_BUILD ON) # to disable switch to OFF
-
 endif()
+
+
+include_directories(${PROJECT_SOURCE_DIR}/Program/sources)
+include_directories(${PROJECT_BINARY_DIR}/Program)
+
+add_subdirectory(Program)
 
 add_subdirectory(Tests)
 
