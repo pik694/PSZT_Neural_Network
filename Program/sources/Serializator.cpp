@@ -5,16 +5,16 @@
 #include <fstream>
 #include "Serializator.h"
 
-void Serializator::serialize(neural_network::NeuralNetwork neuralNetwork) {
+void Serializator::serialize(neural_network::NeuralNetwork &neuralNetwork, std::string &fileName) {
     std::ofstream file;
-    file.open("write.csv");
+    file.open(fileName);
     writeActivationFunction(file);
     writeTopology(file, neuralNetwork);
     writeWeights(file, neuralNetwork);
     file.close();
 }
 
-neural_network::NeuralNetwork Serializator::deserialize(std::ifstream file) {
+neural_network::NeuralNetwork Serializator::deserialize(std::ifstream &file) {
 
     neural_network::functions::ActivationFunctions_E activationFunction = readActivationFunction(file);
     std::vector<int> topology = readTopology(file);
@@ -23,13 +23,12 @@ neural_network::NeuralNetwork Serializator::deserialize(std::ifstream file) {
 }
 
 void Serializator::writeActivationFunction(std::ofstream &file) {
-    //write function
     // przydalby sie  getter do funkcji
+    // todo
     file << "2\n";
 }
 
 void Serializator::writeTopology(std::ofstream &file, neural_network::NeuralNetwork &neuralNetwork) {
-    // write topology
     for (int node : neuralNetwork.getTopology()) {
         file << node;
         file << ",";
@@ -38,7 +37,6 @@ void Serializator::writeTopology(std::ofstream &file, neural_network::NeuralNetw
 }
 
 void Serializator::writeWeights(std::ofstream &file, neural_network::NeuralNetwork &neuralNetwork) {
-    // write weights
     //layers
     for (std::vector<std::vector<double>> layer : neuralNetwork.getWeights()) {
         //nodes
@@ -56,7 +54,6 @@ void Serializator::writeWeights(std::ofstream &file, neural_network::NeuralNetwo
 neural_network::functions::ActivationFunctions_E Serializator::readActivationFunction(std::ifstream &file) {
     std::string sample;
 
-    //getting activation function
     getline(file, sample);
     int functionNumber = stoi(sample);
     neural_network::functions::ActivationFunctions_E activationFunctions_e;
@@ -87,7 +84,6 @@ std::vector<int> Serializator::readTopology(std::ifstream &file) {
     std::string sample;
     std::vector<int> topology;
 
-    // geting topology
     getline(file, sample, ',');
     topology.push_back(stoi(sample));
     while (file.good()) {
@@ -122,6 +118,12 @@ neural_network::NeuralNetwork::weights_t Serializator::readWeights(std::ifstream
         }
     }
     return weights;
+}
+
+void Serializator::saveResults(neural_network::NeuralNetwork &neuralNetwork, std::string &fileName) {
+    std::ofstream file;
+    file.open(fileName);
+    //todo
 }
 
 
