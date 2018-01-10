@@ -134,7 +134,7 @@ void Serializator::closeLoggerFile() {
 
 void
 Serializator::serialize(neural_network::NeuralNetwork &neuralNetwork, neural_network::functions::ActivationFunctions_E,
-                        int epochs, int batchSize, double eta) {
+                        int epochs, int batchSize, double eta, int testsPct, double MSE) {
 
 }
 
