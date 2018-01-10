@@ -25,7 +25,7 @@ if (Boost_FOUND)
     include_directories(${Boost_INDLUDE_DIRS})
     link_directories(${Boost_LIBRARY_DIRS})
 
-    set(ENABLE_TESTS_AT_EACH_BUILD ON) # to disable switch to OFF
+    set(ENABLE_TESTS_AT_EACH_BUILD OFF) # to disable switch to OFF
 endif()
 
 
