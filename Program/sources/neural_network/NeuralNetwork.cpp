@@ -37,7 +37,6 @@ NeuralNetwork::NeuralNetwork(NeuralNetwork::weights_t weights, functions::Activa
 
 void NeuralNetwork::createInputNeurons() {
 
-	neurons_.emplace_back();
 
 	// 19 input neurons for each position in a house + 1 bias neuron
 	for (int i = 0; i < 19; ++i) {
@@ -131,37 +130,34 @@ void NeuralNetwork::createConnections(NeuralNetwork::weights_t weights) {
 }
 
 std::vector<int> NeuralNetwork::getTopology() const {
-	std::vector<int> topology(neurons_.size() - 2);
+
+	std::vector<int> topology;
 
 	auto outputLayer = --neurons_.end();
+
 	for (auto iterator = ++neurons_.begin(); iterator != outputLayer; ++iterator)
-		topology.emplace_back(iterator->size());
+		topology.emplace_back(iterator->size() - 1);
 
 	return topology;
 }
 
 NeuralNetwork::weights_t NeuralNetwork::getWeights() const {
 
-	weights_t weights(neurons_.size() - 1);
+	weights_t weights;
 
-	auto firstDim = weights.begin();
-	auto outputLayer = --neurons_.end();
-	for (auto layer = neurons_.begin(); layer != outputLayer; ++layer, ++firstDim) {
-		firstDim->emplace_back(layer->size());
-
-		auto secondDim = firstDim->begin();
-		for (auto neuron = layer->begin(); neuron != layer->end(); ++neuron, ++secondDim) {
-
-			auto synapses = (*neuron)->getOutputSynapses();
-
-			std::for_each(synapses.begin(), synapses.end(),
-			              [&secondDim](auto synapse) {
-				              secondDim->emplace_back(synapse->getWeight());
-			              });
-
+	for (auto layer : neurons_) {
+		std::vector<std::vector<double>> layerWeights;
+		for (auto neuron : layer) {
+			auto synapses = neuron->getOutputSynapses();
+			std::vector<double> weights;
+			for (auto synapse : synapses) {
+				weights.push_back(synapse->getWeight());
+			}
+			layerWeights.emplace_back(std::move(weights));
 		}
+		weights.emplace_back(std::move(layerWeights));
 	}
-
+	weights.pop_back();
 	return weights;
 }
 
