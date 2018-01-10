@@ -50,13 +50,10 @@ BOOST_AUTO_TEST_SUITE(NEURAL_NETWORK_TESTS)
 
 		auto weights = net->getWeights();
 
-		BOOST_CHECK_EQUAL(weights.size(), topology.size() + 2);
+		BOOST_CHECK_EQUAL(weights.size(), topology.size() + 1);
 
-		for (int i = 0; i < topology.size(); ++i)
-			BOOST_CHECK_EQUAL(weights.at(i + 1).size(), topology.at(i));
-
-		BOOST_CHECK_EQUAL(weights.at(weights.size() - 1).size(), 1);
-
+		for (unsigned int i = 0; i < topology.size(); ++i)
+			BOOST_CHECK_EQUAL(weights.at(i+1).size() - 1, topology.at(i));
 
 	}
 

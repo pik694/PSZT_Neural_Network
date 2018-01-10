@@ -13,6 +13,8 @@ namespace neural_network {
 		public:
 			BiasNeuron() { value_ = 1.0; }
 
+			void addInputSynapse(const std::shared_ptr<Synapse>&) override {}
+
 			~BiasNeuron() override = default;
 
 		};
