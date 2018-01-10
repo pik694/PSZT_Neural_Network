@@ -6,6 +6,7 @@
 #include "neurons/InputNeuron.h"
 #include "neurons/BiasNeuron.h"
 #include "neurons/HiddenLayerNeuron.h"
+#include "progress/ProgressStatusManager.h"
 
 using namespace neural_network;
 
@@ -209,15 +210,14 @@ void NeuralNetwork::setInputs(const house::NormalizedValuesHouse &house) {
 
 double
 NeuralNetwork::stochasticGradientDescent(const houses_t &inputHouses, int epochs, int batchSize, double eta,
-                                         int testsPct,
-                                         std::function<void()> updateProgress) {
+                                         int testsPct) {
 
 	std::vector<houses_t::const_iterator> houses;
 	std::random_device randomDevice;
 	std::mt19937 g(randomDevice());
 	double factor = eta/batchSize;
 
-	int testsNumber = inputHouses.size() * testsPct / 100;
+	auto testsNumber = inputHouses.size() * testsPct / 100;
 
 	auto firstTest = (inputHouses.end() - testsNumber);
 
@@ -234,7 +234,8 @@ NeuralNetwork::stochasticGradientDescent(const houses_t &inputHouses, int epochs
 			runBatchAndUpdateWeights(iterator,
 			                         iterator + batchSize, factor);
 
-		updateProgress();
+		progress::ProgressStatusManager::getInstance()->addProgress(1);
+
 	}
 
 

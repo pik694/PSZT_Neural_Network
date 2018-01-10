@@ -21,8 +21,7 @@ namespace neural_network {
 		weights_t getWeights() const;
 
 		double stochasticGradientDescent(const houses_t &inputHouses, int epochs, int batchSize, double eta,
-		                                 int testsPct,
-		                                 std::function<void()> updateProgress);
+		                                 int testsPct);
 
 		double calculateHousesPrice(const house::NormalizedValuesHouse& house);
 
