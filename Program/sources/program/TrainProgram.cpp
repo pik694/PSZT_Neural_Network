@@ -1,4 +1,5 @@
 #include "TrainProgram.h"
+#include "Serializator.h"
 
 using namespace program;
 
@@ -49,6 +50,6 @@ TrainProgram::TrainProgram( std::vector< std::shared_ptr< house::NormalizedValue
 
 TrainProgram::~TrainProgram()
 {
-
+    Serializator::getInstance().closeLoggerFile();
 }
 

@@ -4,13 +4,12 @@
 
 #include <iostream>
 #include <fstream>
-#include "neural_network/NeuralNetwork.h"
 #include "FileReader.h"
 #include "TrainingDataFactory.h"
 #include "ProgramInitializer.h"
 #include "progress/ProgressStatusManager.h"
 #include "neural_network/NeuralNetworkTopology.h"
-
+#include "Serializator.h"
 
 using namespace program;
 using namespace program::program_initializer;
@@ -98,23 +97,26 @@ std::unique_ptr< program::Program > ProgramInitializer::getProgram()
 		training_data_factory.run( &file_data , &training_data );
 		ProgressStatusManager::getInstance()->deinit();
 
-		std::ofstream loggerStream;
+        std::ofstream loggerStream;
 		std::ifstream neural_net_file;
 
         switch ( executionMode_ )
         {
 			case ExecutionMode_E::TRAIN:
-                if( !epoch_v.size() || !batchSize_v.size() || !function_v.size() || !eta_v.size() || !topology_v.size() || !loggerFile_.size() || !resultPath_.size() )
+                if( epoch_v.empty() || batchSize_v.empty() || function_v.empty() || eta_v.empty() || topology_v.empty() || !loggerFile_.size() || !resultPath_.size() )
                     throw std::runtime_error( "More parameters required." );
 
 				loggerStream.open( loggerFile_ );
 				if( !loggerStream.is_open() )
 					throw std::runtime_error( "Could not open logger file." );
 
+                Serializator::getInstance().setLoggerFile( loggerStream );
+                Serializator::getInstance().setOuptutDirecotry( resultPath_ );
+
 				return std::make_unique< TrainProgram >( training_data, epoch_v, batchSize_v, function_v, eta_v, topology_v );
 
 			case ExecutionMode_E::TRAIN_AND_TEST:
-                if( !epoch_v.size() || !batchSize_v.size() || !function_v.size() || !eta_v.size() || !topology_v.size() || !loggerFile_.size() || !resultPath_.size() )
+                if( epoch_v.empty() || batchSize_v.empty() || function_v.empty() || eta_v.empty() || topology_v.empty() || !loggerFile_.size() || !resultPath_.size() )
                     throw std::runtime_error( "More parameters required." );
 
 				if( tolerance_ < 0 )
@@ -124,10 +126,13 @@ std::unique_ptr< program::Program > ProgramInitializer::getProgram()
 				if( !loggerStream.is_open() )
 					throw std::runtime_error( "Could not open logger file." );
 
+                Serializator::getInstance().setLoggerFile( loggerStream );
+                Serializator::getInstance().setOuptutDirecotry( resultPath_ );
+
 				return std::make_unique< TrainAndTestProgram >( training_data, epoch_v, batchSize_v, function_v, eta_v, topology_v, tolerance_ );
 
 			case ExecutionMode_E::TEST:
-                if( !batchSize_v.size() || !neuralNetFile_.size()  )
+                if( batchSize_v.empty() || !neuralNetFile_.size()  )
                     throw std::runtime_error( "More parameters required." );
 
 				if( tolerance_ < 0 )

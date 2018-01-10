@@ -124,7 +124,7 @@ void Serializator::setOuptutDirecotry(const std::string &) {
     // TODO
 }
 
-void Serializator::setLoggerFile(std::ofstream) {
+void Serializator::setLoggerFile(std::ofstream&) {
     // TODO
 }
 

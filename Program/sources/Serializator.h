@@ -17,7 +17,7 @@ public:
 	}
 
 	void setOuptutDirecotry(const std::string&);
-	void setLoggerFile(std::ofstream);
+	void setLoggerFile(std::ofstream& );
 	void closeLoggerFile();
 
 	void serialize(neural_network::NeuralNetwork &neuralNetwork,
