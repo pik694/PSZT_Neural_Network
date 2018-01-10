@@ -43,14 +43,16 @@ namespace program {
 			const char **argv_;
 
             std::vector< int > epoch_v;
-            std::vector< int > pack_v;
+            std::vector< int > batchSize_v;
             std::vector< neural_network::Topology_E > topology_v;
             std::vector< neural_network::functions::ActivationFunctions_E > function_v;
             std::vector< double > eta_v;
-            std::vector< int > tolerance_v;
+            int tolerance_;
             std::string neuralNetFile_;
 			std::string inputFileName_;
 			ExecutionMode_E executionMode_;
+			std::string resultPath_;
+			std::string loggerFile_;
 
 
 			c_str HELP = "help";
@@ -64,6 +66,8 @@ namespace program {
             c_str TOPOLOGY = "topology";
             c_str TOLERANCE = "tolerance";
             c_str NEURAL_NET = "neural net";
+			c_str LOGGER = "logger";
+			c_str RESULT = "result path";
 		};
 	}
 }
