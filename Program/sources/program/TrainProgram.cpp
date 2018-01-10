@@ -37,14 +37,16 @@ TrainProgram::TrainProgram( std::vector< std::shared_ptr< house::NormalizedValue
                             std::vector< int > &batch_size_vec,
                             std::vector< neural_network::functions::ActivationFunctions_E > &function_vec,
                             std::vector< double > &eta_vec,
-                            std::vector< neural_network::Topology_E > &topology_vec )
+                            std::vector< neural_network::Topology_E > &topology_vec,
+                            int percentage )
 
         :   trainingData_( std::move( training_data) ),
             epochVec_( std::move( epoch_vec ) ),
             batchSizeVec_( std::move( batch_size_vec ) ),
             functionVec_( std::move( function_vec ) ),
             etaVec_( std::move( eta_vec ) ),
-            topologyVec_( std::move( topology_vec ) )
+            topologyVec_( std::move( topology_vec ) ),
+            percentage_( percentage )
 {
 }
 

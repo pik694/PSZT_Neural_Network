@@ -44,7 +44,7 @@ ProgramInitializer::ProgramInitializer(int argc, const char **argv) :
             ( command( NEURAL_NET, "n" ).c_str(), value< std::string >( &neuralNetFile_ ), "Specifies serialized neural network file" )
             ( command( PACK, "p" ).c_str(), value< std::vector< int > >( &batchSize_v )->multitoken(), "Specifies data packs, must be a factor of data size" )
             ( command( FUNCTION, "f" ).c_str(), value< std::vector< neural_network::functions::ActivationFunctions_E > >( &function_v )->multitoken(), "Specifies neural activation function" )
-            ( command( TOLERANCE, "b" ).c_str(), value< int  >( &tolerance_ )->default_value( -1 ), "Specifies error tolerance" );
+            ( command( TOLERANCE, "b" ).c_str(), value< int  >( &percentage_ )->default_value( -1 ), "Specifies error tolerance" );
 			}
 
 std::string ProgramInitializer::command( std::string longCommand, std::string shortCommand ) const
@@ -100,6 +100,8 @@ std::unique_ptr< program::Program > ProgramInitializer::getProgram()
         std::ofstream loggerStream;
 		std::ifstream neural_net_file;
 
+        long data_size;
+
         switch ( executionMode_ )
         {
 			case ExecutionMode_E::TRAIN:
@@ -110,39 +112,64 @@ std::unique_ptr< program::Program > ProgramInitializer::getProgram()
 				if( !loggerStream.is_open() )
 					throw std::runtime_error( "Could not open logger file." );
 
+                if( percentage_ < 0 )
+                    throw std::runtime_error( "Invalid percentage specified." );
+
+                data_size = (long)( ( ( 100 - percentage_) / 100.0 ) * training_data.size() );
+                for( int i = 0; i < batchSize_v.size(); ++i )
+                {
+                    if( (data_size % batchSize_v[ i ]) != 0 )
+                    {
+                        std::string error = "Invalid batch size at: ";
+                        error += std::to_string( i );
+                        throw std::runtime_error( error );
+                    }
+                }
+
                 Serializator::getInstance().setLoggerFile( loggerStream );
                 Serializator::getInstance().setOuptutDirecotry( resultPath_ );
 
-				return std::make_unique< TrainProgram >( training_data, epoch_v, batchSize_v, function_v, eta_v, topology_v );
+				return std::make_unique< TrainProgram >( training_data, epoch_v, batchSize_v, function_v, eta_v, topology_v, percentage_ );
 
 			case ExecutionMode_E::TRAIN_AND_TEST:
                 if( epoch_v.empty() || batchSize_v.empty() || function_v.empty() || eta_v.empty() || topology_v.empty() || !loggerFile_.size() || !resultPath_.size() )
                     throw std::runtime_error( "More parameters required." );
 
-				if( tolerance_ < 0 )
-					throw std::runtime_error( "Invalid tolerance specified." );
+				if( percentage_ < 0 )
+					throw std::runtime_error( "Invalid percentage specified." );
 
 				loggerStream.open( loggerFile_ );
 				if( !loggerStream.is_open() )
 					throw std::runtime_error( "Could not open logger file." );
 
+                data_size = (long)( ( ( 100 - percentage_) / 100.0 ) * training_data.size() );
+                for( int i = 0; i < batchSize_v.size(); ++i )
+                {
+                    if( (data_size % batchSize_v[ i ]) != 0 )
+                    {
+                        std::string error = "Invalid batch size at: ";
+                        error += std::to_string( i );
+                        throw std::runtime_error( error );
+                    }
+                }
+
                 Serializator::getInstance().setLoggerFile( loggerStream );
                 Serializator::getInstance().setOuptutDirecotry( resultPath_ );
 
-				return std::make_unique< TrainAndTestProgram >( training_data, epoch_v, batchSize_v, function_v, eta_v, topology_v, tolerance_ );
+				return std::make_unique< TrainAndTestProgram >( training_data, epoch_v, batchSize_v, function_v, eta_v, topology_v, percentage_ );
 
 			case ExecutionMode_E::TEST:
                 if( batchSize_v.empty() || !neuralNetFile_.size()  )
                     throw std::runtime_error( "More parameters required." );
 
-				if( tolerance_ < 0 )
+				if( percentage_ < 0 )
 					throw std::runtime_error( "Invalid tolerance specified." );
 
 				neural_net_file.open( neuralNetFile_ );
 				if( neural_net_file.is_open() )
 					throw std::invalid_argument( "File could not be opened" );
 
-                return std::make_unique< TestProgram >( training_data, neural_net_file, tolerance_ );
+                return std::make_unique< TestProgram >( training_data, neural_net_file, percentage_ );
         }
 	}
 	catch ( std::exception& e )
