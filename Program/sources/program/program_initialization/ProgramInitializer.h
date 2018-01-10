@@ -47,12 +47,13 @@ namespace program {
             std::vector< neural_network::Topology_E > topology_v;
             std::vector< neural_network::functions::ActivationFunctions_E > function_v;
             std::vector< double > eta_v;
-            int tolerance_;
+            int percentage_;
             std::string neuralNetFile_;
 			std::string inputFileName_;
 			ExecutionMode_E executionMode_;
 			std::string resultPath_;
 			std::string loggerFile_;
+            int threadsForEta_;
 
 
 			c_str HELP = "help";
@@ -68,6 +69,7 @@ namespace program {
             c_str NEURAL_NET = "neural net";
 			c_str LOGGER = "logger";
 			c_str RESULT = "result path";
+            c_str THREADS = "threads";
 		};
 	}
 }

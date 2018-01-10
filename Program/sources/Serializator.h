@@ -22,7 +22,7 @@ public:
 
 	void serialize(neural_network::NeuralNetwork &neuralNetwork,
 	               neural_network::functions::ActivationFunctions_E,
-	               int epochs, int batchSize, double eta, int testsPct, double MSE);
+	               int epochs, int batchSize, double eta);
 
 	neural_network::NeuralNetwork deserialize(std::ifstream &file);
 

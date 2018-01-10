@@ -7,7 +7,6 @@
 #include <boost/tokenizer.hpp>
 #include "house/NormalizedValuesHouse.h"
 
-const unsigned THREADS_COUNT = std::thread::hardware_concurrency();
 
 using namespace house;
 
