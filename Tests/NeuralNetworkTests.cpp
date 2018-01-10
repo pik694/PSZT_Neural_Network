@@ -3,27 +3,115 @@
 //
 
 #include <boost/test/unit_test.hpp>
+#include "neural_network/NeuralNetwork.h"
+#include "neural_network/ActivationFunctionsBank.h"
 
 BOOST_AUTO_TEST_SUITE(NEURAL_NETWORK_TESTS)
 
-	BOOST_AUTO_TEST_CASE(NeuralNetworkCreation){
+	using namespace neural_network;
+	auto sampleActivationFunction = functions::ActivationFunctions_E::step;
 
-		BOOST_CHECK_EQUAL(1,1);
+	BOOST_AUTO_TEST_CASE(NeuralNetworkCreation) {
+
+
+		std::vector<int> topology = {1, 2, 3};
+
+		std::shared_ptr<NeuralNetwork> net;
+
+		BOOST_REQUIRE_NO_THROW(net = std::make_shared<NeuralNetwork>(topology, sampleActivationFunction));
+
+
 	}
 
-	BOOST_AUTO_TEST_CASE(){
 
-		BOOST_CHECK_EQUAL(1,1);
+	BOOST_AUTO_TEST_CASE(TopologyTest) {
+
+
+		std::vector<int> topology = {1, 2, 3};
+
+		std::shared_ptr<NeuralNetwork> net;
+
+		BOOST_REQUIRE_NO_THROW(net = std::make_shared<NeuralNetwork>(topology, sampleActivationFunction));
+
+		auto netTopology = net->getTopology();
+
+		BOOST_CHECK_EQUAL_COLLECTIONS(topology.begin(), topology.end(), netTopology.begin(), netTopology.end());
+
+
 	}
 
-	BOOST_AUTO_TEST_CASE(TopologyTest){
+	BOOST_AUTO_TEST_CASE(CheckWeightsAndTopology) {
 
-		BOOST_CHECK_EQUAL(1,1);
+		std::vector<int> topology = {1, 2, 3};
+
+		std::shared_ptr<NeuralNetwork> net;
+
+		BOOST_REQUIRE_NO_THROW(net = std::make_shared<NeuralNetwork>(topology, sampleActivationFunction));
+
+		auto weights = net->getWeights();
+
+		BOOST_CHECK_EQUAL(weights.size(), topology.size() + 2);
+
+		for (int i = 0; i < topology.size(); ++i)
+			BOOST_CHECK_EQUAL(weights.at(i + 1).size(), topology.at(i));
+
+		BOOST_CHECK_EQUAL(weights.at(weights.size() - 1).size(), 1);
+
+
 	}
 
-	BOOST_AUTO_TEST_CASE(NeuralNetworkCreation){
 
-		BOOST_CHECK_EQUAL(1,1);
+	BOOST_AUTO_TEST_CASE(CheckSecondNetTopology) {
+
+		std::vector<int> topology = {1, 2, 3};
+
+		std::shared_ptr<NeuralNetwork> net;
+
+		BOOST_REQUIRE_NO_THROW(net = std::make_shared<NeuralNetwork>(topology, sampleActivationFunction));
+
+		auto weights = net->getWeights();
+
+		std::shared_ptr<NeuralNetwork> secondNet = std::make_shared<NeuralNetwork>(weights, sampleActivationFunction);
+
+		auto secondNetTopology = secondNet->getTopology();
+
+		BOOST_CHECK_EQUAL_COLLECTIONS(topology.begin(), topology.end(), secondNetTopology.begin(),
+		                              secondNetTopology.end());
+
+	}
+
+
+	BOOST_AUTO_TEST_CASE(CheckSecondNetWeights) {
+
+		std::vector<int> topology = {1, 2, 3};
+
+		std::shared_ptr<NeuralNetwork> net;
+
+		BOOST_REQUIRE_NO_THROW(net = std::make_shared<NeuralNetwork>(topology, sampleActivationFunction));
+
+		auto weights = net->getWeights();
+
+		std::shared_ptr<NeuralNetwork> secondNet = std::make_shared<NeuralNetwork>(weights, sampleActivationFunction);
+
+		auto secondNetWeights = secondNet->getWeights();
+
+		for (auto layer1 = weights.begin(), layer2 = secondNetWeights.begin();
+		     layer1 != weights.end() && layer2 != secondNetWeights.end();
+		     ++layer1, ++layer2) {
+
+			for (auto beginNeuron1 = layer1->begin(), beginNeuron2 = layer2->begin();
+			     beginNeuron1 != layer1->end() && beginNeuron2 != layer2->end();
+			     ++beginNeuron1, ++beginNeuron2){
+
+				BOOST_CHECK_EQUAL_COLLECTIONS(
+						beginNeuron1->begin(), beginNeuron1->end(),
+						beginNeuron2->begin(), beginNeuron2->end()
+				);
+
+			}
+
+		}
+
 	}
 
 
