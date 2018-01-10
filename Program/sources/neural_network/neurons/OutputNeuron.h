@@ -17,6 +17,9 @@ namespace neural_network {
 
 			void addInputSynapse(const std::shared_ptr<Synapse> &inputSynapse) override;
 
+
+			void recalculateValue() override;
+
 			void calculateOutputError(const house::NormalizedValuesHouse &house,
 			                          std::function<double(double, double)> costFunctionDerivative);
 

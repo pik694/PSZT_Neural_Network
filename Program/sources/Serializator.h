@@ -20,9 +20,8 @@ public:
 	void setLoggerFile(std::ofstream& );
 	void closeLoggerFile();
 
-	void serialize(neural_network::NeuralNetwork &neuralNetwork,
-	               neural_network::functions::ActivationFunctions_E,
-	               int epochs, int batchSize, double eta);
+	void serialize(neural_network::NeuralNetwork &neuralNetwork, neural_network::functions::ActivationFunctions_E,
+	               int epochs, int batchSize, double eta, int testsPct, double MSE);
 
 	neural_network::NeuralNetwork deserialize(std::ifstream &file);
 

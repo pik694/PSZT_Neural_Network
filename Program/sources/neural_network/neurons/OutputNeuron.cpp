@@ -21,3 +21,13 @@ void OutputNeuron::calculateOutputError(const house::NormalizedValuesHouse &hous
 	delta_ = costFunctionDerivative(value_, house.getPrice())*functions_.second(inputSum_);
 
 }
+
+void OutputNeuron::recalculateValue() {
+	delta_ = 0.0;
+	inputSum_ = 0.0;
+
+	for(auto& synapse : inputSynapses_)
+		inputSum_ += synapse->recalculateValue();
+
+	value_ = functions_.first(inputSum_);
+}

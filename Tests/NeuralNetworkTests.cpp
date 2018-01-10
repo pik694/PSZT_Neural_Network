@@ -2,13 +2,17 @@
 // Created by Piotr Żelazko on 10.01.2018.
 //
 
+#include <boost/date_time/gregorian/gregorian.hpp>
 #include <boost/test/unit_test.hpp>
 #include "neural_network/NeuralNetwork.h"
 #include "neural_network/ActivationFunctionsBank.h"
+#include "house/NormalizedValuesHouse.h"
+
 
 BOOST_AUTO_TEST_SUITE(NEURAL_NETWORK_TESTS)
 
 	using namespace neural_network;
+	using namespace boost::gregorian;
 	auto sampleActivationFunction = functions::ActivationFunctions_E::step;
 
 	BOOST_AUTO_TEST_CASE(NeuralNetworkCreation) {
@@ -53,7 +57,7 @@ BOOST_AUTO_TEST_SUITE(NEURAL_NETWORK_TESTS)
 		BOOST_CHECK_EQUAL(weights.size(), topology.size() + 1);
 
 		for (unsigned int i = 0; i < topology.size(); ++i)
-			BOOST_CHECK_EQUAL(weights.at(i+1).size() - 1, topology.at(i));
+			BOOST_CHECK_EQUAL(weights.at(i + 1).size() - 1, topology.at(i));
 
 	}
 
@@ -98,7 +102,7 @@ BOOST_AUTO_TEST_SUITE(NEURAL_NETWORK_TESTS)
 
 			for (auto beginNeuron1 = layer1->begin(), beginNeuron2 = layer2->begin();
 			     beginNeuron1 != layer1->end() && beginNeuron2 != layer2->end();
-			     ++beginNeuron1, ++beginNeuron2){
+			     ++beginNeuron1, ++beginNeuron2) {
 
 				BOOST_CHECK_EQUAL_COLLECTIONS(
 						beginNeuron1->begin(), beginNeuron1->end(),
@@ -108,6 +112,22 @@ BOOST_AUTO_TEST_SUITE(NEURAL_NETWORK_TESTS)
 			}
 
 		}
+
+	}
+
+	BOOST_AUTO_TEST_CASE(SimpleFeedForward) {
+
+		std::vector<int> topology = {1, 2, 3};
+
+		date day(2002, Feb, 1);
+
+		house::NormalizedValuesHouse house(day, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+		NeuralNetwork net(topology, sampleActivationFunction);
+
+		auto calculatedPrice = net.calculateHousesPrice(house);
+
+		BOOST_CHECK_NE(calculatedPrice, 0.0);
 
 	}
 
