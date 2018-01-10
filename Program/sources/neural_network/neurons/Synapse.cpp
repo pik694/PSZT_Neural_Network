@@ -46,9 +46,9 @@ double Synapse::getBackPropagationValue() {
 	return weight_ * end_.lock()->getDelta();
 }
 
-void Synapse::updateWeight(double eta, int batchSize) {
+void Synapse::updateWeight(double factor) {
 
-	weight_ -= (eta/batchSize) * delta_;
+	weight_ -= factor * delta_;
 	delta_ = 0.0;
 }
 

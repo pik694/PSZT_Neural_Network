@@ -42,8 +42,9 @@ namespace neural_network {
 		void createConnections(weights_t);
 
 
-		void runBatchAndUpdateWeights(houses_const_iterator_t begin, houses_const_iterator_t end, double eta, int batchSize);
-		void updateWeights(double eta, int batchSize);
+		void runBatchAndUpdateWeights(NeuralNetwork::houses_const_iterator_t begin,
+				                              NeuralNetwork::houses_const_iterator_t end, double factor);
+		void updateWeights(double factor);
 		void propagateBack();
 		void calculateOutputError(const house::NormalizedValuesHouse& house);
 

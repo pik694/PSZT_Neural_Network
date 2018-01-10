@@ -34,7 +34,7 @@ namespace neural_network {
 			double getValue(){return value_;}
 			double getDelta(){return delta_;}
 
-			void updateOutputWeights(double eta, int batchSize);
+			void updateOutputWeights(double factor);
 
 			virtual void recalculateValue();
 

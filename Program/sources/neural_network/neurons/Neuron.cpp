@@ -26,10 +26,10 @@ void Neuron::computeError() {
 	throw std::runtime_error("This method should not be used in this type");
 }
 
-void Neuron::updateOutputWeights(double eta, int batchSize) {
+void Neuron::updateOutputWeights(double factor) {
 
 	for(auto synapse : outputSynapses_)
-		synapse->updateWeight(eta, batchSize);
+		synapse->updateWeight(factor);
 }
 
 
