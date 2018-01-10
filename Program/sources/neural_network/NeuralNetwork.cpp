@@ -219,6 +219,7 @@ NeuralNetwork::stochasticGradientDescent(const NeuralNetwork::houses_t &inputHou
 	std::vector<houses_t::const_iterator> houses;
 	std::random_device randomDevice;
 	std::mt19937 g(randomDevice());
+	double factor = eta/batchSize;
 
 	for (auto iterator = inputHouses.begin(); iterator != inputHouses.end(); ++iterator)
 		houses.emplace_back(iterator);
@@ -230,14 +231,15 @@ NeuralNetwork::stochasticGradientDescent(const NeuralNetwork::houses_t &inputHou
 		std::shuffle(houses.begin(), houses.end(), g);
 
 		for (auto iterator = houses.begin(); iterator != houses.end();)
-			runBatchAndUpdateWeights(iterator, iterator += batchSize, eta, batchSize);
+			runBatchAndUpdateWeights(iterator,
+			                         iterator += batchSize, factor);
 
 		updateProgress();
 	}
 }
 
 void NeuralNetwork::runBatchAndUpdateWeights(NeuralNetwork::houses_const_iterator_t begin,
-                                             NeuralNetwork::houses_const_iterator_t end, double eta, int batchSize) {
+                                             NeuralNetwork::houses_const_iterator_t end, double factor) {
 
 	for(;begin != end; ++begin){
 
@@ -247,7 +249,7 @@ void NeuralNetwork::runBatchAndUpdateWeights(NeuralNetwork::houses_const_iterato
 
 	}
 
-	updateWeights(eta, batchSize);
+	updateWeights(factor);
 
 }
 
@@ -255,11 +257,11 @@ void NeuralNetwork::calculateOutputError(const house::NormalizedValuesHouse &hou
 	outputNeuron_->calculateOutputError(house, costDerivative);
 }
 
-void NeuralNetwork::updateWeights(double eta, int batchSize) {
+void NeuralNetwork::updateWeights(double factor) {
 
 	for(layer_t layer : neurons_){
 		for(auto neuron : layer){
-			neuron->updateOutputWeights(eta, batchSize);
+			neuron->updateOutputWeights(factor);
 		}
 	}
 
