@@ -2,12 +2,24 @@
 // Created by Piotr Żelazko on 09.01.2018.
 //
 
+#include <map>
 #include "NeuralNetworkTopology.h"
 
 using namespace neural_network;
 
 std::vector<int> TopologyBank::getTopology(Topology_E topology) {
+	static const std::map<Topology_E, std::vector<int>> map = {
+			{Topology_E::_5_5,      {5,  5}},
+			{Topology_E::_10_10,    {10, 10}},
+			{Topology_E::_15_5,     {15, 5}},
+			{Topology_E::_15_10,    {15, 10}},
+			{Topology_E::_20_10,    {20, 10}},
+			{Topology_E::_20_20,    {20, 20}},
+			{Topology_E::_30_15,    {30, 15}},
+			{Topology_E::_5_5_5,    {5,  5,  5}},
+			{Topology_E::_10_10_10, {10, 10, 10}},
 
-	return {1,2,3,4};
+	};
 
+	return map.at(topology);
 }

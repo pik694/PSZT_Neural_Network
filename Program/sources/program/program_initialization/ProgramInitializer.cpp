@@ -249,8 +249,18 @@ namespace boost {
         using string_function_map_t = std::map< const std::string, neural_network::Topology_E >;
 
         static const string_function_map_t map = {
-                { std::to_string( static_cast< int >( neural_network::Topology_E ::JakaKolwiek) ), neural_network::Topology_E::JakaKolwiek },
-              };
+
+                { std::to_string( static_cast< int >( neural_network::Topology_E::_10_10 )), neural_network::Topology_E::_10_10 },
+                { std::to_string( static_cast< int >( neural_network::Topology_E::_20_20 )), neural_network::Topology_E::_20_20 },
+                { std::to_string( static_cast< int >( neural_network::Topology_E::_20_10 )), neural_network::Topology_E::_20_10 },
+                { std::to_string( static_cast< int >( neural_network::Topology_E::_30_15 )), neural_network::Topology_E::_30_15 },
+                { std::to_string( static_cast< int >( neural_network::Topology_E::_15_10 )), neural_network::Topology_E::_15_10},
+                { std::to_string( static_cast< int >( neural_network::Topology_E::_15_10 )), neural_network::Topology_E::_15_10},
+                { std::to_string( static_cast< int >( neural_network::Topology_E::_15_5 )), neural_network::Topology_E::_15_5 },
+                { std::to_string( static_cast< int >( neural_network::Topology_E::_5_5 )), neural_network::Topology_E::_5_5 },
+                { std::to_string( static_cast< int >( neural_network::Topology_E::_5_5_5 )), neural_network::Topology_E::_5_5_5 },
+                { std::to_string( static_cast< int >( neural_network::Topology_E::_10_10_10 )), neural_network::Topology_E::_10_10_10 },
+        };
 
             if( map.find( name ) == map.end() )
                 throw std::runtime_error( "Invalid function" );
