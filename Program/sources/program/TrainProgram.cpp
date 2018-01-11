@@ -1,7 +1,5 @@
 #include "TrainProgram.h"
-#include "Serializator.h"
 #include "progress/ProgressStatusManager.h"
-#include "Serializator.h"
 #include "neural_network/NeuralNetworkTopology.h"
 
 using namespace program;

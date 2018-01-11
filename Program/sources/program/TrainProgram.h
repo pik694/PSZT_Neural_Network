@@ -8,7 +8,7 @@
 #include "neural_network/NeuralNetworkTopology.h"
 #include "house/NormalizedValuesHouse.h"
 #include "neural_network/ActivationFunctionsBank.h"
-#include "neural_network/NeuralNetwork.h"
+#include "Serializator.h"
 
 const int NEURAL_NETWORK = 0;
 const int EPOCHS = 1;
