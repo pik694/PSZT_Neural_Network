@@ -66,9 +66,9 @@ namespace program {
             c_str EPOCH = "epoch";
             c_str TOPOLOGY = "topology";
             c_str TOLERANCE = "tolerance";
-            c_str NEURAL_NET = "neural net";
+            c_str NEURAL_NET = "neural-net";
 			c_str LOGGER = "logger";
-			c_str RESULT = "result path";
+			c_str RESULT = "result-path";
             c_str THREADS = "threads";
 		};
 	}
