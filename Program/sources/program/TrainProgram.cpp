@@ -34,7 +34,7 @@ void TrainProgram::run()
                         {
                             ProgressStatusManager::getInstance()->init( "Training neural network", iterations );
                             for( auto it = configVec_.begin(); it != configVec_.end(); ++ it )
-                                threadsVec_.emplace_back( trainNeuralNet, *it, trainingData_ );
+                                threadsVec_.emplace_back( trainNeuralNet, std::ref(*it), std::ref(trainingData_) );
 
 
                             for( auto it_t = threadsVec_.begin(); it_t != threadsVec_.end(); ++it_t )
