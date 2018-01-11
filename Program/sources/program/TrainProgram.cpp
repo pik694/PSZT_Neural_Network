@@ -23,7 +23,7 @@ void TrainProgram::run()
                     {
                         if( configVec_.size() < THREADS_COUNT )
                         {
-                            iterations += threadsForEta_ * *it_epoch;
+                            iterations += threadsForEta_ * (*it_epoch);
                             for( unsigned threads_count = 0; threads_count < threadsForEta_; ++threads_count )
                             {
                                 NeuralNetwork neural_network( TopologyBank::getTopology( *it_topology ), *it_function  );
@@ -50,6 +50,9 @@ void TrainProgram::run()
                                                                        std::get< ETA >( *it ),
                                                                        std::get< TEST_PERCENTAGE >( *it ),
                                                                        std::get< MSE >( *it ) );
+
+                            threadsVec_.clear();
+                            configVec_.clear();
 
                             iterations = 0;
                         }

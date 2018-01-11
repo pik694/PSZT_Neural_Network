@@ -31,14 +31,8 @@ void Program::refresh()
 	while( canRefresh_ )
 	{
 		sleep( SLEEP_TIME );
-		try
-		{
-			progress::ProgressStatusManager::getInstance()->refresh();
-		}
-		catch( ... )
-		{
+		progress::ProgressStatusManager::getInstance()->refresh();
 
-		}
 	}
 
 

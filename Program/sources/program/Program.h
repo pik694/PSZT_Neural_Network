@@ -9,7 +9,7 @@
 #include <boost/program_options.hpp>
 #include "program_version.h"
 
-const unsigned SLEEP_TIME = 10;
+const unsigned SLEEP_TIME = 0;
 
 namespace program
 {
