@@ -123,3 +123,7 @@ void Serializator::writeWeights(std::ofstream &stream, neural_network::NeuralNet
 	}
 
 }
+
+neural_network::NeuralNetwork Serializator::deserialize(std::ifstream &file) {
+	return neural_network::NeuralNetwork(std::vector<int>(), neural_network::functions::ActivationFunctions_E::step );
+}
