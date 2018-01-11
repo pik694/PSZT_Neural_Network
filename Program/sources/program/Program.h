@@ -9,6 +9,8 @@
 #include <boost/program_options.hpp>
 #include "program_version.h"
 
+const unsigned SLEEP_TIME = 10;
+
 namespace program
 {
     enum class ExecutionMode_E
@@ -26,10 +28,13 @@ namespace program
 
 		virtual ~Program() = default;
 
-		//static void trainNeuralNet();
+		static void refresh();
+
+		static bool canRefresh_;
 
 	protected:
 		std::vector< std::thread > threadsVec_;
+		std::thread refresher_;
 	private:
 
     };
