@@ -9,15 +9,19 @@
 
 namespace neural_network {
 	namespace neurons {
-		class BiasNeuron : public InputNeuron {
+		class BiasNeuron : public Neuron {
 		public:
 			BiasNeuron() { value_ = 1.0; }
 
-			void addInputSynapse(const std::shared_ptr<Synapse>&) override {}
-
-			void recalculateValue() override {}
-
 			~BiasNeuron() override = default;
+
+			void addOutputSynapse(const std::shared_ptr<Synapse> &outputSynapse) override;
+
+			void addInputSynapse(const std::shared_ptr<Synapse> &inputSynapse) override;
+
+			void recalculateValue() override;
+
+			void computeError() override;
 
 		};
 	}

@@ -14,8 +14,6 @@ namespace neural_network {
 		public:
 			HiddenLayerNeuron(functions::ActivationFunctions_E);
 
-
-
 			~HiddenLayerNeuron() override = default;
 
 			void addInputSynapse(const std::shared_ptr<Synapse> &inputSynapse) override;

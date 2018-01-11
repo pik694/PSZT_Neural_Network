@@ -10,7 +10,16 @@
 namespace neural_network{
 	enum class Topology_E
 	{
-		JakaKolwiek = 69
+		_5_5,
+		_10_10,
+		_15_5,
+		_15_10,
+		_20_10,
+		_20_20,
+		_30_15,
+		_5_5_5,
+		_10_10_10,
+
 	};
 
 	class TopologyBank{
