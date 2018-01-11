@@ -1,11 +1,15 @@
 //Created by Daniel Bigos
 
+#ifndef _PSZT_NEURAL_NETWORK
+#define _PSZT_NEURAL_NETWORK
+
 #include <vector>
 
 #include "house/NormalizedValuesHouse.h"
 #include "ActivationFunctionsBank.h"
 #include "neurons/Neuron.h"
 #include "neurons/OutputNeuron.h"
+#include "progress/ProgressStatusManager.h"
 
 namespace neural_network {
 	class NeuralNetwork {
@@ -21,7 +25,8 @@ namespace neural_network {
 		weights_t getWeights() const;
 
 		double stochasticGradientDescent(const houses_t &inputHouses, int epochs, int batchSize, double eta,
-				                                 int testsPct, std::function<void()> updateProgress);
+				                                 int testsPct,
+				                         std::function<void()> updateProgress = []{progress::ProgressStatusManager::getInstance()->addProgress(1);});
 
 		double calculateHousesPrice(const house::NormalizedValuesHouse& house);
 
@@ -57,3 +62,5 @@ namespace neural_network {
 		double getMSE(const houses_t::const_iterator &begin, const houses_t::const_iterator &end);
 	};
 }
+
+#endif

@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <tuple>
 #include "FileReader.h"
 #include "TrainingDataFactory.h"
 #include "ProgramInitializer.h"

@@ -211,7 +211,7 @@ void NeuralNetwork::setInputs(const house::NormalizedValuesHouse &house) {
 double
 NeuralNetwork::stochasticGradientDescent(const houses_t &inputHouses, int epochs, int batchSize, double eta,
                                          int testsPct,
-                                         std::function<void()> updateProgress = []{progress::ProgressStatusManager::getInstance()->addProgress(1);})
+                                         std::function<void()> updateProgress)
 {
 
 	std::vector<houses_t::const_iterator> houses;
