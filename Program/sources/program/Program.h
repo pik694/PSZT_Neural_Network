@@ -5,6 +5,7 @@
 #ifndef PSZT_NEURAL_NETWORK_PROGRAM_H
 #define PSZT_NEURAL_NETWORK_PROGRAM_H
 
+#include <mutex>
 #include <thread>
 #include <boost/program_options.hpp>
 #include "program_version.h"
@@ -28,14 +29,17 @@ namespace program
 
 		virtual ~Program() = default;
 
-		static void refresh();
+		static void decrementThreads();
+		static int getThreads();
+		static void setThreads( int count );
 
-		static bool canRefresh_;
 
 	protected:
 		std::vector< std::thread > threadsVec_;
-		std::thread refresher_;
+
 	private:
+		static int threads_;
+		static std::mutex mutex_;
 
     };
 

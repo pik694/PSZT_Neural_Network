@@ -5,7 +5,26 @@
 
 using namespace program;
 
-bool Program::canRefresh_ = true;
+int Program::threads_ = 0;
+std::mutex Program::mutex_;
+
+void Program::decrementThreads()
+{
+	std::lock_guard< std::mutex > guard( mutex_ );
+	--threads_;
+}
+
+int Program::getThreads()
+{
+	std::lock_guard< std::mutex > guard( mutex_ );
+	return threads_;
+}
+
+void Program::setThreads( int count )
+{
+	std::lock_guard< std::mutex > guard( mutex_ );
+	threads_ = count;
+}
 
 void program::ProgramDecorator::run() {
 	program_->run();
@@ -26,14 +45,3 @@ void ErrorInfoProgram::run() {
 	ProgramDecorator::run();
 }
 
-void Program::refresh()
-{
-	while( canRefresh_ )
-	{
-		sleep( SLEEP_TIME );
-		progress::ProgressStatusManager::getInstance()->refresh();
-
-	}
-
-
-}
