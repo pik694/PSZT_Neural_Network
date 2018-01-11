@@ -36,6 +36,8 @@ namespace program
 
         void run() override;
 
+        void doTraining();
+
         static void trainNeuralNet( ConfigTuple& config, const std::vector< std::shared_ptr< house::NormalizedValuesHouse > > & training_data );
 
         virtual ~TrainProgram();
@@ -49,6 +51,7 @@ namespace program
         int percentage_;
         int threadsForEta_;
         std::vector< ConfigTuple > configVec_;
+        unsigned iterations_;
     };
 }
 

@@ -10,7 +10,6 @@ void TrainProgram::run()
 {
     refresher_ = std::thread( refresh );
 
-    unsigned iterations = 0;
     for( auto it_topology = topologyVec_.begin(); it_topology != topologyVec_.end(); ++it_topology )
     {
         for( auto it_epoch = epochVec_.begin(); it_epoch != epochVec_.end(); ++it_epoch )
@@ -23,7 +22,7 @@ void TrainProgram::run()
                     {
                         if( configVec_.size() < THREADS_COUNT )
                         {
-                            iterations += threadsForEta_ * *it_epoch;
+                            iterations_ += threadsForEta_ * *it_epoch;
                             for( unsigned threads_count = 0; threads_count < threadsForEta_; ++threads_count )
                             {
                                 NeuralNetwork neural_network( TopologyBank::getTopology( *it_topology ), *it_function  );
@@ -32,32 +31,15 @@ void TrainProgram::run()
                         }
                         else
                         {
-                            ProgressStatusManager::getInstance()->init( "Training neural network", iterations );
-                            for( auto it = configVec_.begin(); it != configVec_.end(); ++ it )
-                                threadsVec_.emplace_back( trainNeuralNet, std::ref(*it), std::ref(trainingData_) );
-
-
-                            for( auto it_t = threadsVec_.begin(); it_t != threadsVec_.end(); ++it_t )
-                                it_t->join();
-
-                            ProgressStatusManager::getInstance()->deinit();
-
-                            for( auto it = configVec_.begin(); it != configVec_.end(); ++ it )
-                                Serializator::getInstance().serialize( std::get< NEURAL_NETWORK >( *it ),
-                                                                       std::get< ACTIVATION_FUNCTION >( *it ),
-                                                                       std::get< EPOCHS >( *it ),
-                                                                       std::get< BATCH_SIZE >( *it ),
-                                                                       std::get< ETA >( *it ),
-                                                                       std::get< TEST_PERCENTAGE >( *it ),
-                                                                       std::get< MSE >( *it ) );
-
-                            iterations = 0;
+                            doTraining();
                         }
                     }
                 }
             }
         }
     }
+
+    doTraining();
 }
 
 TrainProgram::TrainProgram( std::vector< std::shared_ptr< house::NormalizedValuesHouse > > &training_data,
@@ -76,7 +58,8 @@ TrainProgram::TrainProgram( std::vector< std::shared_ptr< house::NormalizedValue
             etaVec_( std::move( eta_vec ) ),
             topologyVec_( std::move( topology_vec ) ),
             percentage_( percentage ),
-            threadsForEta_( threads_for_eta )
+            threadsForEta_( threads_for_eta ),
+            iterations_( 0 )
 {
 }
 
@@ -94,5 +77,29 @@ void TrainProgram::trainNeuralNet( ConfigTuple &config,
                                                                                                   std::get< EPOCHS >( config ),
                                                                                                   std::get< BATCH_SIZE >( config),
                                                                                                   std::get< ETA >( config ), std::get< TEST_PERCENTAGE >( config ) );
+}
+
+void TrainProgram::doTraining()
+{
+    ProgressStatusManager::getInstance()->init( "Training neural network", iterations_ );
+    for( auto it = configVec_.begin(); it != configVec_.end(); ++ it )
+        threadsVec_.emplace_back( trainNeuralNet, std::ref(*it), std::ref(trainingData_) );
+
+
+    for( auto it_t = threadsVec_.begin(); it_t != threadsVec_.end(); ++it_t )
+        it_t->join();
+
+    ProgressStatusManager::getInstance()->deinit();
+
+    for( auto it = configVec_.begin(); it != configVec_.end(); ++ it )
+        Serializator::getInstance().serialize( std::get< NEURAL_NETWORK >( *it ),
+                                               std::get< ACTIVATION_FUNCTION >( *it ),
+                                               std::get< EPOCHS >( *it ),
+                                               std::get< BATCH_SIZE >( *it ),
+                                               std::get< ETA >( *it ),
+                                               std::get< TEST_PERCENTAGE >( *it ),
+                                               std::get< MSE >( *it ) );
+
+    iterations_ = 0;
 }
 
