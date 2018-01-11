@@ -5,18 +5,18 @@
 #ifndef PSZT_NEURAL_NETWORK_SERIALIZATOR_H
 #define PSZT_NEURAL_NETWORK_SERIALIZATOR_H
 
-
+#include <fstream>
 #include "neural_network/NeuralNetwork.h"
 
 class Serializator {
 
 public:
-	static Serializator &getInstance() {
+	static Serializator &getInstance() { // TODO change into a ptr
 		static Serializator instance;
 		return instance;
 	}
 
-	void setOuptutDirecotry(const std::string&);
+	void setOutputDirectory(const std::string &);
 	void setLoggerFile(std::ofstream& );
 	void closeLoggerFile();
 
@@ -25,22 +25,41 @@ public:
 
 	neural_network::NeuralNetwork deserialize(std::ifstream &file);
 
-	//obsolete: void saveResults(neural_network::NeuralNetwork &neuralNetwork, std::string &fileName);
+	virtual ~Serializator() = default;
 
 private:
 	Serializator() = default;
 
-	void writeActivationFunction(std::ofstream &file);
+	std::ofstream loggerFile;
+	std::string outputDirectory;
 
-	void writeTopology(std::ofstream &file, neural_network::NeuralNetwork &neuralNetwork);
+	std::string getCurrentDateTime();
 
-	void writeWeights(std::ofstream &file, neural_network::NeuralNetwork &neuralNetwork);
+	void serializeNeuralNetwork(std::ofstream &stream, neural_network::NeuralNetwork &net,
+	                            neural_network::functions::ActivationFunctions_E func,
+	                            int epochs, int batchSize, double eta, int testPct, double MSE);
 
-	neural_network::functions::ActivationFunctions_E readActivationFunction(std::ifstream &file);
+	void saveNetToLogger(neural_network::NeuralNetwork &net,
+	                     neural_network::functions::ActivationFunctions_E func,
+	                     int epochs, int batchSize, double eta, int testPct, double MSE);
 
-	std::vector<int> readTopology(std::ifstream &file);
+	void writeWeights(std::ofstream &stream, neural_network::NeuralNetwork &net);
 
-	neural_network::NeuralNetwork::weights_t readWeights(std::ifstream &file, std::vector<int> &topology);
+	void writeNetInfo(std::ofstream& stream, neural_network::NeuralNetwork &net,
+	                  neural_network::functions::ActivationFunctions_E func,
+	                  int epochs, int batchSize, double eta, int testPct, double MSE);
+
+//	void writeActivationFunction(std::ofstream &file);
+//
+//	void writeTopology(std::ofstream &file, neural_network::NeuralNetwork &neuralNetwork);
+//
+//	void writeWeights(std::ofstream &file, neural_network::NeuralNetwork &neuralNetwork);
+//
+//	neural_network::functions::ActivationFunctions_E readActivationFunction(std::ifstream &file);
+//
+//	std::vector<int> readTopology(std::ifstream &file);
+//
+//	neural_network::NeuralNetwork::weights_t readWeights(std::ifstream &file, std::vector<int> &topology);
 
 };
 
