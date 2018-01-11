@@ -13,17 +13,17 @@
 
 void Serializator::setLoggerFile(std::ofstream& loggerStream) { // TODO: make sure it that the stream overwrites file
 
-    loggerStream = std::move(loggerStream);
+    loggerFile_ = std::move(loggerStream);
 
 }
 
 void Serializator::closeLoggerFile() {
-    if (loggerFile.is_open())
-        loggerFile.close();
+    if (loggerFile_.is_open())
+        loggerFile_.close();
 }
 
 void Serializator::setOutputDirectory(const std::string& directory) {
-    outputDirectory = directory;
+    outputDirectory_ = directory;
 }
 
 
@@ -31,12 +31,12 @@ void
 Serializator::serialize(neural_network::NeuralNetwork &neuralNetwork, neural_network::functions::ActivationFunctions_E function,
                         int epochs, int batchSize, double eta, int testsPct, double MSE) {
 
-    if (outputDirectory.length() == 0){
+    if (outputDirectory_.length() == 0){
         std::cerr << "Did not set output directory. Output directory was set to /tmp/neural_net/" << std::endl;
-        outputDirectory = "/tmp/neural_net/";
+        outputDirectory_ = "/tmp/neural_net/";
     }
 
-    std::string fileName =  outputDirectory + getCurrentDateTime() + ".nnet";
+    std::string fileName =  outputDirectory_ + getCurrentDateTime() + ".nnet";
 
     std::ofstream currentNet (fileName);
 
@@ -71,13 +71,13 @@ void
 Serializator::saveNetToLogger(neural_network::NeuralNetwork &net, neural_network::functions::ActivationFunctions_E func,
                               int epochs, int batchSize, double eta, int testPct, double MSE) {
 
-	if (!loggerFile.is_open()){
+	if (!loggerFile_.is_open()){
 		std::cerr << "Broken logger file : stream is closed. Omitted saving net to logger." << std:: endl;
 		return;
 	}
 
 
-	writeNetInfo(loggerFile, net, func, epochs, batchSize, eta, testPct, MSE);
+	writeNetInfo(loggerFile_, net, func, epochs, batchSize, eta, testPct, MSE);
 
 }
 

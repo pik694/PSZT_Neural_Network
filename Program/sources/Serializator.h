@@ -30,8 +30,8 @@ public:
 private:
 	Serializator() = default;
 
-	std::ofstream loggerFile;
-	std::string outputDirectory;
+	std::ofstream loggerFile_;
+	std::string outputDirectory_;
 
 	std::string getCurrentDateTime();
 
