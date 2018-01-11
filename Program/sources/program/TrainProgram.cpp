@@ -101,5 +101,8 @@ void TrainProgram::doTraining()
                                                std::get< MSE >( *it ) );
 
     iterations_ = 0;
+
+    configVec_.clear();
+    threadsVec_.clear();
 }
 
