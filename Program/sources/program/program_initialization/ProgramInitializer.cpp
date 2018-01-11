@@ -110,7 +110,7 @@ std::unique_ptr< program::Program > ProgramInitializer::getProgram()
                 if( epoch_v.empty() || batchSize_v.empty() || function_v.empty() || eta_v.empty() || topology_v.empty() || !loggerFile_.size() || !resultPath_.size() )
                     throw std::runtime_error( "More parameters required." );
 
-				loggerStream.open( loggerFile_ );
+				loggerStream.open( loggerFile_, std::ofstream::app);
 				if( !loggerStream.is_open() )
 					throw std::runtime_error( "Could not open logger file." );
 
@@ -142,7 +142,7 @@ std::unique_ptr< program::Program > ProgramInitializer::getProgram()
 				if( percentage_ < 0 )
 					throw std::runtime_error( "Invalid percentage specified." );
 
-				loggerStream.open( loggerFile_ );
+				loggerStream.open( loggerFile_,  std::ofstream::app );
 				if( !loggerStream.is_open() )
 					throw std::runtime_error( "Could not open logger file." );
 
