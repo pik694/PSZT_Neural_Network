@@ -12,7 +12,7 @@ namespace neural_network {
 	public:
 
 		using weights_t = std::vector<std::vector<std::vector<double>>>;
-		using houses_t = std::vector<house::NormalizedValuesHouse>; // TODO : shared ptr
+		using houses_t = std::vector<std::shared_ptr<house::NormalizedValuesHouse>>;
 
 		NeuralNetwork(std::vector<int> topology, functions::ActivationFunctions_E activationFunction);
 		NeuralNetwork(weights_t weights, functions::ActivationFunctions_E activationFunction);
@@ -21,7 +21,7 @@ namespace neural_network {
 		weights_t getWeights() const;
 
 		double stochasticGradientDescent(const houses_t &inputHouses, int epochs, int batchSize, double eta,
-		                                 int testsPct);
+				                                 int testsPct, std::function<void()> updateProgress);
 
 		double calculateHousesPrice(const house::NormalizedValuesHouse& house);
 
@@ -30,7 +30,7 @@ namespace neural_network {
 	private:
 
 		using layer_t = std::vector<std::shared_ptr<neurons::Neuron>>;
-		using houses_const_iterator_t = std::vector<houses_t::const_iterator>::iterator; //TODO : check whether it is ok
+		using houses_const_iterator_t = std::vector<houses_t::const_iterator>::iterator;
 
 		std::vector<layer_t> neurons_;
 		std::shared_ptr<neurons::OutputNeuron> outputNeuron_;

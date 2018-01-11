@@ -210,7 +210,9 @@ void NeuralNetwork::setInputs(const house::NormalizedValuesHouse &house) {
 
 double
 NeuralNetwork::stochasticGradientDescent(const houses_t &inputHouses, int epochs, int batchSize, double eta,
-                                         int testsPct) {
+                                         int testsPct,
+                                         std::function<void()> updateProgress = []{progress::ProgressStatusManager::getInstance()->addProgress(1);})
+{
 
 	std::vector<houses_t::const_iterator> houses;
 	std::random_device randomDevice;
@@ -234,8 +236,7 @@ NeuralNetwork::stochasticGradientDescent(const houses_t &inputHouses, int epochs
 			runBatchAndUpdateWeights(iterator,
 			                         iterator + batchSize, factor);
 
-		progress::ProgressStatusManager::getInstance()->addProgress(1);
-
+		updateProgress();
 	}
 
 
@@ -249,7 +250,8 @@ double NeuralNetwork::getMSE(const houses_t::const_iterator &begin,
 	double meanSquaredError = 0.0;
 
 	for(auto test = begin; test != end; ++test){
-		double currentError = calculateHousesPrice(*test);
+		double currentError = calculateHousesPrice(**test);
+		currentError -= (*test)->getPrice();
 		currentError *= currentError;
 		meanSquaredError += currentError;
 	}
@@ -261,8 +263,8 @@ void NeuralNetwork::runBatchAndUpdateWeights(NeuralNetwork::houses_const_iterato
 
 	for(;begin != end; ++begin){
 
-		feedForward(**begin);
-		calculateOutputError(**begin);
+		feedForward(***begin);
+		calculateOutputError(***begin);
 		propagateBack();
 
 	}
@@ -287,7 +289,9 @@ void NeuralNetwork::updateWeights(double factor) {
 
 void NeuralNetwork::propagateBack() {
 
-	for(auto layer_it = ++neurons_.rbegin(); layer_it != neurons_.rend(); ++layer_it)
+	auto inputLayer = --neurons_.rend();
+
+	for(auto layer_it = ++neurons_.rbegin(); layer_it != inputLayer; ++layer_it)
 		for(auto neuron_it = layer_it->begin(); neuron_it != layer_it->end(); ++neuron_it)
 			(*neuron_it)->computeError();
 

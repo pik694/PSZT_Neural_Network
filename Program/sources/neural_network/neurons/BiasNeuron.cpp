@@ -12,5 +12,9 @@ void BiasNeuron::addOutputSynapse(const std::shared_ptr<Synapse> &outputSynapse)
 	outputSynapses_.emplace_back(outputSynapse);
 }
 
+void BiasNeuron::addInputSynapse(const std::shared_ptr<Synapse> &) {}
 
+void BiasNeuron::recalculateValue() {}
+
+void BiasNeuron::computeError() {}
 

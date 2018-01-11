@@ -17,6 +17,12 @@ namespace neural_network {
 
 			void addOutputSynapse(const std::shared_ptr<Synapse> &outputSynapse) override;
 
+			void addInputSynapse(const std::shared_ptr<Synapse> &inputSynapse) override;
+
+			void recalculateValue() override;
+
+			void computeError() override;
+
 		};
 	}
 }

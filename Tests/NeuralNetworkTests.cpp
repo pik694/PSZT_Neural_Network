@@ -13,7 +13,7 @@ BOOST_AUTO_TEST_SUITE(NEURAL_NETWORK_TESTS)
 
 	using namespace neural_network;
 	using namespace boost::gregorian;
-	auto sampleActivationFunction = functions::ActivationFunctions_E::step;
+	auto sampleActivationFunction = functions::ActivationFunctions_E::hyperbolicTangent;
 
 	BOOST_AUTO_TEST_CASE(NeuralNetworkCreation) {
 
@@ -137,15 +137,15 @@ BOOST_AUTO_TEST_SUITE(NEURAL_NETWORK_TESTS)
 
 		date day(2002, Feb, 1);
 
-		house::NormalizedValuesHouse house(day, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-
-		std::vector<house::NormalizedValuesHouse> houses;
-		houses.push_back(house);
-		houses.push_back(house);
+		std::vector<std::shared_ptr<house::NormalizedValuesHouse>> houses;
+		houses.emplace_back(std::make_shared<house::NormalizedValuesHouse>(day, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
+		houses.emplace_back(std::make_shared<house::NormalizedValuesHouse>(day, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
 
 		NeuralNetwork net(topology, sampleActivationFunction);
 
-		auto MSE = net.stochasticGradientDescent(houses, 1, 1, 0.1, 0);
+		auto MSE = net.stochasticGradientDescent(houses, 1, 1, 0.1, 50, []{});
+
+		BOOST_CHECK_NE(MSE, 0.0);
 
 	}
 
