@@ -30,7 +30,7 @@ std::vector< std::string > FileReader::getFileRows( const std::string& file_name
 		}
 	}
 
-	ProgressStatusManager::getInstance()->addProgress( --progress );
+	ProgressStatusManager::getInstance()->addProgress( progress );
 
 	file_.close();
 	return file_rows;
