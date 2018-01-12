@@ -18,6 +18,8 @@ namespace neural_network {
 			void setOutputValue(double value) override;
 
 			~InputNeuron() override = default;
+
+			void computeError() override;
 		};
 	}
 }

@@ -45,6 +45,6 @@ void HiddenLayerNeuron::computeError() {
 	for(auto& synapse : outputSynapses_)
 		delta_ += synapse->getBackPropagationValue();
 
-	delta_ = functions_.second(delta_);
+	delta_ *= functions_.second(inputSum_);
 
 }

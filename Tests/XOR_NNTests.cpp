@@ -12,7 +12,7 @@ BOOST_AUTO_TEST_SUITE(NEURAL_NETWORK_TESTS_XOR)
 
 	using namespace neural_network;
 	using Bpair_t = std::pair<bool, bool>;
-	auto sampleActivationFunction = functions::ActivationFunctions_E::hyperbolicTangent;
+	auto sampleActivationFunction = functions::ActivationFunctions_E::fastSigmoid;
 
 	BOOST_AUTO_TEST_CASE(NeuralNetworkCreation) {
 
@@ -126,7 +126,7 @@ BOOST_AUTO_TEST_SUITE(NEURAL_NETWORK_TESTS_XOR)
 
 		NeuralNetwork<Bpair_t> net(topology, sampleActivationFunction);
 
-		auto MSE = net.stochasticGradientDescent(inputs, 1, 1, 0.9, 50, []{});
+		auto MSE = net.stochasticGradientDescent(inputs, 1, 1, 0.3, 0, []{});
 
 		BOOST_CHECK_NE(MSE, 0.0);
 
@@ -134,17 +134,28 @@ BOOST_AUTO_TEST_SUITE(NEURAL_NETWORK_TESTS_XOR)
 
 	BOOST_AUTO_TEST_CASE(LearningXOR) {
 
-		std::vector<int> topology = {2};
+		std::vector<int> topology = {2,2};
 
-//		std::vector<Bpair_t> inputs = {{false, false}, {false, true}, {true, false}, {true, true}};
-		std::vector<Bpair_t> inputs = {{true, true}, {false, false}};
+		std::vector<Bpair_t> inputs = {{false, false}, {false, true}, {true, false}, {true, true}};
+//		std::vector<Bpair_t> inputs = {{true, false}};
+
+		//std::vector<std::vector<std::vector<double>>> weightsStart = {{{1},{1},{1}}};
 
 		NeuralNetwork<Bpair_t> net(topology, sampleActivationFunction);
 
 		std::vector<NeuralNetwork<Bpair_t>::weights_t> weights;
 
-		for (int epochs : {1,10,100,1000,10000, 100000}){
-			auto MSE = net.stochasticGradientDescent(inputs, 1, 1, 0.1, 0, []{});
+		for(auto input : inputs){
+
+			std::cout << input.first << " xor " << input.second << " = "
+			          << ((input.first + input.second) % 2)
+			          << " -> " << net.computeResult(input) << std::endl;
+
+		}
+		std::cout << std::endl;
+
+		for (int epochs : {1,10,100,1000,10000, 50000}){
+			auto MSE = net.stochasticGradientDescent(inputs, epochs, 1, 0.2, 0, []{});
 
 			for(auto input : inputs){
 
@@ -155,7 +166,6 @@ BOOST_AUTO_TEST_SUITE(NEURAL_NETWORK_TESTS_XOR)
 			}
 			std::cout << std::endl;
 
-			weights.emplace_back(net.getWeights());
 		}
 
 

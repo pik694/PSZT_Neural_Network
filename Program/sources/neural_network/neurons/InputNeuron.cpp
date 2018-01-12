@@ -15,3 +15,9 @@ void InputNeuron::addOutputSynapse(const std::shared_ptr<Synapse> &outputSynapse
 void InputNeuron::setOutputValue(double value) {
 	value_ = value;
 }
+
+
+void InputNeuron::computeError() {
+	for(auto& synapse : outputSynapses_)
+		delta_ += synapse->getBackPropagationValue();
+}

@@ -13,7 +13,7 @@ public:
 
 	static int generateInteger(){
 		static 	std::random_device randomDevice;
-		static  std::mt19937 generator;
+		static  std::mt19937 generator(randomDevice());
 		static  std::uniform_int_distribution<> distribution (min, max);
 
 		return distribution(generator);
@@ -21,7 +21,7 @@ public:
 
 	static double generateDouble(){
 		static 	std::random_device randomDevice;
-		static  std::mt19937 generator;
+		static  std::mt19937 generator(randomDevice());
 		static  std::uniform_real_distribution<> distribution ((double)min,(double)max);
 
 		return distribution(generator);

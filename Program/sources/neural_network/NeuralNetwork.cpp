@@ -77,8 +77,9 @@ void NeuralNetwork<std::pair<bool, bool>>::createInputNeurons() {
 
 template<>
 void NeuralNetwork<std::pair<bool, bool>>::setInputs(const std::pair<bool, bool> &datum) {
+
 	layer_t &inputLayer = neurons_.at(0);
 
 	inputLayer.at(0)->setOutputValue(datum.first);
-	inputLayer.at(0)->setOutputValue(datum.second);
+	inputLayer.at(1)->setOutputValue(datum.second);
 }

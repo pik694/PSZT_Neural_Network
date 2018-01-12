@@ -246,7 +246,7 @@ namespace neural_network {
 
 		void propagateBack() {
 
-			auto inputLayer = --neurons_.rend();
+			auto inputLayer = neurons_.rend();
 
 			for (auto layer_it = ++neurons_.rbegin(); layer_it != inputLayer; ++layer_it)
 				for (auto neuron_it = layer_it->begin(); neuron_it != layer_it->end(); ++neuron_it)

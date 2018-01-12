@@ -16,5 +16,10 @@ void BiasNeuron::addInputSynapse(const std::shared_ptr<Synapse> &) {}
 
 void BiasNeuron::recalculateValue() {}
 
-void BiasNeuron::computeError() {}
+void BiasNeuron::computeError() {
+
+	for(auto& synapse : outputSynapses_)
+		synapse->getBackPropagationValue();
+
+}
 
