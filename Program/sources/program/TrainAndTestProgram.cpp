@@ -46,6 +46,6 @@ TrainAndTestProgram::TrainAndTestProgram( std::vector<  house::NormalizedValuesH
 
 TrainAndTestProgram::~TrainAndTestProgram()
 {
-//    Serializator::getInstance().closeLoggerFile();
+    Serializator<house::NormalizedValuesHouse>::getInstance().closeLoggerFile();
 }
 

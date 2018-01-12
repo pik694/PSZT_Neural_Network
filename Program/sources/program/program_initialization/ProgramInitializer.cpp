@@ -130,8 +130,8 @@ std::unique_ptr< program::Program > ProgramInitializer::getProgram()
                     }
                 }
 
-//                Serializator::getInstance().setLoggerFile( loggerStream );
-//		        Serializator::getInstance().setOutputDirectory(resultPath_);
+                Serializator<house::NormalizedValuesHouse>::getInstance().setLoggerFile( loggerStream );
+		        Serializator<house::NormalizedValuesHouse>::getInstance().setOutputDirectory(resultPath_);
 
 				return std::make_unique< TrainProgram >( training_data, epoch_v, batchSize_v, function_v, eta_v, topology_v, percentage_, threadsForEta_ );
 
@@ -157,8 +157,8 @@ std::unique_ptr< program::Program > ProgramInitializer::getProgram()
                     }
                 }
 
-//                Serializator::getInstance().setLoggerFile( loggerStream );
-//		        Serializator::getInstance().setOutputDirectory(resultPath_);
+                Serializator<house::NormalizedValuesHouse>::getInstance().setLoggerFile( loggerStream );
+		        Serializator<house::NormalizedValuesHouse>::getInstance().setOutputDirectory(resultPath_);
 
 				return std::make_unique< TrainAndTestProgram >( training_data, epoch_v, batchSize_v, function_v, eta_v, topology_v, percentage_ );
 

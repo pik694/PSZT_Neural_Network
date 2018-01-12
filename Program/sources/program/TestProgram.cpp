@@ -11,15 +11,15 @@ void TestProgram::run()
 {
     unsigned long tests_passed = 0;
     int progress = 0;
-//    NeuralNetwork neural_network = Serializator::getInstance().deserialize( neuralFile_ );
+    NeuralNetwork<house::NormalizedValuesHouse> neural_network = Serializator<house::NormalizedValuesHouse>::getInstance().deserialize( neuralFile_ );
     ProgressStatusManager::getInstance()->init( "Neural network testing", trainingData_.size() );
     for( auto it = trainingData_.begin(); it != trainingData_.end(); ++it, ++progress )
     {
         double min_price = (double)( ( 100 - tolerance_ ) / 100 ) * it->getPrice();
         double max_price = (double)( ( 100 + tolerance_ ) / 100 ) * it->getPrice();
-//        double price = neural_network.calculateHousesPrice( *( it->get() ) );
+        double price = neural_network.computeResult(*it);
 
-//        if( price >= min_price && price <= max_price )
+        if( price >= min_price && price <= max_price )
             ++tests_passed;
 
         if( progress == PROGRESS_INFO )
