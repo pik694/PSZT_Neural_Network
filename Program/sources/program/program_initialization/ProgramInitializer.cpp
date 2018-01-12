@@ -94,7 +94,7 @@ std::unique_ptr< program::Program > ProgramInitializer::getProgram()
 		ProgressStatusManager::getInstance()->deinit();
 
 		ProgressStatusManager::getInstance()->init( "Creating training data", file_data.size() );
-		std::vector< std::shared_ptr< NormalizedValuesHouse > > training_data( file_data.size() );
+		std::vector<NormalizedValuesHouse> training_data( file_data.size() );
 		TrainingDataFactory training_data_factory;
 		training_data_factory.run( &file_data , &training_data );
 		ProgressStatusManager::getInstance()->deinit();
@@ -130,8 +130,8 @@ std::unique_ptr< program::Program > ProgramInitializer::getProgram()
                     }
                 }
 
-                Serializator::getInstance().setLoggerFile( loggerStream );
-		        Serializator::getInstance().setOutputDirectory(resultPath_);
+//                Serializator::getInstance().setLoggerFile( loggerStream );
+//		        Serializator::getInstance().setOutputDirectory(resultPath_);
 
 				return std::make_unique< TrainProgram >( training_data, epoch_v, batchSize_v, function_v, eta_v, topology_v, percentage_, threadsForEta_ );
 
@@ -157,8 +157,8 @@ std::unique_ptr< program::Program > ProgramInitializer::getProgram()
                     }
                 }
 
-                Serializator::getInstance().setLoggerFile( loggerStream );
-		        Serializator::getInstance().setOutputDirectory(resultPath_);
+//                Serializator::getInstance().setLoggerFile( loggerStream );
+//		        Serializator::getInstance().setOutputDirectory(resultPath_);
 
 				return std::make_unique< TrainAndTestProgram >( training_data, epoch_v, batchSize_v, function_v, eta_v, topology_v, percentage_ );
 

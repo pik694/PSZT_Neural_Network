@@ -19,7 +19,7 @@ namespace neural_network {
 
 			void recalculateValue() override;
 
-			void calculateOutputError(const house::NormalizedValuesHouse &house,
+			void calculateOutputError(double expected,
 			                          std::function<double(double, double)> costFunctionDerivative);
 
 			virtual ~OutputNeuron() = default;

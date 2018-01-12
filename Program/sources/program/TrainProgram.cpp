@@ -6,6 +6,8 @@ using namespace program;
 using namespace neural_network;
 using namespace progress;
 
+using NHouse = house::NormalizedValuesHouse;
+
 void TrainProgram::run() {
 	for (auto it_topology = topologyVec_.begin(); it_topology != topologyVec_.end(); ++it_topology) {
 		for (auto it_epoch = epochVec_.begin(); it_epoch != epochVec_.end(); ++it_epoch) {
@@ -13,9 +15,9 @@ void TrainProgram::run() {
 				for (auto it_function = functionVec_.begin(); it_function != functionVec_.end(); ++it_function) {
 					for (auto it_eta = etaVec_.begin(); it_eta != etaVec_.end(); ++it_eta) {
 						for (unsigned threads_count = 0; threads_count < threadsForEta_; ++threads_count) {
-							NeuralNetwork neural_network(TopologyBank::getTopology(*it_topology), *it_function);
-							configVec_.emplace_back(neural_network, *it_epoch, *it_batch_size, *it_eta, percentage_,
-							                        std::numeric_limits<double>::max(), *it_function);
+//							NeuralNetwork<NHouse> neural_network(TopologyBank::getTopology(*it_topology), *it_function);
+//							configVec_.emplace_back(neural_network, *it_epoch, *it_batch_size, *it_eta, percentage_,
+//							                        std::numeric_limits<double>::max(), *it_function);
 						}
 					}
 				}
@@ -26,7 +28,7 @@ void TrainProgram::run() {
 	doTraining();
 }
 
-TrainProgram::TrainProgram(std::vector<std::shared_ptr<house::NormalizedValuesHouse> > &training_data,
+TrainProgram::TrainProgram(std::vector<house::NormalizedValuesHouse>& training_data,
                            std::vector<int> &epoch_vec,
                            std::vector<int> &batch_size_vec,
                            std::vector<neural_network::functions::ActivationFunctions_E> &function_vec,
@@ -47,17 +49,17 @@ TrainProgram::TrainProgram(std::vector<std::shared_ptr<house::NormalizedValuesHo
 }
 
 TrainProgram::~TrainProgram() {
-	Serializator::getInstance().closeLoggerFile();
+//	Serializator::getInstance().closeLoggerFile();
 }
 
 void TrainProgram::trainNeuralNet(ConfigTuple &config,
-                                  const std::vector<std::shared_ptr<house::NormalizedValuesHouse> > &training_data) {
-	std::get<MSE>(config) = std::get<NEURAL_NETWORK>(config).stochasticGradientDescent(training_data,
-	                                                                                   std::get<EPOCHS>(config),
-	                                                                                   std::get<BATCH_SIZE>(config),
-	                                                                                   std::get<ETA>(config),
-	                                                                                   std::get<TEST_PERCENTAGE>(
-			                                                                                   config));
+                                  const std::vector<house::NormalizedValuesHouse> &training_data) {
+//	std::get<MSE>(config) = std::get<NEURAL_NETWORK>(config).stochasticGradientDescent(training_data,
+//	                                                                                   std::get<EPOCHS>(config),
+//	                                                                                   std::get<BATCH_SIZE>(config),
+//	                                                                                   std::get<ETA>(config),
+//	                                                                                   std::get<TEST_PERCENTAGE>(
+//			                                                                                   config));
 	decrementThreads();
 
 }
@@ -93,14 +95,14 @@ void TrainProgram::doTraining() {
 
 		ProgressStatusManager::getInstance()->deinit();
 
-		for (auto it = tmp_vector.begin(); it != tmp_vector.end(); ++it)
-			Serializator::getInstance().serialize(std::get<NEURAL_NETWORK>(*it),
-			                                      std::get<ACTIVATION_FUNCTION>(*it),
-			                                      std::get<EPOCHS>(*it),
-			                                      std::get<BATCH_SIZE>(*it),
-			                                      std::get<ETA>(*it),
-			                                      std::get<TEST_PERCENTAGE>(*it),
-			                                      std::get<MSE>(*it));
+		for (auto it = tmp_vector.begin(); it != tmp_vector.end(); ++it);
+//			Serializator::getInstance().serialize(std::get<NEURAL_NETWORK>(*it),
+//			                                      std::get<ACTIVATION_FUNCTION>(*it),
+//			                                      std::get<EPOCHS>(*it),
+//			                                      std::get<BATCH_SIZE>(*it),
+//			                                      std::get<ETA>(*it),
+//			                                      std::get<TEST_PERCENTAGE>(*it),
+//			                                      std::get<MSE>(*it));
 
 
 	}

@@ -15,10 +15,10 @@ void OutputNeuron::addInputSynapse(const std::shared_ptr<Synapse> &inputSynapse)
 	inputSynapses_.emplace_back(inputSynapse);
 }
 
-void OutputNeuron::calculateOutputError(const house::NormalizedValuesHouse &house,
+void OutputNeuron::calculateOutputError(double expected,
                                         std::function<double(double, double)> costFunctionDerivative) {
 
-	delta_ = costFunctionDerivative(value_, house.getPrice())*functions_.second(inputSum_);
+	delta_ = costFunctionDerivative(value_, expected) * functions_.second(inputSum_);
 
 }
 

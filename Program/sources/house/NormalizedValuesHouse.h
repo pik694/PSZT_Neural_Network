@@ -52,6 +52,9 @@ const unsigned THREADS_COUNT = std::thread::hardware_concurrency();
 namespace house {
 	class NormalizedValuesHouse {
 	public:
+
+		NormalizedValuesHouse() = default;
+
 		NormalizedValuesHouse(const boost::gregorian::date &date, float price, int bedrooms, float bathrooms,
 		                      int sqftLiving, int sqftLot, float floors, int waterfront, int view, int condition,
 		                      int grade, int sqftAbove, int sqftBasement, int yrBuilt, int yrRenovated, int zipcode,

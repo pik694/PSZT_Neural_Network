@@ -25,7 +25,7 @@ void TrainAndTestProgram::run()
     //TODO test
 }
 
-TrainAndTestProgram::TrainAndTestProgram( std::vector< std::shared_ptr< house::NormalizedValuesHouse > > &training_data,
+TrainAndTestProgram::TrainAndTestProgram( std::vector<  house::NormalizedValuesHouse  > &training_data,
                                           std::vector< int > &epoch_vec,
                                           std::vector< int > &batch_size_vec,
                                           std::vector< neural_network::functions::ActivationFunctions_E > &function_vec,
@@ -46,6 +46,6 @@ TrainAndTestProgram::TrainAndTestProgram( std::vector< std::shared_ptr< house::N
 
 TrainAndTestProgram::~TrainAndTestProgram()
 {
-    Serializator::getInstance().closeLoggerFile();
+//    Serializator::getInstance().closeLoggerFile();
 }
 

@@ -11,15 +11,15 @@ void TestProgram::run()
 {
     unsigned long tests_passed = 0;
     int progress = 0;
-    NeuralNetwork neural_network = Serializator::getInstance().deserialize( neuralFile_ );
+//    NeuralNetwork neural_network = Serializator::getInstance().deserialize( neuralFile_ );
     ProgressStatusManager::getInstance()->init( "Neural network testing", trainingData_.size() );
     for( auto it = trainingData_.begin(); it != trainingData_.end(); ++it, ++progress )
     {
-        double min_price = (double)( ( 100 - tolerance_ ) / 100 ) * it->get()->getPrice();
-        double max_price = (double)( ( 100 + tolerance_ ) / 100 ) * it->get()->getPrice();
-        double price = neural_network.calculateHousesPrice( *( it->get() ) );
+        double min_price = (double)( ( 100 - tolerance_ ) / 100 ) * it->getPrice();
+        double max_price = (double)( ( 100 + tolerance_ ) / 100 ) * it->getPrice();
+//        double price = neural_network.calculateHousesPrice( *( it->get() ) );
 
-        if( price >= min_price && price <= max_price )
+//        if( price >= min_price && price <= max_price )
             ++tests_passed;
 
         if( progress == PROGRESS_INFO )
@@ -42,7 +42,7 @@ TestProgram::~TestProgram()
      neuralFile_.close();
 }
 
-TestProgram::TestProgram( std::vector< std::shared_ptr< house::NormalizedValuesHouse > > &training_data,
+TestProgram::TestProgram( std::vector< house::NormalizedValuesHouse  > &training_data,
                           std::ifstream &neural_file,
                           int tolerance )
 

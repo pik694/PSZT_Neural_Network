@@ -5,7 +5,7 @@ using namespace progress;
 
 TrainingDataFactory::TrainingDataFactory() = default;
 
-void TrainingDataFactory::run( std::vector< std::string >* file_rows, std::vector< std::shared_ptr< NormalizedValuesHouse > >* training_data )
+void TrainingDataFactory::run( std::vector< std::string >* file_rows, std::vector<NormalizedValuesHouse>* training_data )
 {
 	
 	for ( unsigned thread_id = 0; thread_id < THREADS_COUNT; ++thread_id )
@@ -17,7 +17,7 @@ void TrainingDataFactory::run( std::vector< std::string >* file_rows, std::vecto
 	( *file_rows ).clear();
 }
 
-void TrainingDataFactory::createHouseFromRow( unsigned thread_id, std::vector< std::string >* file_rows, std::vector< std::shared_ptr< NormalizedValuesHouse > >* training_data )
+void TrainingDataFactory::createHouseFromRow( unsigned thread_id, std::vector< std::string >* file_rows, std::vector< NormalizedValuesHouse >* training_data )
 {
 	boost::char_separator< char > b_separator( "," );
 	unsigned progress = 0;
@@ -121,8 +121,8 @@ void TrainingDataFactory::createHouseFromRow( unsigned thread_id, std::vector< s
 			continue;
 
 
-		( *training_data )[ index ] = std::make_shared< NormalizedValuesHouse >( date, price, bedrooms, bathrooms, sqftLiving, sqftLot, floors, waterfront,
-			view, condition, grade, sqftAbove, sqftBasement, yrBuilt, yrRenovated, zipcode, lat, f_long, sqftLiving15, sqftLot15 );
+//		( *training_data )[ index ] = NormalizedValuesHouse ( date, price, bedrooms, bathrooms, sqftLiving, sqftLot, floors, waterfront,
+//			view, condition, grade, sqftAbove, sqftBasement, yrBuilt, yrRenovated, zipcode, lat, f_long, sqftLiving15, sqftLot15 );
 	}
 
 	ProgressStatusManager::getInstance()->addProgress( progress );

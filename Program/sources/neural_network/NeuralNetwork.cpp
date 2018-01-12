@@ -10,9 +10,9 @@
 
 using namespace neural_network;
 
-NeuralNetwork::NeuralNetwork(std::vector<int> topology, functions::ActivationFunctions_E activationFunction) :
+template<typename T>
+NeuralNetwork<T>::NeuralNetwork(std::vector<int> topology, functions::ActivationFunctions_E activationFunction) :
 		neurons_(topology.size() + 2) {
-
 
 	createInputNeurons();
 
@@ -24,7 +24,8 @@ NeuralNetwork::NeuralNetwork(std::vector<int> topology, functions::ActivationFun
 
 }
 
-NeuralNetwork::NeuralNetwork(NeuralNetwork::weights_t weights, functions::ActivationFunctions_E activationFunction) :
+template<typename T>
+NeuralNetwork<T>::NeuralNetwork(NeuralNetwork<T>::weights_t weights, functions::ActivationFunctions_E activationFunction) :
 		neurons_(weights.size() + 1) {
 
 	createInputNeurons();
@@ -36,18 +37,8 @@ NeuralNetwork::NeuralNetwork(NeuralNetwork::weights_t weights, functions::Activa
 	createConnections(weights);
 }
 
-void NeuralNetwork::createInputNeurons() {
-
-
-	// 19 input neurons for each position in a house + 1 bias neuron
-	for (int i = 0; i < 19; ++i) {
-		neurons_.at(0).emplace_back(new neurons::InputNeuron());
-	}
-	neurons_.at(0).emplace_back(new neurons::BiasNeuron());
-
-}
-
-void NeuralNetwork::createOutputNeuron(functions::ActivationFunctions_E functions) {
+template<typename T>
+void NeuralNetwork<T>::createOutputNeuron(functions::ActivationFunctions_E functions) {
 
 	// output layer consists of only one output neuron
 	outputNeuron_ = std::make_shared<neurons::OutputNeuron>(functions);
@@ -55,7 +46,8 @@ void NeuralNetwork::createOutputNeuron(functions::ActivationFunctions_E function
 
 }
 
-void NeuralNetwork::createHiddenLayers(std::vector<int> topology, functions::ActivationFunctions_E activationFunction) {
+template<typename T>
+void NeuralNetwork<T>::createHiddenLayers(std::vector<int> topology, functions::ActivationFunctions_E activationFunction) {
 
 	// hidden layers with number of neurons specified in the input argument + 1 bias neuron per layer
 
@@ -70,8 +62,9 @@ void NeuralNetwork::createHiddenLayers(std::vector<int> topology, functions::Act
 
 }
 
-void NeuralNetwork::createHiddenLayers(NeuralNetwork::weights_t weights,
-                                       functions::ActivationFunctions_E activationFunction) {
+template<typename T>
+void NeuralNetwork<T>::createHiddenLayers(NeuralNetwork::weights_t weights,
+                                          functions::ActivationFunctions_E activationFunction) {
 
 
 	auto netIterator = ++neurons_.begin();
@@ -91,7 +84,8 @@ void NeuralNetwork::createHiddenLayers(NeuralNetwork::weights_t weights,
 
 }
 
-void NeuralNetwork::createConnections() {
+template<typename T>
+void NeuralNetwork<T>::createConnections() {
 
 	for (auto i = neurons_.begin(), j = i + 1; j != neurons_.end(); ++i, ++j) {
 		for (auto k = i->begin(); k != i->end(); ++k) {
@@ -106,7 +100,8 @@ void NeuralNetwork::createConnections() {
 	}
 }
 
-void NeuralNetwork::createConnections(NeuralNetwork::weights_t weights) {
+template<typename T>
+void NeuralNetwork<T>::createConnections(NeuralNetwork<T>::weights_t weights) {
 
 	auto layerIt = weights.begin();
 
@@ -130,7 +125,8 @@ void NeuralNetwork::createConnections(NeuralNetwork::weights_t weights) {
 
 }
 
-std::vector<int> NeuralNetwork::getTopology() const {
+template<typename T>
+std::vector<int> NeuralNetwork<T>::getTopology() const {
 
 	std::vector<int> topology;
 
@@ -142,7 +138,8 @@ std::vector<int> NeuralNetwork::getTopology() const {
 	return topology;
 }
 
-NeuralNetwork::weights_t NeuralNetwork::getWeights() const {
+template<typename T>
+typename NeuralNetwork<T>::weights_t NeuralNetwork<T>::getWeights() const {
 
 	weights_t weights;
 
@@ -162,138 +159,164 @@ NeuralNetwork::weights_t NeuralNetwork::getWeights() const {
 	return weights;
 }
 
-double NeuralNetwork::calculateHousesPrice(const house::NormalizedValuesHouse &house) {
+template<typename T>
+double NeuralNetwork<T>::computeResult(const T &datum) {
 
-	feedForward(house);
+	feedForward(datum);
 	return outputNeuron_->getValue();
 
 }
 
-void NeuralNetwork::feedForward(const house::NormalizedValuesHouse &house) {
+template<typename T>
+void NeuralNetwork<T>::feedForward(const T &datum) {
 
-	setInputs(house);
+	setInputs(datum);
 
-	for (auto i = neurons_.begin() + 1; i != neurons_.end(); ++i) {
-		std::for_each(i->begin(), i->end(),
-		              [](std::shared_ptr<neurons::Neuron>& neuron) {
-			              neuron->recalculateValue();
-		              });
+	for (std::vector<layer_t>::iterator layerIt = neurons_.begin() + 1; layerIt != neurons_.end(); ++layerIt) {
+		for (layer_t::iterator neuronIt = layerIt->begin(); neuronIt != layerIt->end(); ++neuronIt) {
+			(*neuronIt)->recalculateValue();
+		}
 	}
 
 }
 
-void NeuralNetwork::setInputs(const house::NormalizedValuesHouse &house) {
 
-	layer_t &inputLayer = neurons_.at(0);
 
-	inputLayer.at(0)->setOutputValue(house.getDate());
-	inputLayer.at(1)->setOutputValue(house.getBedrooms());
-	inputLayer.at(2)->setOutputValue(house.getBathrooms());
-	inputLayer.at(3)->setOutputValue(house.getSqftLiving());
-	inputLayer.at(4)->setOutputValue(house.getSqftLot());
-	inputLayer.at(5)->setOutputValue(house.getFloors());
-	inputLayer.at(6)->setOutputValue(house.getWaterfront());
-	inputLayer.at(7)->setOutputValue(house.getView());
-	inputLayer.at(8)->setOutputValue(house.getCondition());
-	inputLayer.at(9)->setOutputValue(house.getGrade());
-	inputLayer.at(10)->setOutputValue(house.getSqftAbove());
-	inputLayer.at(11)->setOutputValue(house.getSqftBasement());
-	inputLayer.at(12)->setOutputValue(house.getYrBuilt());
-	inputLayer.at(13)->setOutputValue(house.getYrRenovated());
-	inputLayer.at(14)->setOutputValue(house.getZipcode());
-	inputLayer.at(15)->setOutputValue(house.getLat());
-	inputLayer.at(16)->setOutputValue(house.getLong());
-	inputLayer.at(17)->setOutputValue(house.getSqftLiving15());
-	inputLayer.at(18)->setOutputValue(house.getSqftLot15());
 
-}
+template<typename T>
+double NeuralNetwork<T>::stochasticGradientDescent(const data_vect_t &inputData,
+                                                   int epochs, int batchSize, double eta, int testsPct,
+                                                   std::function<void()> updateProgress) {
 
-double
-NeuralNetwork::stochasticGradientDescent(const houses_t &inputHouses, int epochs, int batchSize, double eta,
-                                         int testsPct,
-                                         std::function<void()> updateProgress)
-{
-
-	std::vector<houses_t::const_iterator> houses;
+	std::vector<typename std::vector<T>::const_iterator> dataCopy;
 	std::random_device randomDevice;
 	std::mt19937 g(randomDevice());
-	double factor = eta/batchSize;
 
-	auto testsNumber = inputHouses.size() * testsPct / 100;
+	double factor = eta / batchSize;
 
-	auto firstTest = (inputHouses.end() - testsNumber);
+	auto testsNumber = inputData.size() * testsPct / 100;
+	auto firstTest = (inputData.end() - testsNumber);
 
-	for (auto iterator = inputHouses.begin(); iterator != firstTest ; ++iterator)
-		houses.emplace_back(iterator);
-
+	for (auto iterator = inputData.begin(); iterator != firstTest; ++iterator)
+		dataCopy.emplace_back(iterator);
 
 
 	for (int epoch = 0; epoch < epochs; ++epoch) {
 
-		std::shuffle(houses.begin(), houses.end(), g);
+		std::shuffle(dataCopy.begin(), dataCopy.end(), g);
 
-		for (auto iterator = houses.begin(); iterator != houses.end(); iterator += batchSize)
-			runBatchAndUpdateWeights(iterator,
-			                         iterator + batchSize, factor);
+		for (auto iterator = dataCopy.begin(); iterator != dataCopy.end(); iterator += batchSize)
+//			runBatchAndUpdateWeights(iterator, iterator + batchSize, factor);
 
 		updateProgress();
 	}
 
 
-	double meanSquaredError = getMSE(firstTest, inputHouses.end());
+//	double meanSquaredError = getMSE(firstTest, inputData.end());
 
-	return (meanSquaredError / testsNumber);
+//	return (meanSquaredError / testsNumber);
+
+	return 0;
 }
 
-double NeuralNetwork::getMSE(const houses_t::const_iterator &begin,
-                             const houses_t::const_iterator &end) {
-	double meanSquaredError = 0.0;
+//double NeuralNetwork::getMSE(const houses_t::const_iterator &begin,
+//                             const houses_t::const_iterator &end) {
+//	double meanSquaredError = 0.0;
+//
+//	for(auto test = begin; test != end; ++test){
+//		double currentError = calculateHousesPrice(**test);
+//		currentError -= (*test)->getPrice();
+//		currentError *= currentError;
+//		meanSquaredError += currentError;
+//	}
+//	return meanSquaredError;
+//}
 
-	for(auto test = begin; test != end; ++test){
-		double currentError = calculateHousesPrice(**test);
-		currentError -= (*test)->getPrice();
-		currentError *= currentError;
-		meanSquaredError += currentError;
-	}
-	return meanSquaredError;
+//template<typename T>
+//void NeuralNetwork<T>::runBatchAndUpdateWeights(std::vector<data_vect_t::const_iterator>::iterator begin,
+//                                                const std::vector<data_vect_t::const_iterator>::iterator end,
+//                                                double factor) {
+//
+//	for (; begin != end; ++begin) {
+//
+//		feedForward(**begin);
+//		calculateOutputError(**begin);
+//		propagateBack();
+//
+//	}
+//
+//	updateWeights(factor);
+//
+//}
+
+template <typename T>
+void NeuralNetwork<T>::calculateOutputError(const T& datum) {
+
+	double expected = getExpectedResult(datum);
+	outputNeuron_->calculateOutputError(expected, costDerivative);
 }
 
-void NeuralNetwork::runBatchAndUpdateWeights(NeuralNetwork::houses_const_iterator_t begin,
-                                             NeuralNetwork::houses_const_iterator_t end, double factor) {
+template <typename T>
+void NeuralNetwork<T>::updateWeights(double factor) {
 
-	for(;begin != end; ++begin){
-
-		feedForward(***begin);
-		calculateOutputError(***begin);
-		propagateBack();
-
-	}
-
-	updateWeights(factor);
-
-}
-
-void NeuralNetwork::calculateOutputError(const house::NormalizedValuesHouse &house) {
-	outputNeuron_->calculateOutputError(house, costDerivative);
-}
-
-void NeuralNetwork::updateWeights(double factor) {
-
-	for(layer_t layer : neurons_){
-		for(auto neuron : layer){
+	for (layer_t layer : neurons_) {
+		for (auto neuron : layer) {
 			neuron->updateOutputWeights(factor);
 		}
 	}
 
 }
 
-void NeuralNetwork::propagateBack() {
+template <typename T>
+void NeuralNetwork<T>::propagateBack() {
 
 	auto inputLayer = --neurons_.rend();
 
-	for(auto layer_it = ++neurons_.rbegin(); layer_it != inputLayer; ++layer_it)
-		for(auto neuron_it = layer_it->begin(); neuron_it != layer_it->end(); ++neuron_it)
+	for (auto layer_it = ++neurons_.rbegin(); layer_it != inputLayer; ++layer_it)
+		for (auto neuron_it = layer_it->begin(); neuron_it != layer_it->end(); ++neuron_it)
 			(*neuron_it)->computeError();
+
+}
+
+///MARK: Specialized
+
+template<>
+void NeuralNetwork<house::NormalizedValuesHouse>::setInputs(const house::NormalizedValuesHouse &datum) {
+
+	layer_t &inputLayer = neurons_.at(0);
+
+	inputLayer.at(0)->setOutputValue(datum.getDate());
+	inputLayer.at(1)->setOutputValue(datum.getBedrooms());
+	inputLayer.at(2)->setOutputValue(datum.getBathrooms());
+	inputLayer.at(3)->setOutputValue(datum.getSqftLiving());
+	inputLayer.at(4)->setOutputValue(datum.getSqftLot());
+	inputLayer.at(5)->setOutputValue(datum.getFloors());
+	inputLayer.at(6)->setOutputValue(datum.getWaterfront());
+	inputLayer.at(7)->setOutputValue(datum.getView());
+	inputLayer.at(8)->setOutputValue(datum.getCondition());
+	inputLayer.at(9)->setOutputValue(datum.getGrade());
+	inputLayer.at(10)->setOutputValue(datum.getSqftAbove());
+	inputLayer.at(11)->setOutputValue(datum.getSqftBasement());
+	inputLayer.at(12)->setOutputValue(datum.getYrBuilt());
+	inputLayer.at(13)->setOutputValue(datum.getYrRenovated());
+	inputLayer.at(14)->setOutputValue(datum.getZipcode());
+	inputLayer.at(15)->setOutputValue(datum.getLat());
+	inputLayer.at(16)->setOutputValue(datum.getLong());
+	inputLayer.at(17)->setOutputValue(datum.getSqftLiving15());
+	inputLayer.at(18)->setOutputValue(datum.getSqftLot15());
+
+}
+
+
+template<>
+void NeuralNetwork<house::NormalizedValuesHouse>::createInputNeurons() {
+
+
+	// 19 input neurons for each position in a house + 1 bias neuron
+	for (int i = 0; i < 19; ++i) {
+		neurons_.at(0).emplace_back(new neurons::InputNeuron());
+	}
+	neurons_.at(0).emplace_back(new neurons::BiasNeuron());
 
 }
 

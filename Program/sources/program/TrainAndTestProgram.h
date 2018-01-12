@@ -13,7 +13,7 @@ namespace program
     class TrainAndTestProgram : public Program
     {
     public:
-        TrainAndTestProgram( std::vector< std::shared_ptr< house::NormalizedValuesHouse > > &training_data,
+        TrainAndTestProgram( std::vector< house::NormalizedValuesHouse > &training_data,
                              std::vector< int > &epoch_vec,
                              std::vector< int > &batch_size_vec,
                              std::vector< neural_network::functions::ActivationFunctions_E >& function_vec,
@@ -26,7 +26,7 @@ namespace program
         ~TrainAndTestProgram() override;
 
     private:
-        std::vector< std::shared_ptr< house::NormalizedValuesHouse > > trainingData_;
+        std::vector< house::NormalizedValuesHouse > trainingData_;
         std::vector< int > epochVec_;
         std::vector< int > batchSizeVec_;
         std::vector< neural_network::functions::ActivationFunctions_E > functionVec_;

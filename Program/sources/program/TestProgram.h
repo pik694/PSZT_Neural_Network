@@ -12,7 +12,7 @@ namespace program
     class TestProgram : public Program
     {
     public:
-        TestProgram( std::vector< std::shared_ptr< house::NormalizedValuesHouse > > &training_data,
+        TestProgram( std::vector< house::NormalizedValuesHouse > &training_data,
                      std::ifstream &neural_file,
                      int tolerance );
 
@@ -20,7 +20,7 @@ namespace program
 
         ~TestProgram() override;
     private:
-        std::vector< std::shared_ptr< house::NormalizedValuesHouse > > trainingData_;
+        std::vector< house::NormalizedValuesHouse > trainingData_;
         std::ifstream neuralFile_;
         int tolerance_;
     };
