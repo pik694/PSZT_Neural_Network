@@ -12,6 +12,7 @@
 BOOST_AUTO_TEST_SUITE(NEURAL_NETWORK_TESTS)
 
 	using namespace neural_network;
+	using NHouse = house::NormalizedValuesHouse;
 	using namespace boost::gregorian;
 	auto sampleActivationFunction = functions::ActivationFunctions_E::hyperbolicTangent;
 
@@ -20,10 +21,7 @@ BOOST_AUTO_TEST_SUITE(NEURAL_NETWORK_TESTS)
 
 		std::vector<int> topology = {1, 2, 3};
 
-		std::shared_ptr<NeuralNetwork> net;
-
-		BOOST_REQUIRE_NO_THROW(net = std::make_shared<NeuralNetwork>(topology, sampleActivationFunction));
-
+		BOOST_CHECK_NO_THROW(NeuralNetwork<NHouse> net (topology, sampleActivationFunction));
 
 	}
 
@@ -33,11 +31,9 @@ BOOST_AUTO_TEST_SUITE(NEURAL_NETWORK_TESTS)
 
 		std::vector<int> topology = {1, 2, 3};
 
-		std::shared_ptr<NeuralNetwork> net;
+		NeuralNetwork<NHouse> net (topology, sampleActivationFunction);
 
-		BOOST_REQUIRE_NO_THROW(net = std::make_shared<NeuralNetwork>(topology, sampleActivationFunction));
-
-		auto netTopology = net->getTopology();
+		auto netTopology = net.getTopology();
 
 		BOOST_CHECK_EQUAL_COLLECTIONS(topology.begin(), topology.end(), netTopology.begin(), netTopology.end());
 
@@ -48,11 +44,9 @@ BOOST_AUTO_TEST_SUITE(NEURAL_NETWORK_TESTS)
 
 		std::vector<int> topology = {1, 2, 3};
 
-		std::shared_ptr<NeuralNetwork> net;
+		NeuralNetwork<NHouse> net (topology, sampleActivationFunction);
 
-		BOOST_REQUIRE_NO_THROW(net = std::make_shared<NeuralNetwork>(topology, sampleActivationFunction));
-
-		auto weights = net->getWeights();
+		auto weights = net.getWeights();
 
 		BOOST_CHECK_EQUAL(weights.size(), topology.size() + 1);
 
@@ -66,35 +60,31 @@ BOOST_AUTO_TEST_SUITE(NEURAL_NETWORK_TESTS)
 
 		std::vector<int> topology = {1, 2, 3};
 
-		std::shared_ptr<NeuralNetwork> net;
+		NeuralNetwork<NHouse> net (topology, sampleActivationFunction);
 
-		BOOST_REQUIRE_NO_THROW(net = std::make_shared<NeuralNetwork>(topology, sampleActivationFunction));
+		auto weights = net.getWeights();
 
-		auto weights = net->getWeights();
+		NeuralNetwork<NHouse> secondNet (topology, sampleActivationFunction);
 
-		std::shared_ptr<NeuralNetwork> secondNet = std::make_shared<NeuralNetwork>(weights, sampleActivationFunction);
-
-		auto secondNetTopology = secondNet->getTopology();
+		auto secondNetTopology = secondNet.getTopology();
 
 		BOOST_CHECK_EQUAL_COLLECTIONS(topology.begin(), topology.end(), secondNetTopology.begin(),
 		                              secondNetTopology.end());
 
 	}
 
-
 	BOOST_AUTO_TEST_CASE(CheckSecondNetWeights) {
 
-		std::vector<int> topology = {1, 2, 3};
+//		std::vector<int> topology = {1,2,3};
+		std::vector<int> topology = {1};
 
-		std::shared_ptr<NeuralNetwork> net;
+		NeuralNetwork<NHouse> net (topology, sampleActivationFunction);
 
-		BOOST_REQUIRE_NO_THROW(net = std::make_shared<NeuralNetwork>(topology, sampleActivationFunction));
+		auto weights = net.getWeights();
 
-		auto weights = net->getWeights();
+		NeuralNetwork<NHouse> secondNet (weights, sampleActivationFunction);
 
-		std::shared_ptr<NeuralNetwork> secondNet = std::make_shared<NeuralNetwork>(weights, sampleActivationFunction);
-
-		auto secondNetWeights = secondNet->getWeights();
+		auto secondNetWeights = secondNet.getWeights();
 
 		for (auto layer1 = weights.begin(), layer2 = secondNetWeights.begin();
 		     layer1 != weights.end() && layer2 != secondNetWeights.end();
@@ -115,17 +105,16 @@ BOOST_AUTO_TEST_SUITE(NEURAL_NETWORK_TESTS)
 
 	}
 
+
 	BOOST_AUTO_TEST_CASE(SimpleFeedForward) {
 
 		std::vector<int> topology = {1, 2, 3};
 
-		date day(2002, Feb, 1);
+		house::NormalizedValuesHouse house;
 
-		house::NormalizedValuesHouse house(day, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+		NeuralNetwork<NHouse> net(topology, sampleActivationFunction);
 
-		NeuralNetwork net(topology, sampleActivationFunction);
-
-		auto calculatedPrice = net.calculateHousesPrice(house);
+		auto calculatedPrice = net.computeResult(house);
 
 		BOOST_CHECK_NE(calculatedPrice, 0.0);
 
@@ -135,19 +124,17 @@ BOOST_AUTO_TEST_SUITE(NEURAL_NETWORK_TESTS)
 
 		std::vector<int> topology = {1, 2, 3};
 
-		date day(2002, Feb, 1);
+		std::vector<house::NormalizedValuesHouse> houses(2);
 
-		std::vector<std::shared_ptr<house::NormalizedValuesHouse>> houses;
-		houses.emplace_back(std::make_shared<house::NormalizedValuesHouse>(day, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
-		houses.emplace_back(std::make_shared<house::NormalizedValuesHouse>(day, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
-
-		NeuralNetwork net(topology, sampleActivationFunction);
+		NeuralNetwork<NHouse> net(topology, sampleActivationFunction);
 
 		auto MSE = net.stochasticGradientDescent(houses, 1, 1, 0.1, 50, []{});
 
 		BOOST_CHECK_NE(MSE, 0.0);
 
 	}
+
+
 
 
 BOOST_AUTO_TEST_SUITE_END()
