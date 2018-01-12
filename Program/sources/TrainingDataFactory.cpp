@@ -121,8 +121,8 @@ void TrainingDataFactory::createHouseFromRow( unsigned thread_id, std::vector< s
 			continue;
 
 
-//		( *training_data )[ index ] = NormalizedValuesHouse ( date, price, bedrooms, bathrooms, sqftLiving, sqftLot, floors, waterfront,
-//			view, condition, grade, sqftAbove, sqftBasement, yrBuilt, yrRenovated, zipcode, lat, f_long, sqftLiving15, sqftLot15 );
+		( *training_data )[ index ] = NormalizedValuesHouse ( date, price, bedrooms, bathrooms, sqftLiving, sqftLot, floors, waterfront,
+			view, condition, grade, sqftAbove, sqftBasement, yrBuilt, yrRenovated, zipcode, lat, f_long, sqftLiving15, sqftLot15 );
 	}
 
 	ProgressStatusManager::getInstance()->addProgress( progress );

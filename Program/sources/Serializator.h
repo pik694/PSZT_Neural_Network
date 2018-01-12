@@ -11,7 +11,11 @@
 #include <sstream>
 #include <iomanip>
 #include <string>
+#include <boost/tokenizer.hpp>
 #include "neural_network/NeuralNetwork.h"
+
+template<>
+neural_network::functions::ActivationFunctions_E boost::lexical_cast( const std::string & );
 
 template<typename T>
 class Serializator {
@@ -62,8 +66,47 @@ public:
 	}
 
 	neural_network::NeuralNetwork<T> deserialize(std::ifstream &file) {
-		return neural_network::NeuralNetwork<T>(std::vector<int>(),
-		                                        neural_network::functions::ActivationFunctions_E::step);
+
+
+		std::string header;
+		boost::char_separator<char> separator1( "," );
+		boost::char_separator<char> separator2( ";" );
+		boost::char_separator<char> separator3( ":" );
+
+
+		std::getline (file, header); // First line is a header line
+		std::getline (file, header);
+
+		boost::tokenizer< boost::char_separator<char> > tokenizer (header, separator1);
+		auto iterator = tokenizer.begin(); // 6th is the activation function
+		for(int i = 0; i < 4; ++i, ++iterator);
+
+		auto func = boost::lexical_cast<neural_network::functions::ActivationFunctions_E>(*iterator);
+
+
+		std::string weightsString;
+		std::getline (file, weightsString);
+
+		std::vector<std::vector<std::vector<double>>> weights;
+		boost::tokenizer< boost::char_separator<char> > layerTokenizer (weightsString, separator3);
+		for(auto layer = layerTokenizer.begin(); layer != layerTokenizer.end(); ++layer){
+			boost::tokenizer< boost::char_separator<char> > beginTokenizer (*layer, separator2);
+			std::vector<std::vector<double>> weights2;
+			for (auto beginNeuron = beginTokenizer.begin(); beginNeuron != beginTokenizer.end(); ++beginNeuron){
+				boost::tokenizer< boost::char_separator<char> > valueTokenizer (*beginNeuron, separator1);
+				std::vector<double> weights1;
+				for(auto value = valueTokenizer.begin(); value != valueTokenizer.end(); ++value){
+					double weight;
+					std::istringstream (*value) >> std::scientific >> weight;
+					weights1.push_back(weight);
+				}
+				weights2.emplace_back(weights1);
+			}
+			weights.emplace_back(weights2);
+		}
+
+		return neural_network::NeuralNetwork<house::NormalizedValuesHouse>(weights, func);
+
 	}
 
 	virtual ~Serializator() = default;
@@ -114,13 +157,13 @@ private:
 		auto weights = net.getWeights();
 
 		for (auto &layer : weights) {
-			stream << std::endl;
 			for (auto &inputNeuron : layer) {
 				for (auto &weight : inputNeuron) {
 					stream << weight << ",";
 				}
-				stream << std::endl;
+				stream << ";";
 			}
+			stream << ":";
 		}
 
 	}
@@ -144,6 +187,8 @@ private:
 	}
 
 	int id_;
+
+
 
 };
 
