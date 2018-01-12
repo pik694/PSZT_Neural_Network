@@ -137,9 +137,6 @@ BOOST_AUTO_TEST_SUITE(NEURAL_NETWORK_TESTS_XOR)
 		std::vector<int> topology = {2,2};
 
 		std::vector<Bpair_t> inputs = {{false, false}, {false, true}, {true, false}, {true, true}};
-//		std::vector<Bpair_t> inputs = {{true, false}};
-
-		//std::vector<std::vector<std::vector<double>>> weightsStart = {{{1},{1},{1}}};
 
 		NeuralNetwork<Bpair_t> net(topology, sampleActivationFunction);
 
@@ -154,7 +151,7 @@ BOOST_AUTO_TEST_SUITE(NEURAL_NETWORK_TESTS_XOR)
 		}
 		std::cout << std::endl;
 
-		for (int epochs : {1,10,100,1000,10000, 50000}){
+		for (int epochs : {50000}){
 			auto MSE = net.stochasticGradientDescent(inputs, epochs, 1, 0.2, 0, []{});
 
 			for(auto input : inputs){
@@ -167,6 +164,11 @@ BOOST_AUTO_TEST_SUITE(NEURAL_NETWORK_TESTS_XOR)
 			std::cout << std::endl;
 
 		}
+
+		for(auto input : inputs)
+			BOOST_CHECK_SMALL(net.computeResult(input) - ((input.first + input.second) % 2), 0.1 );
+
+
 
 
 
