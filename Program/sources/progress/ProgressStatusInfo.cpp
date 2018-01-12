@@ -26,12 +26,11 @@ void ProgressStatusInfo::refreshProgress() {
     tmpProgress_ = 0;
     message += std::to_string( iterations_ );
 
-    std::cout << "\r\033[F"
-              << std::left
-              << std::setw( lengthOfLastPrintedMessage_ )
-              << message;
+    std::cout << "\r" << std::left << std::setfill(' ') << std::setw(lengthOfLastPrintedMessage_ + 10) << message;
 
     lengthOfLastPrintedMessage_ = message.size();
+
+
 }
 
 void ProgressStatusInfo::addProgress( unsigned long progress ) {
