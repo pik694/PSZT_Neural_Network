@@ -5,14 +5,12 @@
 #include <boost/date_time/gregorian/gregorian.hpp>
 #include <boost/test/unit_test.hpp>
 #include "neural_network/NeuralNetwork.h"
-#include "neural_network/ActivationFunctionsBank.h"
-#include "house/NormalizedValuesHouse.h"
+#include "iostream"
 
 
-BOOST_AUTO_TEST_SUITE(NEURAL_NETWORK_TESTS)
+BOOST_AUTO_TEST_SUITE(NEURAL_NETWORK_TESTS_XOR)
 
 	using namespace neural_network;
-	using NHouse_t = house::NormalizedValuesHouse;
 	using Bpair_t = std::pair<bool, bool>;
 	auto sampleActivationFunction = functions::ActivationFunctions_E::hyperbolicTangent;
 
@@ -21,7 +19,7 @@ BOOST_AUTO_TEST_SUITE(NEURAL_NETWORK_TESTS)
 
 		std::vector<int> topology = {1, 2, 3};
 
-		BOOST_CHECK_NO_THROW(NeuralNetwork<NHouse_t> net (topology, sampleActivationFunction));
+		BOOST_CHECK_NO_THROW(NeuralNetwork<Bpair_t> net (topology, sampleActivationFunction));
 
 	}
 
@@ -31,7 +29,7 @@ BOOST_AUTO_TEST_SUITE(NEURAL_NETWORK_TESTS)
 
 		std::vector<int> topology = {1, 2, 3};
 
-		NeuralNetwork<NHouse_t> net (topology, sampleActivationFunction);
+		NeuralNetwork<Bpair_t> net (topology, sampleActivationFunction);
 
 		auto netTopology = net.getTopology();
 
@@ -44,7 +42,7 @@ BOOST_AUTO_TEST_SUITE(NEURAL_NETWORK_TESTS)
 
 		std::vector<int> topology = {1, 2, 3};
 
-		NeuralNetwork<NHouse_t> net (topology, sampleActivationFunction);
+		NeuralNetwork<Bpair_t> net (topology, sampleActivationFunction);
 
 		auto weights = net.getWeights();
 
@@ -60,11 +58,11 @@ BOOST_AUTO_TEST_SUITE(NEURAL_NETWORK_TESTS)
 
 		std::vector<int> topology = {1, 2, 3};
 
-		NeuralNetwork<NHouse_t> net (topology, sampleActivationFunction);
+		NeuralNetwork<Bpair_t> net (topology, sampleActivationFunction);
 
 		auto weights = net.getWeights();
 
-		NeuralNetwork<NHouse_t> secondNet (topology, sampleActivationFunction);
+		NeuralNetwork<Bpair_t> secondNet (topology, sampleActivationFunction);
 
 		auto secondNetTopology = secondNet.getTopology();
 
@@ -78,11 +76,11 @@ BOOST_AUTO_TEST_SUITE(NEURAL_NETWORK_TESTS)
 //		std::vector<int> topology = {1,2,3};
 		std::vector<int> topology = {1};
 
-		NeuralNetwork<NHouse_t> net (topology, sampleActivationFunction);
+		NeuralNetwork<Bpair_t> net (topology, sampleActivationFunction);
 
 		auto weights = net.getWeights();
 
-		NeuralNetwork<NHouse_t> secondNet (weights, sampleActivationFunction);
+		NeuralNetwork<Bpair_t> secondNet (weights, sampleActivationFunction);
 
 		auto secondNetWeights = secondNet.getWeights();
 
@@ -110,11 +108,11 @@ BOOST_AUTO_TEST_SUITE(NEURAL_NETWORK_TESTS)
 
 		std::vector<int> topology = {1, 2, 3};
 
-		house::NormalizedValuesHouse house;
+		Bpair_t input = {true, true};
 
-		NeuralNetwork<NHouse_t> net(topology, sampleActivationFunction);
+		NeuralNetwork<Bpair_t> net(topology, sampleActivationFunction);
 
-		auto calculatedPrice = net.computeResult(house);
+		auto calculatedPrice = net.computeResult(input);
 
 		BOOST_CHECK_NE(calculatedPrice, 0.0);
 
@@ -124,15 +122,46 @@ BOOST_AUTO_TEST_SUITE(NEURAL_NETWORK_TESTS)
 
 		std::vector<int> topology = {1, 2, 3};
 
-		std::vector<house::NormalizedValuesHouse> houses(2);
+		std::vector<Bpair_t> inputs(2);
 
-		NeuralNetwork<NHouse_t> net(topology, sampleActivationFunction);
+		NeuralNetwork<Bpair_t> net(topology, sampleActivationFunction);
 
-		auto MSE = net.stochasticGradientDescent(houses, 1, 1, 0.1, 50, []{});
+		auto MSE = net.stochasticGradientDescent(inputs, 1, 1, 0.9, 50, []{});
 
 		BOOST_CHECK_NE(MSE, 0.0);
 
 	}
+
+	BOOST_AUTO_TEST_CASE(LearningXOR) {
+
+		std::vector<int> topology = {2};
+
+//		std::vector<Bpair_t> inputs = {{false, false}, {false, true}, {true, false}, {true, true}};
+		std::vector<Bpair_t> inputs = {{true, true}, {false, false}};
+
+		NeuralNetwork<Bpair_t> net(topology, sampleActivationFunction);
+
+		std::vector<NeuralNetwork<Bpair_t>::weights_t> weights;
+
+		for (int epochs : {1,10,100,1000,10000, 100000}){
+			auto MSE = net.stochasticGradientDescent(inputs, 1, 1, 0.1, 0, []{});
+
+			for(auto input : inputs){
+
+				std::cout << input.first << " xor " << input.second << " = "
+				          << ((input.first + input.second) % 2)
+				          << " -> " << net.computeResult(input) << std::endl;
+
+			}
+			std::cout << std::endl;
+
+			weights.emplace_back(net.getWeights());
+		}
+
+
+
+	}
+
 
 
 

@@ -57,3 +57,28 @@ template<>
 double NeuralNetwork<house::NormalizedValuesHouse>::getExpectedResult(const house::NormalizedValuesHouse &datum) {
 	return datum.getPrice();
 }
+
+template<>
+double NeuralNetwork<std::pair<bool, bool>>::getExpectedResult(const std::pair<bool, bool> &datum) {
+	return ((int)datum.first + (int)datum.second) % 2;
+}
+
+template<>
+void NeuralNetwork<std::pair<bool, bool>>::createInputNeurons() {
+
+
+	// 2 input neurons for each position in a house + 1 bias neuron
+	for (int i = 0; i < 2; ++i) {
+		neurons_.at(0).emplace_back(new neurons::InputNeuron());
+	}
+	neurons_.at(0).emplace_back(new neurons::BiasNeuron());
+
+}
+
+template<>
+void NeuralNetwork<std::pair<bool, bool>>::setInputs(const std::pair<bool, bool> &datum) {
+	layer_t &inputLayer = neurons_.at(0);
+
+	inputLayer.at(0)->setOutputValue(datum.first);
+	inputLayer.at(0)->setOutputValue(datum.second);
+}
