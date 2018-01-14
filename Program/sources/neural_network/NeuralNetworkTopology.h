@@ -19,7 +19,10 @@ namespace neural_network{
 		_30_15,
 		_5_5_5,
 		_10_10_10,
-
+		_500,
+		_1000,
+		_1500,
+		_2000,
 	};
 
 	class TopologyBank{

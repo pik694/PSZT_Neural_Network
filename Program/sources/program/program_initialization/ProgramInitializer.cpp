@@ -260,7 +260,10 @@ namespace boost {
                 { std::to_string( static_cast< int >( neural_network::Topology_E::_15_5 )), neural_network::Topology_E::_15_5 },
                 { std::to_string( static_cast< int >( neural_network::Topology_E::_5_5 )), neural_network::Topology_E::_5_5 },
                 { std::to_string( static_cast< int >( neural_network::Topology_E::_5_5_5 )), neural_network::Topology_E::_5_5_5 },
-                { std::to_string( static_cast< int >( neural_network::Topology_E::_10_10_10 )), neural_network::Topology_E::_10_10_10 },
+                { std::to_string( static_cast< int >( neural_network::Topology_E::_500 )), neural_network::Topology_E::_500 },
+                { std::to_string( static_cast< int >( neural_network::Topology_E::_1000 )), neural_network::Topology_E::_1000 },
+                { std::to_string( static_cast< int >( neural_network::Topology_E::_1500 )), neural_network::Topology_E::_1500 },
+                { std::to_string( static_cast< int >( neural_network::Topology_E::_2000 )), neural_network::Topology_E::_2000 },
         };
 
             if( map.find( name ) == map.end() )

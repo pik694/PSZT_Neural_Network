@@ -17,7 +17,10 @@ std::vector<int> TopologyBank::getTopology(Topology_E topology) {
 			{Topology_E::_20_20,    {20, 20}},
 			{Topology_E::_30_15,    {30, 15}},
 			{Topology_E::_5_5_5,    {5,  5,  5}},
-			{Topology_E::_10_10_10, {10, 10, 10}},
+			{Topology_E::_500, {500}},
+			{Topology_E::_1000, {1000}},
+			{Topology_E::_1500, {1500}},
+			{Topology_E::_2000, {2000}},
 
 	};
 
