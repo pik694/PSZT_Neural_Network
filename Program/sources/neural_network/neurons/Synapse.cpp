@@ -15,7 +15,7 @@ Synapse::Synapse(const std::shared_ptr<Neuron> &begin, const std::shared_ptr<Neu
 		value_(0.0),
 		delta_(0.0)
 {
-	weight_ = RandomNumberGenerator<0,1>::generateDouble();
+	weight_ = RandomNumberGenerator<-1,1>::generateDouble();
 }
 
 Synapse::Synapse(const std::shared_ptr<Neuron> &begin, const std::shared_ptr<Neuron> &end, double weight) :
