@@ -145,3 +145,7 @@ gen
 .idea/.name
 .idea/vcs.xml
 .idea/workspace.xml
+/.idea/modules.xml
+/.idea/PSZT_test.iml
+/.idea/misc.xml
+/.idea/codeStyleSettings.xml
