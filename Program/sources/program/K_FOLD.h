@@ -14,6 +14,7 @@
 
 namespace program {
 	class K_FOLD : public Program{
+    public:
 		K_FOLD(std::vector<house::NormalizedValuesHouse> &training_data,
 		       unsigned k,
 		       std::vector< int > &epoch_vec,

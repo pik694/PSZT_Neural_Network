@@ -11,6 +11,7 @@
 #include "program/TestProgram.h"
 #include "program/TrainProgram.h"
 #include "program/TrainWithTimer.h"
+#include "program/K_FOLD.h"
 #include "neural_network/ActivationFunctionsBank.h"
 #include "neural_network/NeuralNetworkTopology.h"
 
@@ -55,6 +56,7 @@ namespace program {
 			std::string loggerFile_;
             int threadsForEta_;
 			unsigned time_;
+			unsigned K_;
 
 
 
@@ -73,6 +75,8 @@ namespace program {
 			c_str RESULT = "result-path";
             c_str THREADS = "threads";
 			c_str TIMER = "timer";
+			c_str KFOLD = "k-fold";
+
 		};
 	}
 }

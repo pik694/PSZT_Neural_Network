@@ -23,5 +23,6 @@ void ProgressStatusBar::refreshProgress(){
 void ProgressStatusBar::done() {
 
     refreshProgress();
+    *( progressBar_.get() ) += ( progressBar_->expected_count() - progressBar_->count() );
     std::cout << std::endl << "Done" << std::endl << std::endl;
 }

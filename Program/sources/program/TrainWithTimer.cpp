@@ -48,18 +48,18 @@ void TrainWithTimer::doTraining()
 
     while (!configVec_.empty()) {
 
-        //iterations_ = 0;
+        iterations_ = 0;
         tmp_vector.clear();
         threadsVec_.clear();
 
         for (int i = 0; i < THREADS_COUNT && !configVec_.empty(); ++i) {
-          //  iterations_ += std::get<EPOCHS>(configVec_.back());
+            iterations_ += time_;
             tmp_vector.emplace_back(std::move(configVec_.back()));
             configVec_.pop_back();
         }
 
         setThreads(static_cast<int>(tmp_vector.size()));
-        ProgressStatusManager::getInstance()->init("Training neural network"/*, iterations_*/);
+        ProgressStatusManager::getInstance()->init("Training neural network", iterations_ * 66);
 
         for (auto it = tmp_vector.begin(); it != tmp_vector.end(); ++it)
             threadsVec_.emplace_back(trainNeuralNet, std::ref(*it), std::ref(trainingData_));
@@ -67,6 +67,7 @@ void TrainWithTimer::doTraining()
         while (getThreads()) {
             ProgressStatusManager::getInstance()->refresh();
             sleep(SLEEP_TIME);
+            ProgressStatusManager::getInstance()->addProgress(1);
         }
 
         for (auto it_t = threadsVec_.begin(); it_t != threadsVec_.end(); ++it_t)
@@ -101,7 +102,8 @@ void TrainWithTimer::trainNeuralNet(TimerTuple &config, const std::vector<house:
         std::get<MSE>(config) = std::get<NEURAL_NETWORK>(config).stochasticGradientDescent(training_data, 1,
                                                                                            std::get<BATCH_SIZE>(config),
                                                                                            std::get<ETA>(config),
-                                                                                           std::get<TEST_PERCENTAGE>(config));
+                                                                                           std::get<TEST_PERCENTAGE>(config),
+                                                                                           []{});
         int epochs = std::get<EPOCHS>(config);
         ++epochs;
         std::get<EPOCHS>(config) = epochs;
