@@ -34,7 +34,7 @@ namespace program
     enum class ExecutionMode_E
     {
         TRAIN = 1,
-        TRAIN_AND_TEST = 2,
+        TRAIN_WITH_TIMER = 2,
         TEST = 3
     };
 

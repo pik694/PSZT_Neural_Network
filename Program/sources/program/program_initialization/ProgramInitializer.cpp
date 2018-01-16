@@ -46,7 +46,8 @@ ProgramInitializer::ProgramInitializer(int argc, const char **argv) :
             ( command( PACK, "p" ).c_str(), value< std::vector< int > >( &batchSize_v )->multitoken(), "Specifies data packs, must be a factor of data size" )
             ( command( FUNCTION, "f" ).c_str(), value< std::vector< neural_network::functions::ActivationFunctions_E > >( &function_v )->multitoken(), "Specifies neural activation function" )
             ( command( TOLERANCE, "b" ).c_str(), value< int  >( &percentage_ )->default_value( -1 ), "Training - specifies test percentage; Testing - specifies error tolerance" )
-            ( command( THREADS, "w" ).c_str(), value< int  >( &threadsForEta_ )->default_value( 0 ), "Specifies threads count for one eta" );
+            ( command( THREADS, "w" ).c_str(), value< int  >( &threadsForEta_ )->default_value( 0 ), "Specifies threads count for one eta" )
+            ( command( TIMER, "q" ).c_str(), value< unsigned >( &time_ )->default_value( 0 ), "Specifies training time" );
 			}
 
 std::string ProgramInitializer::command( std::string longCommand, std::string shortCommand ) const
@@ -136,12 +137,15 @@ std::unique_ptr< program::Program > ProgramInitializer::getProgram()
 
 				return std::make_unique< TrainProgram >( training_data, epoch_v, batchSize_v, function_v, eta_v, topology_v, percentage_, threadsForEta_ );
 
-			/*case ExecutionMode_E::TRAIN_AND_TEST:
-                if( epoch_v.empty() || batchSize_v.empty() || function_v.empty() || eta_v.empty() || topology_v.empty() || !loggerFile_.size() || !resultPath_.size() )
+			case ExecutionMode_E::TRAIN_WITH_TIMER:
+                if( batchSize_v.empty() || function_v.empty() || eta_v.empty() || topology_v.empty() || !loggerFile_.size() || !resultPath_.size() )
                     throw std::runtime_error( "More parameters required." );
 
 				if( percentage_ < 0 )
 					throw std::runtime_error( "Invalid percentage specified." );
+
+				if( time_ < 1 )
+					throw std::runtime_error( "Invalid training time specified." );
 
 				loggerStream.open( loggerFile_,  std::ofstream::app );
 				if( !loggerStream.is_open() )
@@ -161,8 +165,8 @@ std::unique_ptr< program::Program > ProgramInitializer::getProgram()
                 Serializator<house::NormalizedValuesHouse>::getInstance().setLoggerFile( loggerStream );
 		        Serializator<house::NormalizedValuesHouse>::getInstance().setOutputDirectory(resultPath_);
 
-				return std::make_unique< TrainAndTestProgram >( training_data, epoch_v, batchSize_v, function_v, eta_v, topology_v, percentage_ );
-*/
+				return std::make_unique< TrainWithTimer >( training_data, time_, batchSize_v, function_v, eta_v, topology_v, percentage_, threadsForEta_ );
+
 			case ExecutionMode_E::TEST:
                 if( batchSize_v.empty() || !neuralNetFile_.size()  )
                     throw std::runtime_error( "More parameters required." );
@@ -175,6 +179,9 @@ std::unique_ptr< program::Program > ProgramInitializer::getProgram()
 					throw std::invalid_argument( "File could not be opened" );
 
                 return std::make_unique< TestProgram >( training_data, neural_net_file, percentage_ );
+
+            default:
+                throw std::runtime_error("Undefined execution mode.");
         }
 	}
 	catch ( std::exception& e )
@@ -207,7 +214,7 @@ namespace boost {
 				{std::to_string(
 						static_cast< int >( program::ExecutionMode_E::TRAIN )),                  program::ExecutionMode_E::TRAIN},
 				{std::to_string(
-						static_cast< int >( program::ExecutionMode_E::TRAIN_AND_TEST )),         program::ExecutionMode_E::TRAIN_AND_TEST},
+						static_cast< int >( program::ExecutionMode_E::TRAIN_WITH_TIMER )),         program::ExecutionMode_E::TRAIN_WITH_TIMER},
 				{std::to_string(
 						static_cast< int >( program::ExecutionMode_E::TEST )),                   program::ExecutionMode_E::TEST},
 		};

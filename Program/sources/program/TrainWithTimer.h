@@ -11,6 +11,10 @@
 #include "house/NormalizedValuesHouse.h"
 #include "neural_network/ActivationFunctionsBank.h"
 #include "Serializator.h"
+
+const int TIME = 7;
+typedef std::tuple< neural_network::NeuralNetwork<house::NormalizedValuesHouse>, int, const int, const double, const int, double , const neural_network::functions::ActivationFunctions_E, const unsigned > TimerTuple;
+
 namespace program
 {
     class TrainWithTimer : public Program
@@ -29,7 +33,7 @@ namespace program
 
         void doTraining();
 
-        static void trainNeuralNet( ConfigTuple& config, const std::vector<house::NormalizedValuesHouse> & training_data );
+        static void trainNeuralNet( TimerTuple& config, const std::vector<house::NormalizedValuesHouse> & training_data );
 
         virtual ~TrainWithTimer();
     private:
@@ -41,7 +45,7 @@ namespace program
         std::vector< neural_network::Topology_E > topologyVec_;
         int percentage_;
         int threadsForEta_;
-        std::vector< ConfigTuple > configVec_;
+        std::vector< TimerTuple > configVec_;
         unsigned iterations_;
     };
 }
