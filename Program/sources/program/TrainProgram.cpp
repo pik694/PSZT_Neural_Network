@@ -28,7 +28,7 @@ void TrainProgram::run() {
 	doTraining();
 }
 
-TrainProgram::TrainProgram(std::vector<house::NormalizedValuesHouse>& training_data,
+TrainProgram::TrainProgram(std::vector<house::NormalizedValuesHouse> &training_data,
                            std::vector<int> &epoch_vec,
                            std::vector<int> &batch_size_vec,
                            std::vector<neural_network::functions::ActivationFunctions_E> &function_vec,
@@ -96,13 +96,15 @@ void TrainProgram::doTraining() {
 		ProgressStatusManager::getInstance()->deinit();
 
 		for (auto it = tmp_vector.begin(); it != tmp_vector.end(); ++it)
-			Serializator<house::NormalizedValuesHouse>::getInstance().serialize(std::get<NEURAL_NETWORK>(*it),
-			                                      std::get<ACTIVATION_FUNCTION>(*it),
-			                                      std::get<EPOCHS>(*it),
-			                                      std::get<BATCH_SIZE>(*it),
-			                                      std::get<ETA>(*it),
-			                                      std::get<TEST_PERCENTAGE>(*it),
-			                                      std::get<MSE>(*it));
+			Serializator<house::NormalizedValuesHouse>::getInstance().serialize(
+					std::get<NEURAL_NETWORK>(*it),
+					std::get<ACTIVATION_FUNCTION>(*it),
+					std::get<EPOCHS>(*it),
+					std::get<BATCH_SIZE>(*it),
+					std::get<ETA>(*it),
+					std::get<TEST_PERCENTAGE>(*it),
+					std::get<MSE>(*it)
+			);
 
 
 	}
