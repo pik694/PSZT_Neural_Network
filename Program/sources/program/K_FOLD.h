@@ -25,7 +25,8 @@ namespace program {
 
 		void run () override;
 
-		static void trainNeuralNet();
+		static void trainNeuralNet( ConfigTuple &config,
+		const std::vector<house::NormalizedValuesHouse> &training_data);
 
 		~K_FOLD() override = default;
 

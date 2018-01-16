@@ -189,12 +189,6 @@ std::unique_ptr< program::Program > ProgramInitializer::getProgram()
                 if( !loggerStream.is_open() )
                     throw std::runtime_error( "Could not open logger file." );
 
-                if( percentage_ < 0 )
-                    throw std::runtime_error( "Invalid percentage specified." );
-
-                if( threadsForEta_ < 1 )
-                    throw std::runtime_error( "Invalid threads count for eta specified." );
-
                 if( K_ < 1 )
                     throw std::runtime_error( "Invalid k-fold value." );
 				

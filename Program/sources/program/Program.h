@@ -23,10 +23,11 @@ const int EPOCHS = 1;
 const int BATCH_SIZE = 2;
 const int ETA = 3;
 const int TEST_PERCENTAGE = 4;
+const int K = 4;
 const int MSE = 5;
 const int ACTIVATION_FUNCTION = 6;
-
-typedef std::tuple< neural_network::NeuralNetwork<house::NormalizedValuesHouse>, const int, const int, const double, const int, double , const neural_network::functions::ActivationFunctions_E > ConfigTuple;
+const int INDEX = 7;
+typedef std::tuple< neural_network::NeuralNetwork<house::NormalizedValuesHouse>, const int, const int, const double, const int, double , const neural_network::functions::ActivationFunctions_E, int > ConfigTuple;
 
 
 namespace program

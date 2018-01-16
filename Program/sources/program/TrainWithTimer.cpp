@@ -48,18 +48,16 @@ void TrainWithTimer::doTraining()
 
     while (!configVec_.empty()) {
 
-        iterations_ = 0;
         tmp_vector.clear();
         threadsVec_.clear();
 
         for (int i = 0; i < THREADS_COUNT && !configVec_.empty(); ++i) {
-            iterations_ += time_;
             tmp_vector.emplace_back(std::move(configVec_.back()));
             configVec_.pop_back();
         }
 
         setThreads(static_cast<int>(tmp_vector.size()));
-        ProgressStatusManager::getInstance()->init("Training neural network", iterations_ * 66);
+        ProgressStatusManager::getInstance()->init("Training neural network", time_ * 66);
 
         for (auto it = tmp_vector.begin(); it != tmp_vector.end(); ++it)
             threadsVec_.emplace_back(trainNeuralNet, std::ref(*it), std::ref(trainingData_));
