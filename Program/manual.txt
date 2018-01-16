@@ -1,0 +1,57 @@
+MODES:
+1 - train
+2 - train with timer
+3 - test
+4 - train with k-fold
+
+TOPOLOGIES (neurons in hidden layers):
+0 - 5,5
+1 - 10, 10
+2 - 15, 5
+3 - 15, 10
+4 - 20, 10
+5 - 20, 20
+6 - 30, 15
+7 - 5, 5, 5
+8 - 10, 10, 10
+9 - 500
+10 - 1000
+11 - 1500
+12 - 2000
+
+FUNCTIONS:
+0 - step
+1 - fast sigmoid
+2 - logistic
+3 - tanh
+4 - specific algebraic
+
+Needed options per execution mode:
+- TRAIN
+    - epoch
+    - pack
+    - function
+    - eta
+    - topology
+    - percentage
+    - threads
+- TRAIN WITH TIMER
+    - pack
+    - function
+    - eta
+    - topology
+    - percentage
+    - timer
+- TEST
+    - pack
+    - neural-net
+    - percentage
+- K-FOLD
+    - epoch
+    - pack
+    - function
+    - eta
+    - topology
+    - k
+
+

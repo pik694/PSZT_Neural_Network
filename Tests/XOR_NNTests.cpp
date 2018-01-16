@@ -12,7 +12,7 @@ BOOST_AUTO_TEST_SUITE(NEURAL_NETWORK_TESTS_XOR)
 
 	using namespace neural_network;
 	using Bpair_t = std::pair<bool, bool>;
-	auto sampleActivationFunction = functions::ActivationFunctions_E::fastSigmoid;
+	auto sampleActivationFunction = functions::ActivationFunctions_E::logistic;
 
 	BOOST_AUTO_TEST_CASE(NeuralNetworkCreation) {
 
@@ -151,7 +151,7 @@ BOOST_AUTO_TEST_SUITE(NEURAL_NETWORK_TESTS_XOR)
 		}
 		std::cout << std::endl;
 
-		for (int epochs : {50000}){
+		for (int epochs : {10000}){
 			auto MSE = net.stochasticGradientDescent(inputs, epochs, 1, 0.2, 0, []{});
 
 			for(auto input : inputs){

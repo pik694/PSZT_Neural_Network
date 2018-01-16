@@ -37,6 +37,12 @@ void GetVersionProgram::run() {
 
 void HelpProgram::run() {
 	std::cout << description_ << std::endl;
+	std::ifstream manual("manual.txt");
+	if(manual.is_open()) {
+		std::cout << manual.rdbuf() << std::endl;
+		manual.close();
+	}
+
 	ProgramDecorator::run();
 }
 
