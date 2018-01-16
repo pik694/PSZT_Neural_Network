@@ -1,0 +1,14 @@
+//
+// Created by daniel on 16.01.18.
+//
+
+#ifndef PSZT_NEURAL_NETWORK_TRAINWITHTIMER_H
+#define PSZT_NEURAL_NETWORK_TRAINWITHTIMER_H
+
+
+class TrainWithTimer {
+
+};
+
+
+#endif //PSZT_NEURAL_NETWORK_TRAINWITHTIMER_H

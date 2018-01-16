@@ -10,7 +10,6 @@
 #include "program/Program.h"
 #include "program/TestProgram.h"
 #include "program/TrainProgram.h"
-#include "program/TrainAndTestProgram.h"
 #include "neural_network/ActivationFunctionsBank.h"
 #include "neural_network/NeuralNetworkTopology.h"
 

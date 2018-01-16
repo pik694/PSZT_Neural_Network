@@ -135,7 +135,7 @@ std::unique_ptr< program::Program > ProgramInitializer::getProgram()
 
 				return std::make_unique< TrainProgram >( training_data, epoch_v, batchSize_v, function_v, eta_v, topology_v, percentage_, threadsForEta_ );
 
-			case ExecutionMode_E::TRAIN_AND_TEST:
+			/*case ExecutionMode_E::TRAIN_AND_TEST:
                 if( epoch_v.empty() || batchSize_v.empty() || function_v.empty() || eta_v.empty() || topology_v.empty() || !loggerFile_.size() || !resultPath_.size() )
                     throw std::runtime_error( "More parameters required." );
 
@@ -161,7 +161,7 @@ std::unique_ptr< program::Program > ProgramInitializer::getProgram()
 		        Serializator<house::NormalizedValuesHouse>::getInstance().setOutputDirectory(resultPath_);
 
 				return std::make_unique< TrainAndTestProgram >( training_data, epoch_v, batchSize_v, function_v, eta_v, topology_v, percentage_ );
-
+*/
 			case ExecutionMode_E::TEST:
                 if( batchSize_v.empty() || !neuralNetFile_.size()  )
                     throw std::runtime_error( "More parameters required." );
