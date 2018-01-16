@@ -10,6 +10,7 @@
 #include "program/Program.h"
 #include "program/TestProgram.h"
 #include "program/TrainProgram.h"
+#include "program/TrainWithTimer.h"
 #include "neural_network/ActivationFunctionsBank.h"
 #include "neural_network/NeuralNetworkTopology.h"
 
@@ -53,6 +54,8 @@ namespace program {
 			std::string resultPath_;
 			std::string loggerFile_;
             int threadsForEta_;
+			unsigned time_;
+
 
 
 			c_str HELP = "help";
@@ -69,6 +72,7 @@ namespace program {
 			c_str LOGGER = "logger";
 			c_str RESULT = "result-path";
             c_str THREADS = "threads";
+			c_str TIMER = "timer";
 		};
 	}
 }
