@@ -26,7 +26,7 @@ namespace program {
 
 		static void trainNeuralNet();
 
-		~K_FOLD() override;
+		~K_FOLD() override = default;
 
 	private:
 		std::vector<house::NormalizedValuesHouse> trainingData_;
