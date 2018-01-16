@@ -73,5 +73,16 @@ namespace program {
 	}
 }
 
+namespace boost{
+	template<>
+	program::ExecutionMode_E lexical_cast<program::ExecutionMode_E>(const std::string &name);
+
+	template<>
+	neural_network::functions::ActivationFunctions_E lexical_cast<neural_network::functions::ActivationFunctions_E>( const std::string &name );
+
+	template<>
+	neural_network::Topology_E lexical_cast<neural_network::Topology_E>( const std::string &name );
+
+}
 
 #endif //PSZT_NEURAL_NETWORK_PROGRAMINITIALIZER_H

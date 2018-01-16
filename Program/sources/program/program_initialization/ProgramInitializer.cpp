@@ -198,7 +198,7 @@ void ProgramInitializer::parse()
 
 namespace boost {
 	template<>
-	program::ExecutionMode_E lexical_cast(const std::string &name) {
+	program::ExecutionMode_E lexical_cast<program::ExecutionMode_E>(const std::string &name) {
 
 		using string_function_map_t = std::map<const std::string, program::ExecutionMode_E>;
 
@@ -217,12 +217,9 @@ namespace boost {
 		return map.at(name);
 
 	}
-}
 
-
-namespace boost {
     template<>
-    neural_network::functions::ActivationFunctions_E lexical_cast( const std::string &name )
+    neural_network::functions::ActivationFunctions_E lexical_cast<neural_network::functions::ActivationFunctions_E>( const std::string &name )
     {
 
         using string_function_map_t = std::map< const std::string, neural_network::functions::ActivationFunctions_E >;
@@ -240,11 +237,9 @@ namespace boost {
 
         return map.at(name);
     }
-}
 
-namespace boost {
     template<>
-    neural_network::Topology_E lexical_cast( const std::string &name )
+    neural_network::Topology_E lexical_cast<neural_network::Topology_E>( const std::string &name )
     {
 
         using string_function_map_t = std::map< const std::string, neural_network::Topology_E >;

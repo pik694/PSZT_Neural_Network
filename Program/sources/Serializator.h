@@ -15,7 +15,7 @@
 #include "neural_network/NeuralNetwork.h"
 
 template<>
-neural_network::functions::ActivationFunctions_E boost::lexical_cast( const std::string & );
+neural_network::functions::ActivationFunctions_E boost::lexical_cast<neural_network::functions::ActivationFunctions_E>( const std::string & );
 
 template<typename T>
 class Serializator {
