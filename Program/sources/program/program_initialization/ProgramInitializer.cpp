@@ -119,6 +119,7 @@ std::unique_ptr< program::Program > ProgramInitializer::getProgram()
 
                 if( threadsForEta_ < 1 )
                     throw std::runtime_error( "Invalid threads count for eta specified." );
+
                 data_size = (long)( ( ( 100 - percentage_) / 100.0 ) * training_data.size() );
                 for( int i = 0; i < batchSize_v.size(); ++i )
                 {

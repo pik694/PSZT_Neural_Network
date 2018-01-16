@@ -3,23 +3,7 @@
 #ifndef PSZT_NEURAL_NETWORK_TRAINPROGRAM_H
 #define PSZT_NEURAL_NETWORK_TRAINPROGRAM_H
 
-#include <tuple>
 #include "Program.h"
-#include "neural_network/NeuralNetwork.h"
-#include "neural_network/NeuralNetworkTopology.h"
-#include "house/NormalizedValuesHouse.h"
-#include "neural_network/ActivationFunctionsBank.h"
-#include "Serializator.h"
-
-const int NEURAL_NETWORK = 0;
-const int EPOCHS = 1;
-const int BATCH_SIZE = 2;
-const int ETA = 3;
-const int TEST_PERCENTAGE = 4;
-const int MSE = 5;
-const int ACTIVATION_FUNCTION = 6;
-
-typedef std::tuple< neural_network::NeuralNetwork<house::NormalizedValuesHouse>, const int, const int, const double, const int, double , const neural_network::functions::ActivationFunctions_E > ConfigTuple;
 
 namespace program
 {
