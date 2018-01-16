@@ -47,6 +47,7 @@ ProgramInitializer::ProgramInitializer(int argc, const char **argv) :
             ( command( FUNCTION, "f" ).c_str(), value< std::vector< neural_network::functions::ActivationFunctions_E > >( &function_v )->multitoken(), "Specifies neural activation function" )
             ( command( TOLERANCE, "b" ).c_str(), value< int  >( &percentage_ )->default_value( -1 ), "Training - specifies test percentage; Testing - specifies error tolerance" )
             ( command( THREADS, "w" ).c_str(), value< int  >( &threadsForEta_ )->default_value( 0 ), "Specifies threads count for one eta" )
+            ( command( KFOLD, "k" ).c_str(), value< unsigned >( &K_ )->default_value( 0 ), "Specifies k-fold" )
             ( command( TIMER, "q" ).c_str(), value< unsigned >( &time_ )->default_value( 0 ), "Specifies training time" );
 			}
 
@@ -180,6 +181,42 @@ std::unique_ptr< program::Program > ProgramInitializer::getProgram()
 
                 return std::make_unique< TestProgram >( training_data, neural_net_file, percentage_ );
 
+            case ExecutionMode_E::K_FOLD:
+                if( epoch_v.empty() || batchSize_v.empty() || function_v.empty() || eta_v.empty() || topology_v.empty() || !loggerFile_.size() || !resultPath_.size() )
+                    throw std::runtime_error( "More parameters required." );
+
+                loggerStream.open( loggerFile_, std::ofstream::app);
+                if( !loggerStream.is_open() )
+                    throw std::runtime_error( "Could not open logger file." );
+
+                if( percentage_ < 0 )
+                    throw std::runtime_error( "Invalid percentage specified." );
+
+                if( threadsForEta_ < 1 )
+                    throw std::runtime_error( "Invalid threads count for eta specified." );
+
+                if( K_ < 1 )
+                    throw std::runtime_error( "Invalid k-fold value." );
+				
+                data_size = training_data.size();
+				if( ( data_size % K_ ) != 0 )
+					throw std::runtime_error( "Invalid k-fold value." );
+
+				for( int i = 0; i < batchSize_v.size(); ++i )
+                {
+                    if( (data_size % batchSize_v[ i ]) != 0 )
+                    {
+                        std::string error = "Invalid batch size at: ";
+                        error += std::to_string( i );
+                        throw std::runtime_error( error );
+                    }
+                }
+
+                Serializator<house::NormalizedValuesHouse>::getInstance().setLoggerFile( loggerStream );
+                Serializator<house::NormalizedValuesHouse>::getInstance().setOutputDirectory(resultPath_);
+
+                return std::make_unique< K_FOLD >( training_data, K_, epoch_v, batchSize_v, function_v, eta_v, topology_v );
+
             default:
                 throw std::runtime_error("Undefined execution mode.");
         }
@@ -217,7 +254,10 @@ namespace boost {
 						static_cast< int >( program::ExecutionMode_E::TRAIN_WITH_TIMER )),         program::ExecutionMode_E::TRAIN_WITH_TIMER},
 				{std::to_string(
 						static_cast< int >( program::ExecutionMode_E::TEST )),                   program::ExecutionMode_E::TEST},
-		};
+                {std::to_string(
+                        static_cast< int >( program::ExecutionMode_E::K_FOLD )),                   program::ExecutionMode_E::K_FOLD},
+
+        };
 
         if( map.find( name ) == map.end() )
             throw std::runtime_error( "Invalid execution mode" );

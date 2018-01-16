@@ -35,7 +35,8 @@ namespace program
     {
         TRAIN = 1,
         TRAIN_WITH_TIMER = 2,
-        TEST = 3
+        TEST = 3,
+        K_FOLD = 4
     };
 
 	class Program

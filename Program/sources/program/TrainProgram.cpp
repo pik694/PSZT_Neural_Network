@@ -86,6 +86,7 @@ void TrainProgram::doTraining() {
 			threadsVec_.emplace_back(trainNeuralNet, std::ref(*it), std::ref(trainingData_));
 
 		while (getThreads()) {
+
 			ProgressStatusManager::getInstance()->refresh();
 			sleep(SLEEP_TIME);
 		}
