@@ -176,7 +176,7 @@ std::unique_ptr< program::Program > ProgramInitializer::getProgram()
 					throw std::runtime_error( "Invalid tolerance specified." );
 
 				neural_net_file.open( neuralNetFile_ );
-				if( neural_net_file.is_open() )
+				if( !neural_net_file.is_open() )
 					throw std::invalid_argument( "File could not be opened" );
 
                 return std::make_unique< TestProgram >( training_data, neural_net_file, percentage_ );
