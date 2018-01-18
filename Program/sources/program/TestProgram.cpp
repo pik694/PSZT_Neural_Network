@@ -15,8 +15,8 @@ void TestProgram::run()
     ProgressStatusManager::getInstance()->init( "Neural network testing", trainingData_.size() );
     for( auto it = trainingData_.begin(); it != trainingData_.end(); ++it, ++progress )
     {
-        double min_price = (double)( ( 100 - tolerance_ ) / 100 ) * it->getPrice();
-        double max_price = (double)( ( 100 + tolerance_ ) / 100 ) * it->getPrice();
+        double min_price = ( ( 100 - (double)tolerance_ ) / 100 ) * it->getPrice();
+        double max_price = ( ( 100 + (double)tolerance_ ) / 100 ) * it->getPrice();
         double price = neural_network.computeResult(*it);
 
         if( price >= min_price && price <= max_price )
