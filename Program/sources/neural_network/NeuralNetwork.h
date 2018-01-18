@@ -120,8 +120,7 @@ namespace neural_network {
 			}
 
 			return (meanSquaredError / testsNumber);
-
-			return 0;
+			
 		}
 
 

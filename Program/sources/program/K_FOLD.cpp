@@ -115,7 +115,7 @@ const std::vector<house::NormalizedValuesHouse> &training_data) {
 		data.push_back(training_data.at(i));
 
 
-	int testsPct = k * 100 / training_data.size();
+	int testsPct = 100 / k;
 
 
 	std::get<MSE>(config) = std::get<NEURAL_NETWORK>(config).stochasticGradientDescent(data,
