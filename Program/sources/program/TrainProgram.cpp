@@ -17,7 +17,7 @@ void TrainProgram::run() {
 						for (unsigned threads_count = 0; threads_count < threadsForEta_; ++threads_count) {
 							NeuralNetwork<NHouse> neural_network(TopologyBank::getTopology(*it_topology), *it_function);
 							configVec_.emplace_back(neural_network, *it_epoch, *it_batch_size, *it_eta, percentage_,
-							                        std::numeric_limits<double>::max(), *it_function);
+							                        std::numeric_limits<double>::max(), *it_function, 0);
 						}
 					}
 				}
